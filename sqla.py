@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+"""
+This class allow to transform SQLAlchemy metadata to the intermediary syntax.
+"""
+
 from models import Relation, Column, Table
 
 

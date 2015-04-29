@@ -1,17 +1,28 @@
 # -*- coding: utf-8 -*-
 from cst import TABLE, FONT_TAGS, RAW_TAGS
+"""
+All the intermediary syntax.
+We can several kinds of models can be translated to this syntax.
+"""
 
 
-class Column:
+class Drawable:
+    """ Abstract class to represent all the objects which are drawable."""
+    def to_er(self):
+        """Transforms the object to it's intermediary syntax in the er format. """
+        raise NotImplemented()
+
+    def to_graphviz(self):
+        """Transforms the object to it's intermediary syntax in the dot format. """
+        raise NotImplemented()
+
+
+class Column(Drawable):
     """ Represents a Column in the intermediaty syntax """
     def __init__(self, name, type=None, is_key=False):
         self.name = name
         self.type = type
         self.is_key = is_key
-
-    @property
-    def type_name(self):
-        return unicode(self.type)
 
     @property
     def key_symbol(self):
@@ -30,7 +41,7 @@ class Column:
         })
 
 
-class Relation:
+class Relation(Drawable):
     """ Represents a Relation in the intermediaty syntax """
     cardinalities = {
         '*': '0..N',
@@ -75,7 +86,7 @@ class Relation:
         return '{} -- {} [{}];'.format(self.left_col, self.right_col, ','.join(cards))
 
 
-class Table:
+class Table(Drawable):
     """ Represents a Table in the intermediaty syntax """
     def __init__(self, name, columns):
         self.name = name
