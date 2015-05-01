@@ -29,3 +29,14 @@ def base_to_graphviz(metadata):
 def base_to_er(metadata):
     tables, relationships = metadata_to_intermediary(metadata)
     intermediary_to_er(tables, relationships)
+
+
+def draw_er(input, output, mode='auto'):
+    """
+    Transform the metadata into a representation.
+    :param input: SQLAlchemy metadata.
+    :param output:
+    :param mode:
+    :return:
+    """
+    pass
