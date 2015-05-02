@@ -21,16 +21,15 @@ def intermediary_to_dot(tables, relationships, output):
 
 
 def intermediary_to_graphviz(tables, relationships, output):
+    """ Transforms and save the intermediary representation to the file chosen. """
     dot_file = _intermediary_to_dot(tables, relationships)
     graph = AGraph()
     graph = graph.from_string(dot_file)
-    graph.draw(path=output, format='pdf', prog='dot')
+    graph.draw(path=output, prog='dot')
 
 
 def _intermediary_to_er(tables, relationships):
-    """
-    Returns the er markup description of the database in a string.
-    """
+    """ Returns the er markup source in a string. """
     rv = StringIO.StringIO()
     for t in tables:
         rv.write(t.to_er())
@@ -43,9 +42,7 @@ def _intermediary_to_er(tables, relationships):
 
 
 def _intermediary_to_dot(tables, relationships):
-    """
-    Returns the dot representation of the database in a string.
-    """
+    """ Returns the dot source representing the database in a string. """
     rv = StringIO.StringIO()
     rv.write(GRAPH_BEGINING)
     rv.write('\n')
@@ -87,8 +84,8 @@ def all_to_intermediary(input):
 
 def get_output_mode(output, mode):
     """
-    From the output name and the mode returns a the function  that will transform the intermediary
-    reprensentation to the output.
+    From the output name and the mode returns a the function that will transform the intermediary
+    representation to the output.
     """
     if mode != 'auto':
         try:
@@ -105,10 +102,12 @@ def get_output_mode(output, mode):
             return intermediary_to_graphviz
 
 
-def draw_er(input, output, mode='auto'):
+def render_er(input, output, mode='auto'):
     """
     Transform the metadata into a representation.
-    :param input: SQLAlchemy metadata.
+    :param input: Possible inputs are instances of:
+        MetaData: SQLAlchemy Metadata
+        DeclarativeMeta: SQLAlchemy declarative Base
     :param output: name of the file to output the
     :param mode: str in list:
         'er': writes to a file the markup to generate an ER style diagram.

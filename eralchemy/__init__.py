@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-from eralchemy.main import draw_er
+from eralchemy.main import render_er

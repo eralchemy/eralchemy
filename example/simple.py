@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
-from eralchemy import draw_er
+from eralchemy import render_er
 
 Base = declarative_base()
 
@@ -22,7 +22,7 @@ class Child(Base):
 
 
 def test():
-    draw_er(Base, 'simple.pdf')
+    render_er(Base, 'simple.png')
 
 if __name__ == '__main__':
     test()
