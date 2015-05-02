@@ -22,7 +22,7 @@ class Child(Base):
 
 
 def test():
-    draw_er(Base, 'test.pdf')
+    draw_er(Base, 'simple.pdf')
 
 if __name__ == '__main__':
     test()

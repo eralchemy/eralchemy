@@ -9,17 +9,23 @@ We can several kinds of models can be translated to this syntax.
 class Drawable:
     """ Abstract class to represent all the objects which are drawable."""
     def to_er(self):
-        """Transforms the object to it's intermediary syntax in the er format. """
+        """Transforms the intermediary object to it's syntax in the er markup. """
         raise NotImplemented()
 
     def to_graphviz(self):
-        """Transforms the object to it's intermediary syntax in the dot format. """
+        """Transforms the intermediary object to it's syntax in the dot format. """
         raise NotImplemented()
 
 
 class Column(Drawable):
     """ Represents a Column in the intermediaty syntax """
     def __init__(self, name, type=None, is_key=False):
+        """
+        :param name: (str) Name of the column
+        :param type:
+        :param is_key:
+        :return:
+        """
         self.name = name
         self.type = type
         self.is_key = is_key
