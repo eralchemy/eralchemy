@@ -1,6 +1,2 @@
 # -*- coding: utf-8 -*-
-
-
-
-if __name__ == '__main__':
-    pass
+from eralchemy.main import draw_er

@@ -35,3 +35,6 @@ def metadata_to_intermediary(metadata):
     relationships = [relation_to_intermediary(fk) for table in metadata.tables.values() for fk in table.foreign_keys]
     return tables, relationships
 
+
+def declarative_to_intermediary(base):
+    return metadata_to_intermediary(base.metadata)
