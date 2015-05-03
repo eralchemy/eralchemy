@@ -23,6 +23,8 @@ class Child(Base):
 
 def test():
     render_er(Base, 'simple.png')
+    render_er(Base, 'simple.pdf')
+    render_er(Base, 'simple.er')
 
 if __name__ == '__main__':
     test()

@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from cst import GRAPH_BEGINING
-from sqla import metadata_to_intermediary, declarative_to_intermediary
+from sqla import metadata_to_intermediary, declarative_to_intermediary, database_to_intermediary
 from pygraphviz.agraph import AGraph
+from sqlalchemy.engine.url import make_url
+from sqlalchemy.exc import ArgumentError
 try:
     import cStringIO as StringIO
 except ImportError:
@@ -25,7 +27,8 @@ def intermediary_to_schema(tables, relationships, output):
     dot_file = _intermediary_to_dot(tables, relationships)
     graph = AGraph()
     graph = graph.from_string(dot_file)
-    graph.draw(path=output, prog='dot', format='png')
+    extension = output.split('.')[-1]
+    graph.draw(path=output, prog='dot', format=extension)
 
 
 def _intermediary_to_markdown(tables, relationships):
@@ -84,8 +87,16 @@ def all_to_intermediary(input):
         tables, relationships = this_to_intermediary(input)
         return tables, relationships
     except KeyError:
-        msg = 'Cannot process input {}'.format(input_class_name)
-        raise ValueError(msg)
+        pass
+
+    try:
+        make_url(input)
+        return database_to_intermediary(input)
+    except ArgumentError:
+        pass
+
+    msg = 'Cannot process input {}'.format(input_class_name)
+    raise ValueError(msg)
 
 
 def get_output_mode(output, mode):
@@ -106,10 +117,6 @@ def get_output_mode(output, mode):
         return intermediary_to_schema
 
 
-def get_extension(output, mode):
-    extension = output.split('.')[-1]
-
-
 def render_er(input, output, mode='auto'):
     """
     Transforms the metadata into a representation.
@@ -128,4 +135,4 @@ def render_er(input, output, mode='auto'):
     """
     tables, relationships = all_to_intermediary(input)
     intermediary_to_output = get_output_mode(output, mode)
-    intermediary_to_output(tables, relationships, output, extension=extension)
+    intermediary_to_output(tables, relationships, output)
