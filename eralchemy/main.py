@@ -8,8 +8,8 @@ except ImportError:
     import StringIO
 
 
-def intermediary_to_er(tables, relationships, output):
-    er_markup = _intermediary_to_er(tables, relationships)
+def intermediary_to_markdown(tables, relationships, output):
+    er_markup = _intermediary_to_markdown(tables, relationships)
     with open(output, "w") as file_out:
         file_out.write(er_markup)
 
@@ -20,15 +20,15 @@ def intermediary_to_dot(tables, relationships, output):
         file_out.write(dot_file)
 
 
-def intermediary_to_graphviz(tables, relationships, output):
+def intermediary_to_schema(tables, relationships, output):
     """ Transforms and save the intermediary representation to the file chosen. """
     dot_file = _intermediary_to_dot(tables, relationships)
     graph = AGraph()
     graph = graph.from_string(dot_file)
-    graph.draw(path=output, prog='dot')
+    graph.draw(path=output, prog='dot', format='png')
 
 
-def _intermediary_to_er(tables, relationships):
+def _intermediary_to_markdown(tables, relationships):
     """ Returns the er markup source in a string. """
     rv = StringIO.StringIO()
     for t in tables:
@@ -61,10 +61,16 @@ swich_input_class_to_method = {
     'MetaData': metadata_to_intermediary,
     'DeclarativeMeta': declarative_to_intermediary
 }
-swich_mode_to_func = {
-    'er': intermediary_to_er,
-    'graph': intermediary_to_graphviz,
-    'dot': None
+
+swich_output_mode_auto = {
+    'er': intermediary_to_markdown,
+    'graph': intermediary_to_schema,
+    'dot': intermediary_to_dot
+}
+
+switch_output_mode = {
+    'er': intermediary_to_markdown,
+    'dot': intermediary_to_dot,
 }
 
 
@@ -89,22 +95,24 @@ def get_output_mode(output, mode):
     """
     if mode != 'auto':
         try:
-            return swich_mode_to_func[mode]
+            return swich_output_mode_auto[mode]
         except KeyError:
             raise ValueError('Mode "{}" is not supported.')
 
-    else:
-        if output[-3:] == '.er':
-            return intermediary_to_er
-        elif output[-4] == '.dot':
-            return intermediary_to_dot
-        else:
-            return intermediary_to_graphviz
+    extension = output.split('.')[-1]
+    try:
+        return switch_output_mode[extension]
+    except KeyError:
+        return intermediary_to_schema
+
+
+def get_extension(output, mode):
+    extension = output.split('.')[-1]
 
 
 def render_er(input, output, mode='auto'):
     """
-    Transform the metadata into a representation.
+    Transforms the metadata into a representation.
     :param input: Possible inputs are instances of:
         MetaData: SQLAlchemy Metadata
         DeclarativeMeta: SQLAlchemy declarative Base
@@ -120,4 +128,4 @@ def render_er(input, output, mode='auto'):
     """
     tables, relationships = all_to_intermediary(input)
     intermediary_to_output = get_output_mode(output, mode)
-    intermediary_to_output(tables, relationships, output)
+    intermediary_to_output(tables, relationships, output, extension=extension)
