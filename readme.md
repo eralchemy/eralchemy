@@ -7,12 +7,14 @@ It's also able to generate the ER digram from an existing database.
 
 # Quick Start 
 
-    from eralchemy import draw_er
-    # Draw from SQLAlchemy base
-    draw_er(Base, 'erd_from_sqlalchemy.png')
-    
-    # Draw from database
-    draw_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
+```python
+from eralchemy import draw_er
+# Draw from SQLAlchemy base
+draw_er(Base, 'erd_from_sqlalchemy.png')
+
+# Draw from database
+draw_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
+``` 
     
 
 
