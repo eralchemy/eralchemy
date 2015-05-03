@@ -9,7 +9,10 @@ It's also able to generate the ER digram from an existing database.
 Quick Start
 ===========
 
-::
+Use from python
+---------------
+
+.. code:: python
 
     from eralchemy import draw_er
     # Draw from SQLAlchemy base
@@ -18,13 +21,22 @@ Quick Start
     # Draw from database
     draw_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
 
+Use from the command line
+-------------------------
+
+::
+
+    render_er -i sqlite:///relative/path/to/db.db -o erd_from_sqlite.png
+
 Install
 =======
 
-``ERAlchemy`` requires
-`GraphViz <http://www.graphviz.org/Download.php>`__ to generate the
-graphs. Install `graphviz <http://www.graphviz.org/Download.php>`__ for
-your system.
+To install ERAlchemy, just do pip install eralchemy ``ERAlchemy``
+requires `GraphViz <http://www.graphviz.org/Download.php>`__ to generate
+the graphs.
+
+Install `graphviz <http://www.graphviz.org/Download.php>`__ for your
+system.
 
 Architecture
 ============
@@ -55,7 +67,7 @@ from setuptools import setup
 setup(
     name='ERAlchemy',
 
-    version='0.0.6',
+    version='0.0.7',
 
     description='Simple entity relation (ER) diagrams generation',
     long_description=__doc__,
@@ -97,4 +109,9 @@ setup(
         'SQLAlchemy',
         'pygraphviz'
     ],
+    entry_points={
+        'console_scripts': [
+            'render_er=eralchemy:cli',
+        ],
+    },
 )
