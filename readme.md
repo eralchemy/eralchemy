@@ -21,7 +21,7 @@ It's also able to generate the ER digram from an existing database.
 Install [graphviz](http://www.graphviz.org/Download.php) for your system.
 
 # Architecture
-![Architecture schema](/eralchemy_architecture.png?raw=true "Architecture schema")
+![Architecture schema](https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/eralchemy_architecture.png?raw=true "Architecture schema")
 
 Thanks to it's modular architecture, it's an extensible tool: it can also be connected to other ORMs/ODMs/OGMs.
 
