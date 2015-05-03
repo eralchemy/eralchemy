@@ -11,12 +11,14 @@ except ImportError:
 
 
 def intermediary_to_markdown(tables, relationships, output):
+    """ Saves the intermediary representation to markdown. """
     er_markup = _intermediary_to_markdown(tables, relationships)
     with open(output, "w") as file_out:
         file_out.write(er_markup)
 
 
 def intermediary_to_dot(tables, relationships, output):
+    """ Save the intermediary representation to dot format. """
     dot_file = _intermediary_to_dot(tables, relationships)
     with open(output, "w") as file_out:
         file_out.write(dot_file)
@@ -59,18 +61,23 @@ def _intermediary_to_dot(tables, relationships):
     rv.write('}')
     return rv.getvalue()
 
-
+# Routes from the class name to the function transforming this class in
+# the intermediary representation.
 swich_input_class_to_method = {
     'MetaData': metadata_to_intermediary,
     'DeclarativeMeta': declarative_to_intermediary
 }
 
+# Routes from the mode to the method to transform the intermediary
+#  representation to the desired output.
 swich_output_mode_auto = {
     'er': intermediary_to_markdown,
     'graph': intermediary_to_schema,
     'dot': intermediary_to_dot
 }
 
+# Routes from the file extension to the method to transform
+# the intermediary representation to the desired output.
 switch_output_mode = {
     'er': intermediary_to_markdown,
     'dot': intermediary_to_dot,
