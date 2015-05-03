@@ -55,7 +55,7 @@ from setuptools import setup
 setup(
     name='ERAlchemy',
 
-    version='0.0.5',
+    version='0.0.6',
 
     description='Simple entity relation (ER) diagrams generation',
     long_description=__doc__,
