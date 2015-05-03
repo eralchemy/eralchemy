@@ -1,10 +1,9 @@
-ERAlchemy is an extensible tool to generate entity relation (ER) diagrams.
+# ERAlchemy: Simple entity relation (ER) diagrams generation.
 
 It's now integrated with SQLAlchemy.
 
 It's also able to generate the ER digram from an existing database.
 
-It can also be connected to other ORMs/ODMs/OGMs.
 
 # Quick Start 
 
@@ -23,4 +22,13 @@ Install [graphviz](http://www.graphviz.org/Download.php) for your system.
 
 # Architecture
 ![Architecture schema](/eralchemy_architecture.png?raw=true "Architecture schema")
+
+Thanks to it's modular architecture, it's an extensible tool: it can also be connected to other ORMs/ODMs/OGMs.
+
+# Notes
 ERAlchemy was inspired by [erd](https://github.com/BurntSushi/erd).
+
+# License
+Released under an Apache License 2.0
+
+Creator: Alexis Benoist
