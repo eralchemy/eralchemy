@@ -90,6 +90,8 @@ setup(
 
         # that you indicate whether you support Python 2, Python 3 or both.
         'Programming Language :: Python :: 2.7',
+        'Topic :: Scientific/Engineering :: Visualization',
+        'Topic :: Software Development :: Libraries :: Python Modules',
     ],
 
     # What does your project relate to?
