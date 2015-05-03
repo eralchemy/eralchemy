@@ -1,5 +1,7 @@
 ERAlchemy is an extensible tool to generate ER diagrams.
 It's now integrated with SQLAlchemy.
+It's also able to generate the ER digram from an existing database.
+It can also be connected to other ORMs/ODMs/OGMs.
 
 # Quick Start 
 
@@ -10,11 +12,6 @@ It's now integrated with SQLAlchemy.
 # Install
 `ERAlchemy` requires [GraphViz](http://www.graphviz.org/Download.php) to generate the graphs.
 Install [graphviz](http://www.graphviz.org/Download.php) for your system.
-Install 
 
-## Formats
-Formats (not all may be available on every system depending on how Graphviz was built)
-
-‘canon’, ‘cmap’, ‘cmapx’, ‘cmapx_np’, ‘dia’, ‘dot’, ‘fig’, ‘gd’, ‘gd2’, ‘gif’, ‘hpgl’, ‘imap’, ‘imap_np’, ‘ismap’, ‘jpe’, ‘jpeg’, ‘jpg’, ‘mif’, ‘mp’, ‘pcl’, ‘pdf’, ‘pic’, ‘plain’, ‘plain-ext’, ‘png’, ‘ps’, ‘ps2’, ‘svg’, ‘svgz’, ‘vml’, ‘vmlz’, ‘vrml’, ‘vtx’, ‘wbmp’, ‘xdot’, ‘xlib’
-
+# Architecture
 ERAlchemy was inspired by [erd](https://github.com/BurntSushi/erd).
