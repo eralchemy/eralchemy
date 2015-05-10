@@ -1,10 +1,17 @@
 """
-ERAlchemy: Simple entity relation (ER) diagrams generation.
-===========================================================
+Entity relation (ER) diagrams generator
+=======================================
 
-It's now integrated with SQLAlchemy.
+ERAlchemy is integrated with SQLAlchemy and is able to generate the ER
+digram from an existing database.
 
-It's also able to generate the ER digram from an existing database.
+Example
+=======
+
+.. figure:: https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/graph_example.png?raw=true
+   :alt: Example for a graph
+
+   Example
 
 Quick Start
 ===========
@@ -26,17 +33,20 @@ Use from the command line
 
 ::
 
-    render_er -i sqlite:///relative/path/to/db.db -o erd_from_sqlite.png
+    $ render_er -i sqlite:///relative/path/to/db.db -o erd_from_sqlite.png
 
 Install
 =======
 
-To install ERAlchemy, just do pip install eralchemy ``ERAlchemy``
-requires `GraphViz <http://www.graphviz.org/Download.php>`__ to generate
-the graphs.
+To install ERAlchemy, just do
 
-Install `graphviz <http://www.graphviz.org/Download.php>`__ for your
-system.
+::
+
+    pip install eralchemy
+
+``ERAlchemy`` requires
+`GraphViz <http://www.graphviz.org/Download.php>`__ to generate the
+graphs.
 
 Architecture
 ============
@@ -46,8 +56,8 @@ Architecture
 
    Architecture schema
 
-Thanks to it's modular architecture, it's an extensible tool: it can
-also be connected to other ORMs/ODMs/OGMs.
+Thanks to it's modular architecture, it can be connected to other
+ORMs/ODMs/OGMs/O\*Ms.
 
 Notes
 =====
@@ -67,7 +77,7 @@ from setuptools import setup
 setup(
     name='ERAlchemy',
 
-    version='0.0.8',
+    version='0.0.10',
 
     description='Simple entity relation (ER) diagrams generation',
     long_description=__doc__,
