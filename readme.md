@@ -18,7 +18,7 @@ draw_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
 
 ## Use from the command line
 
-    $ render_er -i sqlite:///relative/path/to/db.db -o erd_from_sqlite.png
+    $ eralchemy -i sqlite:///relative/path/to/db.db -o erd_from_sqlite.png
 
 
 # Install

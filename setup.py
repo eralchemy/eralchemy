@@ -1,5 +1,4 @@
-"""
-Entity relation (ER) diagrams generator
+"""Entity relation (ER) diagrams generator
 =======================================
 
 ERAlchemy is integrated with SQLAlchemy and is able to generate the ER
@@ -11,7 +10,7 @@ Example
 .. figure:: https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/graph_example.png?raw=true
    :alt: Example for a graph
 
-   Example
+   Example for a graph
 
 Quick Start
 ===========
@@ -33,7 +32,7 @@ Use from the command line
 
 ::
 
-    $ render_er -i sqlite:///relative/path/to/db.db -o erd_from_sqlite.png
+    $ eralchemy -i sqlite:///relative/path/to/db.db -o erd_from_sqlite.png
 
 Install
 =======
@@ -77,7 +76,7 @@ from setuptools import setup
 setup(
     name='ERAlchemy',
 
-    version='0.0.10',
+    version='0.0.12',
 
     description='Simple entity relation (ER) diagrams generation',
     long_description=__doc__,
