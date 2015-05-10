@@ -3,7 +3,7 @@
 ERAlchemy is integrated with SQLAlchemy and is able to  generate the ER digram from an existing database.
 
 # Example
-![Example](https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/graph_example.png?raw=true "Example for a graph")
+![Example for a graph](https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/graph_example.png?raw=true "Example for a graph")
 
 # Quick Start 
 ## Use from python
