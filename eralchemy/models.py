@@ -89,7 +89,7 @@ class Relation(Drawable):
         if self.left_cardinality != '':
             cards.append('tail' +
                          self.graphviz_cardinalities(self.left_cardinality))
-        return '{} -- {} [{}];'.format(self.left_col, self.right_col, ','.join(cards))
+        return '"{}" -- "{}" [{}];'.format(self.left_col, self.right_col, ','.join(cards))
 
 
 class Table(Drawable):
@@ -99,8 +99,8 @@ class Table(Drawable):
         self.columns = columns
 
     def to_er(self):
-        return "[{}]\n".format(self.name) + \
-               "\n".join([c.to_er() for c in self.columns])
+        return '[{}]\n'.format(self.name) + \
+               '\n'.join([c.to_er() for c in self.columns])
 
     def to_graphviz(self):
         header = RAW_TAGS.format('', '<B><FONT POINT-SIZE="16">{}</FONT></B>').format(self.name)

@@ -1,7 +1,9 @@
-# ERAlchemy: Simple entity relation (ER) diagrams generation.
+# Entity relation (ER) diagrams generator
 
 ERAlchemy is integrated with SQLAlchemy and is able to  generate the ER digram from an existing database.
 
+# Example
+![Example](https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/graph_example.png?raw=true "Example for a graph")
 
 # Quick Start 
 ## Use from python
@@ -25,8 +27,6 @@ To install ERAlchemy, just do
     pip install eralchemy
     
 `ERAlchemy` requires [GraphViz](http://www.graphviz.org/Download.php) to generate the graphs.
-
-Install [graphviz](http://www.graphviz.org/Download.php) for your system.
 
 # Architecture
 ![Architecture schema](https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/eralchemy_architecture.png?raw=true "Architecture schema")

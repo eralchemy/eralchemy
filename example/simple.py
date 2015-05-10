@@ -23,6 +23,7 @@ class Child(Base):
 
 def test():
     render_er(Base, 'simple.png')
+    render_er(Base, 'simple.dot')
     render_er(Base, 'simple.pdf')
     render_er(Base, 'simple.er')
 
