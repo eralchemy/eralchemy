@@ -123,7 +123,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'render_er=eralchemy:cli',
+            'eralchemy=eralchemy:cli',
         ],
     },
 )
