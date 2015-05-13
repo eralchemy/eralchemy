@@ -6,6 +6,13 @@ ERAlchemy is integrated with SQLAlchemy and is able to  generate the ER digram f
 ![Example for a graph](https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/graph_example.png?raw=true "Example for a graph")
 
 # Quick Start 
+## Install
+To install ERAlchemy, just do
+
+    pip install eralchemy
+    
+`ERAlchemy` requires [GraphViz](http://www.graphviz.org/Download.php) to generate the graphs.
+
 ## Use from python
 ```python
 from eralchemy import draw_er
@@ -20,13 +27,6 @@ draw_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
 
     $ eralchemy -i sqlite:///relative/path/to/db.db -o erd_from_sqlite.png
 
-
-# Install
-To install ERAlchemy, just do
-
-    pip install eralchemy
-    
-`ERAlchemy` requires [GraphViz](http://www.graphviz.org/Download.php) to generate the graphs.
 
 # Architecture
 ![Architecture schema](https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/eralchemy_architecture.png?raw=true "Architecture schema")
