@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from cst import GRAPH_BEGINING
+from cst import GRAPH_BEGINNING
 from sqla import metadata_to_intermediary, declarative_to_intermediary, database_to_intermediary
 from pygraphviz.agraph import AGraph
 from sqlalchemy.engine.url import make_url
@@ -49,7 +49,7 @@ def _intermediary_to_markdown(tables, relationships):
 def _intermediary_to_dot(tables, relationships):
     """ Returns the dot source representing the database in a string. """
     rv = StringIO.StringIO()
-    rv.write(GRAPH_BEGINING)
+    rv.write(GRAPH_BEGINNING)
     rv.write('\n')
     for t in tables:
         rv.write(t.to_graphviz())

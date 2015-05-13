@@ -9,7 +9,7 @@ TABLE = '"{}" [label=<<FONT FACE="Helvetica"><TABLE BORDER="0" CELLBORDER="1"' \
 START_CELL = '<TR><TD ALIGN="LEFT"><FONT>'
 FONT_TAGS = '<FONT>{}</FONT>'
 RAW_TAGS = '<TR><TD{}>{}</TD></TR>'
-GRAPH_BEGINING = """
+GRAPH_BEGINNING = """
     graph {
 	graph [rankdir=LR];
 	node [label="\N",
