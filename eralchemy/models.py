@@ -39,12 +39,12 @@ class Column(Drawable):
 
     def to_graphviz(self):
         base = RAW_TAGS.format(' ALIGN="LEFT"', '{key_opening}{col_name}{key_closing}{type}')
-        return base.format(**{
-            'key_opening': '<u>' if self.is_key else '',
-            'key_closing': '</u>' if self.is_key else '',
-            'col_name': FONT_TAGS.format(self.name),
-            'type': FONT_TAGS.format(' [{}]').format(self.type) if self.type != None else ''
-        })
+        return base.format(
+            key_opening='<u>' if self.is_key else '',
+            key_closing='</u>' if self.is_key else '',
+            col_name=FONT_TAGS.format(self.name),
+            type=FONT_TAGS.format(' [{}]').format(self.type) if self.type is not None else ''
+        )
 
 
 class Relation(Drawable):
