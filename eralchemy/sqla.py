@@ -16,11 +16,16 @@ def relation_to_intermediary(fk):
     )
 
 
-def column_to_intermediary(col):
+def format_type(typ):
+    """ Transforms the type into a nice string representation. """
+    return unicode(typ)
+
+
+def column_to_intermediary(col, type_formatter=format_type):
     """Transform an SQLAlchemy Column object to it's intermediary representation. """
     return Column(
         name=col.name,
-        type=col.type,
+        type=type_formatter(col.type),
         is_key=col.primary_key,
     )
 
