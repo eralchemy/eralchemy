@@ -1,2 +1,5 @@
 SQLAlchemy==1.0.3
 pygraphviz==1.2
+coverage==3.7.1
+pydot==1.0.2
+pyparsing==1.5.7
