@@ -34,9 +34,9 @@ draw_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
 Thanks to it's modular architecture, it can be connected to other ORMs/ODMs/OGMs/O*Ms.
 
 ## Notes
-Every feedback is feedback is welcome on the [GitHub issues](https://github.com/Alexis-benoist/eralchemy/issues).
+Every feedback is welcome on the [GitHub issues](https://github.com/Alexis-benoist/eralchemy/issues).
 
-To run the tests please run: `$ py.test`.
+To run the tests, use : `$ py.test`.
 
 ERAlchemy was inspired by [erd](https://github.com/BurntSushi/erd).
 

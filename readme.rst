@@ -61,10 +61,10 @@ ORMs/ODMs/OGMs/O\*Ms.
 Notes
 -----
 
-Every feedback is feedback is welcome on the `GitHub
+Every feedback is welcome on the `GitHub
 issues <https://github.com/Alexis-benoist/eralchemy/issues>`__.
 
-To run the tests please run: ``$ py.test``.
+To run the tests, use : ``$ py.test``.
 
 ERAlchemy was inspired by `erd <https://github.com/BurntSushi/erd>`__.
 
