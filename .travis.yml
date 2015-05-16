@@ -3,9 +3,8 @@ python:
     - "2.7"
 before_install:
     - pip install -r requirements.txt
-    - pip install coveralls
+    - pip install coveralls pytest-cov pytest
 script:
     - py.test
-    - coverage run --source=eralchemy py.test
 after_success:
     - coveralls
