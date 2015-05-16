@@ -39,3 +39,16 @@ def test_column_is_dot_format():
     assert_column_well_rendered_to_dot(parent_name)
     assert_column_well_rendered_to_dot(child_id)
     assert_column_well_rendered_to_dot(child_parent_id)
+
+
+def test_relation():
+    relation_re = re.compile(
+        '\\"(?P<l_name>.+)\\"\\ \\-\\-\\ \\"(?P<r_name>.+)\\"\\ '
+        '\\[taillabel\\=\\<\\<FONT\\>(?P<l_card>.+)\\<\\/FONT\\>\\>'
+        '\\,headlabel\\=\\<\\<FONT\\>(?P<r_card>.+)\\<\\/FONT\\>\\>\\]\\;')
+    dot = relation.to_dot()
+    r = relation_re.match(dot)
+    assert r.group('l_name') == 'child'
+    assert r.group('r_name') == 'parent'
+    assert r.group('l_card') == '{0,1}'
+    assert r.group('r_card') == '0..N'
