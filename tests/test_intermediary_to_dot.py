@@ -61,7 +61,7 @@ def test_relation():
 
 
 def assert_table_well_rendered_to_dot(table):
-    matchs = header_re.match(table.header).groups()
+    matchs = header_re.match(table.header_dot).groups()
     assert len(matchs) == 1
     assert matchs[0] == table.name
     table_dot = table.to_dot()

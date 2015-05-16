@@ -112,14 +112,17 @@ class Table(Drawable):
         self.name = name
         self.columns = columns
 
+    @property
+    def header_er(self):
+        return '[{}]'.format(self.name)
+
     def to_er(self):
-        return '[{}]\n'.format(self.name) + \
-               '\n'.join([c.to_er() for c in self.columns])
+        return self.header_er + '\n' + '\n'.join(c.to_er() for c in self.columns)
 
     @property
-    def header(self):
+    def header_dot(self):
         return ROW_TAGS.format('', '<B><FONT POINT-SIZE="16">{}</FONT></B>').format(self.name)
 
     def to_dot(self):
         body = ''.join(c.to_dot() for c in self.columns)
-        return TABLE.format(self.name, self.header, body)
+        return TABLE.format(self.name, self.header_dot, body)
