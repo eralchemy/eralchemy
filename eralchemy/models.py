@@ -83,13 +83,24 @@ class Relation(Drawable):
         if self.right_cardinality == self.left_cardinality == '':
             return ''
         cards = []
-        if self.right_cardinality != '':
-            cards.append('head' +
-                         self.graphviz_cardinalities(self.right_cardinality))
         if self.left_cardinality != '':
             cards.append('tail' +
                          self.graphviz_cardinalities(self.left_cardinality))
+        if self.right_cardinality != '':
+            cards.append('head' +
+                         self.graphviz_cardinalities(self.right_cardinality))
         return '"{}" -- "{}" [{}];'.format(self.left_col, self.right_col, ','.join(cards))
+
+    def __eq__(self, other):
+        if self.__dict__ == other.__dict__:
+            return True
+        other_inversed = Relation(
+            right_col=other.left_col,
+            left_col=other.right_col,
+            right_cardinality=other.left_cardinality,
+            left_cardinality=other.right_cardinality,
+        )
+        return other_inversed.__dict__ == self.__dict__
 
 
 class Table(Drawable):

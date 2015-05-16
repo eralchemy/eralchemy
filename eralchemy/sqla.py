@@ -9,8 +9,8 @@ from models import Relation, Column, Table
 def relation_to_intermediary(fk):
     """Transform an SQLAlchemy ForeignKey object to it's intermediary representation. """
     return Relation(
-        right_col=fk.parent.table.fullname,
-        left_col=fk._column_tokens[1],
+        right_col=format_name(fk.parent.table.fullname),
+        left_col=format_name(fk._column_tokens[1]),
         right_cardinality='?',
         left_cardinality='*',
     )
@@ -19,6 +19,11 @@ def relation_to_intermediary(fk):
 def format_type(typ):
     """ Transforms the type into a nice string representation. """
     return unicode(typ)
+
+
+def format_name(name):
+    """ Transforms the name into a nice string representation. """
+    return unicode(name)
 
 
 def column_to_intermediary(col, type_formatter=format_type):

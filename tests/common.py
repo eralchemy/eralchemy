@@ -2,8 +2,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
-
-from eralchemy import render_er
+from eralchemy.models import Column as ERColumn, Relation
 
 Base = declarative_base()
 
@@ -21,11 +20,31 @@ class Child(Base):
     parent = relationship('Parent', backref='children')
 
 
-def example():
-    render_er(Base, 'simple.png')
-    render_er(Base, 'simple.dot')
-    render_er(Base, 'simple.pdf')
-    render_er(Base, 'simple.er')
 
-if __name__ == '__main__':
-    example()
+parent_id = ERColumn(
+    name='id',
+    type=u'INTEGER',
+    is_key=True
+)
+
+parent_name = ERColumn(
+    name='name',
+    type=u'VARCHAR(255)',
+)
+
+child_id = ERColumn(
+    name='id',
+    type=u'INTEGER',
+    is_key=True
+)
+
+child_parent_id = ERColumn(
+    name='parent_id',
+    type=u'INTEGER',
+)
+relation = Relation(
+    right_col=u'parent',
+    left_col=u'child',
+    right_cardinality='*',
+    left_cardinality='?',
+)

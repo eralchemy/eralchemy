@@ -1,72 +1,58 @@
 # -*- coding: utf-8 -*-
-from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
-
-Base = declarative_base()
-from eralchemy.sqla import table_to_intermediary, column_to_intermediary, declarative_to_intermediary
-from eralchemy.models import Column as ERColumn, Table, Relation
-import pytest
+from sqlalchemy import create_engine
+from eralchemy.sqla import column_to_intermediary, declarative_to_intermediary, database_to_intermediary
+from eralchemy.models import Table, Relation
+from common import parent_id, parent_name, child_id, child_parent_id, relation,\
+    Parent, Child, Base
 
 
-class Parent(Base):
-    __tablename__ = 'parent'
-    id = Column(Integer, primary_key=True)
-    name = Column(String(255))
-
-
-class Child(Base):
-    __tablename__ = 'child'
-    id = Column(Integer, primary_key=True)
-    parent_id = Column(ForeignKey('parent.id'))
-    parent = relationship('Parent', backref='children')
-
-
-
-def transform_column_helper(column, name_expected, typ, is_key=False):
+def check_column(column, column_intermediary):
     output = column_to_intermediary(column)
-    assert output.name == name_expected
-    assert output.is_key is is_key
-    assert output.type == typ
+    assert output.name == column_intermediary.name
+    assert output.is_key is column_intermediary.is_key
+    assert output.type == column_intermediary.type
 
 
 def test_columns_parent():
-    transform_column_helper(
+    check_column(
         column=Parent.id,
-        name_expected='id',
-        typ=u'INTEGER',
-        is_key=True
+        column_intermediary=parent_id
     )
 
-    transform_column_helper(
+    check_column(
         column=Parent.name,
-        name_expected='name',
-        typ=u'VARCHAR(255)'
+        column_intermediary=parent_name
     )
 
 
 def test_columns_child():
-    transform_column_helper(
+    check_column(
         column=Child.id,
-        name_expected='id',
-        typ=u'INTEGER',
-        is_key=True
+        column_intermediary=child_id
     )
 
-    transform_column_helper(
+    check_column(
         column=Child.parent_id,
-        name_expected='parent_id',
-        typ=u'INTEGER'
+        column_intermediary=child_parent_id
     )
+
+
+def check_intermediary_representation_simple_table(tables, relationships):
+    assert len(tables) == 2
+    assert len(relationships) == 1
+    assert all(isinstance(t, Table) for t in tables)
+    assert all(isinstance(r, Relation) for r in relationships)
+    assert relation == relationships[0]
 
 
 def test_declarative_to_intermediary():
-    tables, relationship = declarative_to_intermediary(Base)
-    assert len(tables) == 2
-    assert len(relationship) == 1
-    assert all(isinstance(t, Table) for t in tables)
-    assert all(isinstance(r, Relation) for r in relationship)
+    tables, relationships = declarative_to_intermediary(Base)
+    check_intermediary_representation_simple_table(tables, relationships)
 
 
-def test_relation():
-    pass
+def test_database_to_intermediary():
+    DB_URI = "sqlite:///test.db"
+    engine = create_engine(DB_URI)
+    Base.metadata.create_all(engine)
+    tables, relationships = database_to_intermediary(DB_URI)
+    check_intermediary_representation_simple_table(tables, relationships)
