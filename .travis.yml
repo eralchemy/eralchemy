@@ -6,5 +6,6 @@ before_install:
     - pip install coveralls
 script:
     - py.test
+    - coverage run --source=eralchemy py.test
 after_success:
     - coveralls

@@ -72,4 +72,3 @@ def assert_table_well_rendered_to_dot(table):
 def test_table():
     assert_table_well_rendered_to_dot(child)
     assert_table_well_rendered_to_dot(parent)
-
