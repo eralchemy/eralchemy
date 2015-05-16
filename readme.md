@@ -36,7 +36,6 @@ Thanks to it's modular architecture, it can be connected to other ORMs/ODMs/OGMs
 # Notes
 ERAlchemy was inspired by [erd](https://github.com/BurntSushi/erd).
 
-# License
 Released under an Apache License 2.0
 
 Creator: Alexis Benoist
