@@ -52,11 +52,11 @@ def _intermediary_to_dot(tables, relationships):
     rv.write(GRAPH_BEGINNING)
     rv.write('\n')
     for t in tables:
-        rv.write(t.to_graphviz())
+        rv.write(t.to_dot())
         rv.write('\n')
 
     for r in relationships:
-        rv.write(r.to_graphviz())
+        rv.write(r.to_dot())
         rv.write('\n')
     rv.write('}')
     return rv.getvalue()
