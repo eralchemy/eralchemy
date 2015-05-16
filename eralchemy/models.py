@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from cst import TABLE, FONT_TAGS, RAW_TAGS
+from cst import TABLE, FONT_TAGS, ROW_TAGS
 """
 All the intermediary syntax.
 We can several kinds of models can be translated to this syntax.
@@ -41,7 +41,7 @@ class Column(Drawable):
         return '    {}{} {{label:"{}"}}'.format(self.key_symbol, self.name, self.type)
 
     def to_dot(self):
-        base = RAW_TAGS.format(' ALIGN="LEFT"', '{key_opening}{col_name}{key_closing}{type}')
+        base = ROW_TAGS.format(' ALIGN="LEFT"', '{key_opening}{col_name}{key_closing}{type}')
         return base.format(
             key_opening='<u>' if self.is_key else '',
             key_closing='</u>' if self.is_key else '',
@@ -117,6 +117,6 @@ class Table(Drawable):
                '\n'.join([c.to_er() for c in self.columns])
 
     def to_dot(self):
-        header = RAW_TAGS.format('', '<B><FONT POINT-SIZE="16">{}</FONT></B>').format(self.name)
+        header = ROW_TAGS.format('', '<B><FONT POINT-SIZE="16">{}</FONT></B>').format(self.name)
         body = ''.join(c.to_dot() for c in self.columns)
         return TABLE.format(self.name, header, body)

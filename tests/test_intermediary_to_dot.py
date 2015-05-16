@@ -3,9 +3,16 @@ from common import parent_id, parent_name, child_id, child_parent_id, relation, 
 from eralchemy.main import _intermediary_to_dot
 import dot_parser
 from eralchemy.cst import GRAPH_BEGINNING
+
+import re
 import pytest
 
 GRAPH_LAYOUT = GRAPH_BEGINNING + "%s }"
+column_re = re.compile('\\<TR\\>\\<TD\\ ALIGN\\=\\"LEFT\\"\\>(.*)\\<\\/TD\\>\\<\\/TR\\>')
+column_inside = re.compile(
+    '(?P<key_opening>.*)\\<FONT\\>(?P<name>.*)\\<\\/FONT\\>'
+    '(?P<key_closing>.*)\\<FONT\\>\\ \\[(?P<type>.*)\\]\\<\\/FONT\\>'
+)
 
 
 def assert_is_dot_format(dot):
@@ -17,21 +24,18 @@ def test_all_to_dot():
     assert_is_dot_format(output)
 
 
+def assert_column_well_rendered_to_dot(col):
+    col_no_table = column_re.match(col.to_dot()).groups()
+    assert len(col_no_table) == 1
+    col_parsed = column_inside.match(col_no_table[0])
+    assert col_parsed.group('key_opening') == ('<u>' if col.is_key else '')
+    assert col_parsed.group('name') == col.name
+    assert col_parsed.group('key_closing') == ('</u>' if col.is_key else '')
+    assert col_parsed.group('type') == col.type
 
-# def assert_is_partial_dot_format(dot):
-#     assert_is_dot_format(GRAPH_LAYOUT % dot)
-#
-# def test_relation_is_dot_format():
-#     assert_is_partial_dot_format(relation.to_dot())
-#
-#
-# def test_column_is_dot_format():
-#     assert_is_partial_dot_format(parent_id.to_dot())
-#     assert_is_partial_dot_format(parent_name.to_dot())
-#     assert_is_partial_dot_format(child_id.to_dot())
-#     assert_is_partial_dot_format(child_parent_id.to_dot())
-#
-#
-# def test_table_is_dot_format():
-#     assert_is_partial_dot_format(child.to_dot())
-#     assert_is_partial_dot_format(parent.to_dot())
+
+def test_column_is_dot_format():
+    assert_column_well_rendered_to_dot(parent_id)
+    assert_column_well_rendered_to_dot(parent_name)
+    assert_column_well_rendered_to_dot(child_id)
+    assert_column_well_rendered_to_dot(child_parent_id)
