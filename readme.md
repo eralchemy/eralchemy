@@ -7,9 +7,9 @@ ERAlchemy is integrated with SQLAlchemy and is able to  generate the ER digram f
 
 ## Quick Start 
 ### Install
-To install ERAlchemy, just do
+To install ERAlchemy, just do:
 
-    pip install eralchemy
+    $ pip install eralchemy
     
 `ERAlchemy` requires [GraphViz](http://www.graphviz.org/Download.php) to generate the graphs.
 
@@ -34,6 +34,10 @@ draw_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
 Thanks to it's modular architecture, it can be connected to other ORMs/ODMs/OGMs/O*Ms.
 
 ## Notes
+Every feedback is feedback is welcome on the [GitHub issues](https://github.com/Alexis-benoist/eralchemy/issues).
+
+To run the tests please run: `$ py.test`.
+
 ERAlchemy was inspired by [erd](https://github.com/BurntSushi/erd).
 
 Released under an Apache License 2.0

@@ -3,6 +3,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from eralchemy.models import Column as ERColumn, Relation, Table
+from sqlalchemy import create_engine
 
 Base = declarative_base()
 
@@ -57,3 +58,18 @@ child = Table(
     name='child',
     columns=[child_id, child_parent_id],
 )
+
+
+def check_intermediary_representation_simple_table(tables, relationships):
+    """ Check that that the tables and relationships represents the model above. """
+    assert len(tables) == 2
+    assert len(relationships) == 1
+    assert all(isinstance(t, Table) for t in tables)
+    assert all(isinstance(r, Relation) for r in relationships)
+    assert relation == relationships[0]
+
+
+def create_db(db_uri="sqlite:///test.db"):
+    engine = create_engine(db_uri)
+    Base.metadata.create_all(engine)
+    return db_uri
