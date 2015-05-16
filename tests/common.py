@@ -2,7 +2,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
-from eralchemy.models import Column as ERColumn, Relation
+from eralchemy.models import Column as ERColumn, Relation, Table
 
 Base = declarative_base()
 
@@ -18,7 +18,6 @@ class Child(Base):
     id = Column(Integer, primary_key=True)
     parent_id = Column(ForeignKey('parent.id'))
     parent = relationship('Parent', backref='children')
-
 
 
 parent_id = ERColumn(
@@ -47,4 +46,14 @@ relation = Relation(
     left_col=u'child',
     right_cardinality='*',
     left_cardinality='?',
+)
+
+parent = Table(
+    name='parent',
+    columns=[parent_id, parent_name],
+)
+
+child = Table(
+    name='child',
+    columns=[child_id, child_parent_id],
 )

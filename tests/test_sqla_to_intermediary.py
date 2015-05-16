@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from sqlalchemy import create_engine
-from eralchemy.sqla import column_to_intermediary, declarative_to_intermediary, database_to_intermediary
+from eralchemy.sqla import column_to_intermediary, declarative_to_intermediary, database_to_intermediary, table_to_intermediary
 from eralchemy.models import Table, Relation
 from common import parent_id, parent_name, child_id, child_parent_id, relation,\
-    Parent, Child, Base
+    Parent, Child, Base,\
+    child, parent
 
 
 def check_column(column, column_intermediary):
@@ -48,6 +49,19 @@ def check_intermediary_representation_simple_table(tables, relationships):
 def test_declarative_to_intermediary():
     tables, relationships = declarative_to_intermediary(Base)
     check_intermediary_representation_simple_table(tables, relationships)
+
+
+def table_equals_helper(sqla_table, expected_table):
+    table = table_to_intermediary(sqla_table.__table__)
+    assert len(table.columns) == len(expected_table.columns)
+    assert table.name == expected_table.name
+    for col in table.columns:
+        assert col in expected_table.columns
+
+
+def test_tables():
+    table_equals_helper(Child, child)
+    table_equals_helper(Parent, parent)
 
 
 def test_database_to_intermediary():

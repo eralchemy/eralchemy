@@ -16,6 +16,9 @@ class Drawable:
         """Transforms the intermediary object to it's syntax in the dot format. """
         raise NotImplemented()
 
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+
 
 class Column(Drawable):
     """ Represents a Column in the intermediaty syntax """
@@ -92,7 +95,7 @@ class Relation(Drawable):
         return '"{}" -- "{}" [{}];'.format(self.left_col, self.right_col, ','.join(cards))
 
     def __eq__(self, other):
-        if self.__dict__ == other.__dict__:
+        if Drawable.__eq__(self, other):
             return True
         other_inversed = Relation(
             right_col=other.left_col,
