@@ -36,13 +36,8 @@ def intermediary_to_schema(tables, relationships, output):
 def _intermediary_to_markdown(tables, relationships):
     """ Returns the er markup source in a string. """
     rv = StringIO.StringIO()
-    for t in tables:
-        rv.write(t.to_er())
-        rv.write('\n')
-
-    for r in relationships:
-        rv.write(r.to_er())
-        rv.write('\n')
+    rv.writelines(t.to_er() for t in tables)
+    rv.writelines(r.to_er() for r in relationships)
     return rv.getvalue()
 
 
@@ -51,13 +46,8 @@ def _intermediary_to_dot(tables, relationships):
     rv = StringIO.StringIO()
     rv.write(GRAPH_BEGINNING)
     rv.write('\n')
-    for t in tables:
-        rv.write(t.to_dot())
-        rv.write('\n')
-
-    for r in relationships:
-        rv.write(r.to_dot())
-        rv.write('\n')
+    rv.writelines(t.to_dot() for t in tables)
+    rv.writelines(r.to_dot() for r in relationships)
     rv.write('}')
     return rv.getvalue()
 
