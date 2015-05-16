@@ -9,6 +9,8 @@ import pytest
 
 GRAPH_LAYOUT = GRAPH_BEGINNING + "%s }"
 column_re = re.compile('\\<TR\\>\\<TD\\ ALIGN\\=\\"LEFT\\"\\>(.*)\\<\\/TD\\>\\<\\/TR\\>')
+header_re = re.compile('\\<TR\\>\\<TD\\>\\<B\\>\\<FONT\\ POINT\\-SIZE\\=\\"16\\"\\>(.*)'
+                       '\\<\\/FONT\\>\\<\\/B\\>\\<\\/TD\\>\\<\\/TR\\>')
 column_inside = re.compile(
     '(?P<key_opening>.*)\\<FONT\\>(?P<name>.*)\\<\\/FONT\\>'
     '(?P<key_closing>.*)\\<FONT\\>\\ \\[(?P<type>.*)\\]\\<\\/FONT\\>'
@@ -20,8 +22,12 @@ def assert_is_dot_format(dot):
 
 
 def test_all_to_dot():
-    output = _intermediary_to_dot([child, parent], [relation])
+    tables = [child, parent]
+    relations = [relation]
+    output = _intermediary_to_dot(tables, relations)
     assert_is_dot_format(output)
+    for element in relations + tables:
+        assert element.to_dot() in output
 
 
 def assert_column_well_rendered_to_dot(col):
@@ -52,3 +58,18 @@ def test_relation():
     assert r.group('r_name') == 'parent'
     assert r.group('l_card') == '{0,1}'
     assert r.group('r_card') == '0..N'
+
+
+def assert_table_well_rendered_to_dot(table):
+    matchs = header_re.match(table.header).groups()
+    assert len(matchs) == 1
+    assert matchs[0] == table.name
+    table_dot = table.to_dot()
+    for col in table.columns:
+        assert col.to_dot() in table_dot
+
+
+def test_table():
+    assert_table_well_rendered_to_dot(child)
+    assert_table_well_rendered_to_dot(parent)
+
