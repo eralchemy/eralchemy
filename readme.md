@@ -42,4 +42,4 @@ ERAlchemy was inspired by [erd](https://github.com/BurntSushi/erd).
 
 Released under an Apache License 2.0
 
-Creator: Alexis Benoist
+Creator: Alexis Benoist @Alexis_Benoist
