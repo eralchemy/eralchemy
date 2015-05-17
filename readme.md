@@ -1,6 +1,6 @@
 # Entity relation diagrams generator
 
-ERAlchemy generates Entity Relation (ER) diagram from databases or from SQLAlchemy models.
+ERAlchemy generates Entity Relation (ER) diagram (like the one below) from databases or from SQLAlchemy models.
 
 ## Example
 ![Example for a graph](https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/graph_example.png?raw=true "Example for a graph")
