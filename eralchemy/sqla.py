@@ -4,6 +4,9 @@ This class allow to transform SQLAlchemy metadata to the intermediary syntax.
 """
 
 from eralchemy.models import Relation, Column, Table
+import sys
+if sys.version_info[0] == 3:
+    unicode = str
 
 
 def relation_to_intermediary(fk):
