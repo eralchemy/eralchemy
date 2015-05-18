@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from eralchemy.main import all_to_intermediary, get_output_mode, intermediary_to_schema,\
     intermediary_to_dot, intermediary_to_markdown
-from common import Base, check_intermediary_representation_simple_table, create_db
+from tests.common import Base, check_intermediary_representation_simple_table, create_db
 
 import pytest
 

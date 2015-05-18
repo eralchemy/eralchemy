@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from common import parent_id, parent_name, child_id, child_parent_id, relation, child, parent
+from tests.common import parent_id, parent_name, child_id, child_parent_id, relation, child, parent
 from eralchemy.main import _intermediary_to_dot
 import dot_parser
 from eralchemy.cst import GRAPH_BEGINNING
