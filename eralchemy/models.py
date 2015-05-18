@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from cst import TABLE, FONT_TAGS, ROW_TAGS
+from eralchemy.cst import TABLE, FONT_TAGS, ROW_TAGS
 """
 All the intermediary syntax.
 We can several kinds of models can be translated to this syntax.

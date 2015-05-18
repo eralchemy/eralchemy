@@ -3,7 +3,7 @@
 This class allow to transform SQLAlchemy metadata to the intermediary syntax.
 """
 
-from models import Relation, Column, Table
+from eralchemy.models import Relation, Column, Table
 
 
 def relation_to_intermediary(fk):
