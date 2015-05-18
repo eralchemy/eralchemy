@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from cst import GRAPH_BEGINNING
-from sqla import metadata_to_intermediary, declarative_to_intermediary, database_to_intermediary
+from eralchemy.cst import GRAPH_BEGINNING
+from eralchemy.sqla import metadata_to_intermediary, declarative_to_intermediary, database_to_intermediary
 from pygraphviz.agraph import AGraph
 from sqlalchemy.engine.url import make_url
 from sqlalchemy.exc import ArgumentError
 try:
-    import cStringIO as StringIO
+    from io import BytesIO as StringIO
 except ImportError:
     import StringIO
 
@@ -35,7 +35,7 @@ def intermediary_to_schema(tables, relationships, output):
 
 def _intermediary_to_markdown(tables, relationships):
     """ Returns the er markup source in a string. """
-    rv = StringIO.StringIO()
+    rv = StringIO()
     rv.writelines(t.to_er() + '\n' for t in tables)
     rv.writelines(r.to_er() + '\n' for r in relationships)
     return rv.getvalue()
@@ -43,7 +43,7 @@ def _intermediary_to_markdown(tables, relationships):
 
 def _intermediary_to_dot(tables, relationships):
     """ Returns the dot source representing the database in a string. """
-    rv = StringIO.StringIO()
+    rv = StringIO()
     rv.write(GRAPH_BEGINNING)
     rv.write('\n')
     rv.writelines(t.to_dot() + '\n' for t in tables)
