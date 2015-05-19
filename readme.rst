@@ -33,12 +33,12 @@ Use from python
 
 .. code:: python
 
-    from eralchemy import draw_er
+    from eralchemy import render_er
     ## Draw from SQLAlchemy base
-    draw_er(Base, 'erd_from_sqlalchemy.png')
+    render_er(Base, 'erd_from_sqlalchemy.png')
 
     ## Draw from database
-    draw_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
+    render_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
 
 Use from the command line
 ~~~~~~~~~~~~~~~~~~~~~~~~~
