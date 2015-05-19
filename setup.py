@@ -4,7 +4,7 @@ with open('README.rst') as f:
 setup(
     name='ERAlchemy',
 
-    version='0.0.23',
+    version='0.0.24',
 
     description='Simple entity relation (ER) diagrams generation',
     long_description=long_description,

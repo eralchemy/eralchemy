@@ -1,8 +1,8 @@
 Entity relation diagrams generator
 ==================================
 
-ERAlchemy generates Entity Relation (ER) diagram from databases or from
-SQLAlchemy models.
+ERAlchemy generates Entity Relation (ER) diagram (like the one below)
+from databases or from SQLAlchemy models.
 
 Example
 -------
@@ -71,3 +71,4 @@ ERAlchemy was inspired by `erd <https://github.com/BurntSushi/erd>`__.
 Released under an Apache License 2.0
 
 Creator: Alexis Benoist
+[@Alexis\_Benoist](https://twitter.com/Alexis\_Benoist)
