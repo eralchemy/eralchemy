@@ -1,7 +1,8 @@
 language: python
 env:
-    - TOXENV=py27
-    - TOXENV=py34
+    - TOXENV=py26-req2
+    - TOXENV=py27-req2
+    - TOXENV=py34-req3
 before_install:
     - travis_retry pip install tox
 script:
