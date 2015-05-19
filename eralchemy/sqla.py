@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 """
 This class allow to transform SQLAlchemy metadata to the intermediary syntax.
 """

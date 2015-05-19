@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
 from eralchemy.sqla import column_to_intermediary, declarative_to_intermediary, database_to_intermediary, table_to_intermediary
 from tests.common import parent_id, parent_name, child_id, child_parent_id, Parent, Child, Base,\
     child, parent

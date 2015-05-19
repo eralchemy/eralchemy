@@ -1,14 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 from eralchemy.cst import GRAPH_BEGINNING
 from eralchemy.sqla import metadata_to_intermediary, declarative_to_intermediary, database_to_intermediary
 from pygraphviz.agraph import AGraph
 from sqlalchemy.engine.url import make_url
 from sqlalchemy.exc import ArgumentError
-try:
-    from io import BytesIO as StringIO
-except ImportError:
-    import StringIO
 
 
 def intermediary_to_markdown(tables, relationships, output):
@@ -36,21 +31,16 @@ def intermediary_to_schema(tables, relationships, output):
 
 def _intermediary_to_markdown(tables, relationships):
     """ Returns the er markup source in a string. """
-    rv = StringIO()
-    rv.writelines(t.to_er() + '\n' for t in tables)
-    rv.writelines(r.to_er() + '\n' for r in relationships)
-    return rv.getvalue()
+    t = '\n'.join(t.to_er() for t in tables)
+    r = '\n'.join(r.to_er() for r in relationships)
+    return '{}\n{}'.format(t, r)
 
 
 def _intermediary_to_dot(tables, relationships):
     """ Returns the dot source representing the database in a string. """
-    rv = StringIO()
-    rv.write(GRAPH_BEGINNING)
-    rv.write('\n')
-    rv.writelines(t.to_dot() + '\n' for t in tables)
-    rv.writelines(r.to_dot() + '\n' for r in relationships)
-    rv.write('}')
-    return rv.getvalue()
+    t = '\n'.join(t.to_dot() for t in tables)
+    r = '\n'.join(r.to_dot() for r in relationships)
+    return '{}\n{}\n{}\n}}'.format(GRAPH_BEGINNING, t, r)
 
 # Routes from the class name to the function transforming this class in
 # the intermediary representation.
