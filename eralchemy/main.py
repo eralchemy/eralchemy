@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from eralchemy.cst import GRAPH_BEGINNING
 from eralchemy.sqla import metadata_to_intermediary, declarative_to_intermediary, database_to_intermediary
 from pygraphviz.agraph import AGraph

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from eralchemy.cst import TABLE, FONT_TAGS, ROW_TAGS
 """
 All the intermediary syntax.
