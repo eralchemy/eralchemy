@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
+import sys
+import re
+from multiprocessing import Process
+from pygraphviz import AGraph
 from tests.common import parent_id, parent_name, child_id, child_parent_id, relation, child, parent
 from eralchemy.main import _intermediary_to_dot
-import dot_parser
 from eralchemy.cst import GRAPH_BEGINNING
 
-import re
 import pytest
 
 GRAPH_LAYOUT = GRAPH_BEGINNING + "%s }"
@@ -16,10 +18,21 @@ column_inside = re.compile(
     '(?P<key_closing>.*)\\<FONT\\>\\ \\[(?P<type>.*)\\]\\<\\/FONT\\>'
 )
 
-
 def assert_is_dot_format(dot):
-    assert dot_parser.parse_dot_data(dot) is not None
-
+    """ Checks that the dot is usable by graphviz. """
+    # We launch a process calling graphviz to render the dot. If the exit code is not 0 we assume that the syntax
+    # wasn't good
+    def run_graph(dot):
+        """ Runs graphviz to see if the syntax is good. """
+        graph = AGraph()
+        graph = graph.from_string(dot)
+        extension = 'png'
+        graph.draw(path='output.png', prog='dot', format=extension)
+        sys.exit(0)
+    p = Process(target=run_graph, args=(dot,))
+    p.start()
+    p.join()
+    assert p.exitcode == 0
 
 def test_all_to_dot():
     tables = [child, parent]
