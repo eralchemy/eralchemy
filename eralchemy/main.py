@@ -121,6 +121,10 @@ def render_er(input, output, mode='auto'):
             '.dot': returns the graph in the dot syntax.
             else: return a graph to the format graph
     """
-    tables, relationships = all_to_intermediary(input)
-    intermediary_to_output = get_output_mode(output, mode)
-    intermediary_to_output(tables, relationships, output)
+    try:
+        tables, relationships = all_to_intermediary(input)
+        intermediary_to_output = get_output_mode(output, mode)
+        intermediary_to_output(tables, relationships, output)
+    except ImportError as e:
+        module_name = e.message.split()[-1]
+        print('Please install {0} using "pip install {0}".'.format(module_name))
