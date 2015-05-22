@@ -1,6 +1,12 @@
 from setuptools import setup
-with open('readme.rst') as f:
-    long_description = f.read()
+
+try:
+    with open('readme.rst') as f:
+        long_description = f.read()
+except IOError:
+    with open('readme.md') as f:
+        long_description = f.read()
+
 setup(
     name='ERAlchemy',
 
