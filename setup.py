@@ -4,12 +4,12 @@ with open('readme.rst') as f:
 setup(
     name='ERAlchemy',
 
-    version='0.0.24',
+    version='0.0.26',
 
     description='Simple entity relation (ER) diagrams generation',
     long_description=long_description,
 
-    # The project's main homepage.
+    # The project's main homepage.d
     url='https://github.com/Alexis-benoist/eralchemy',
 
     # Author details
@@ -26,9 +26,14 @@ setup(
         'Intended Audience :: Developers',
 
         # that you indicate whether you support Python 2, Python 3 or both.
+        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
         'Topic :: Scientific/Engineering :: Visualization',
         'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: Database',
     ],
 
     # What does your project relate to?

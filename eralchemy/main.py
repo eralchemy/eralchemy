@@ -31,8 +31,8 @@ def intermediary_to_schema(tables, relationships, output):
 
 def _intermediary_to_markdown(tables, relationships):
     """ Returns the er markup source in a string. """
-    t = '\n'.join(t.to_er() for t in tables)
-    r = '\n'.join(r.to_er() for r in relationships)
+    t = '\n'.join(t.to_markdown() for t in tables)
+    r = '\n'.join(r.to_markdown() for r in relationships)
     return '{}\n{}'.format(t, r)
 
 
@@ -67,7 +67,7 @@ switch_output_mode = {
 
 def all_to_intermediary(input):
     """ Dispatch the input to the different function to produce the intermediary syntax.
-    All the supported classe names are in `swich_input_class_to_method`.
+    All the supported classes names are in `swich_input_class_to_method`.
     """
     input_class_name = input.__class__.__name__
     try:

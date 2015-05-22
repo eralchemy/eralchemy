@@ -12,11 +12,11 @@ def test_all_to_er():
     relations = [relation]
     output = _intermediary_to_markdown(tables, relations)
     for element in relations + tables:
-        assert element.to_er() in output
+        assert element.to_markdown() in output
 
 
 def assert_column_well_rendered_to_er(col):
-    col_er = col.to_er().strip()
+    col_er = col.to_markdown().strip()
     col_parsed = column_re.match(col_er)
     assert col_parsed.group('key') == ('*' if col.is_key else '')
     assert col_parsed.group('name') == col.name
@@ -31,14 +31,14 @@ def test_column_to_er():
 
 
 def test_relation():
-    assert relation.to_er() in ['parent *--? child', 'child ?--* parent']
+    assert relation.to_markdown() in ['parent *--? child', 'child ?--* parent']
 
 
 def assert_table_well_rendered_to_er(table):
     assert table.header_er == '[' + table.name + ']'
-    table_er = table.to_er()
+    table_er = table.to_markdown()
     for col in table.columns:
-        assert col.to_er() in table_er
+        assert col.to_markdown() in table_er
 
 
 def test_table():

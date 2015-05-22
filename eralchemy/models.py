@@ -8,7 +8,7 @@ We can several kinds of models can be translated to this syntax.
 
 class Drawable:
     """ Abstract class to represent all the objects which are drawable."""
-    def to_er(self):
+    def to_markdown(self):
         """Transforms the intermediary object to it's syntax in the er markup. """
         raise NotImplemented()
 
@@ -37,7 +37,7 @@ class Column(Drawable):
     def key_symbol(self):
         return '*' if self.is_key else ''
 
-    def to_er(self):
+    def to_markdown(self):
         return '    {}{} {{label:"{}"}}'.format(self.key_symbol, self.name, self.type)
 
     def to_dot(self):
@@ -69,7 +69,7 @@ class Relation(Drawable):
         self.right_cardinality = right_cardinality
         self.left_cardinality = left_cardinality
 
-    def to_er(self):
+    def to_markdown(self):
         return "{} {}--{} {}".format(
             self.left_col,
             self.left_cardinality,
@@ -116,8 +116,8 @@ class Table(Drawable):
     def header_er(self):
         return '[{}]'.format(self.name)
 
-    def to_er(self):
-        return self.header_er + '\n' + '\n'.join(c.to_er() for c in self.columns)
+    def to_markdown(self):
+        return self.header_er + '\n' + '\n'.join(c.to_markdown() for c in self.columns)
 
     @property
     def header_dot(self):
