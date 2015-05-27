@@ -38,7 +38,8 @@ Every feedback is welcome on the [GitHub issues](https://github.com/Alexis-benoi
 
 To run the tests, use : `$ py.test`.
 
-ERAlchemy was inspired by [erd](https://github.com/BurntSushi/erd).
+ERAlchemy was inspired by [erd](https://github.com/BurntSushi/erd), though it is able to render the ER diagram directly 
+from the database and not just only from the `ER` markup language.
 
 Released under an Apache License 2.0
 
