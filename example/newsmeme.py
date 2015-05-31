@@ -3,7 +3,10 @@ from sqlalchemy import Column, Integer, ForeignKey, UnicodeText, Text, Boolean, 
 from sqlalchemy.orm import relation
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
-
+"""
+Example of NewsMeme (open source forum like hacker news or Reddit).
+# Adapted from https://bitbucket.org/danjac/newsmeme (newsmeme / newsmeme / models)
+"""
 Base = declarative_base()
 
 post_tags = Table("post_tags", Base.metadata,
