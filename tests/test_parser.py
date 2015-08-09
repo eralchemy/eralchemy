@@ -9,6 +9,7 @@ from eralchemy.parser import (
     RelationNoColException,
     NoCurrentTableException,
     update_models,
+    ParsingException,
     parse_line_iterator
 )
 from eralchemy.models import Column, Table, Relation
@@ -178,3 +179,17 @@ def test_generate_and_parse():
     tables, relations = parse_line_iterator(markdown.split('\n'))
     c.assert_lst_equal(tables, c.tables)
     c.assert_lst_equal(relations, [c.relation])
+
+
+def test_integration_errors():
+    markdown_broken = \
+    """
+        name {label:"VARCHAR(255)"}
+    [child]
+        *id {label:"INTEGER"}
+        parent_id {label:"INTEGER"}
+    parent *--? child
+    """
+    with pytest.raises(ParsingException):
+        parse_line_iterator(markdown_broken.split('\n'))
+    # TODO check error
