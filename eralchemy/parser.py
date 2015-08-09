@@ -3,7 +3,19 @@ from eralchemy.models import Table, Relation, Column
 
 
 class ParsingException(Exception):
-    pass
+    base_traceback = 'Error on line {line_nb}: {line}\n{error}'
+    hint = None
+
+    @property
+    def traceback(self):
+        rv = self.base_traceback.format(
+            line_nb=getattr(self, 'line_nb', '?'),
+            line=getattr(self, 'line', ''),
+            error=self.message,
+        )
+        if self.hint is not None:
+            rv += '\nHINT: {}'.format(self.hint)
+        return rv
 
 
 class DuplicateTableException(ParsingException):
@@ -15,11 +27,11 @@ class DuplicateColumnException(ParsingException):
 
 
 class RelationNoColException(ParsingException):
-    pass
+    hint = 'Try to declare the tables before the relationships.'
 
 
 class NoCurrentTableException(ParsingException):
-    pass
+    hint = 'Try to declare the tables before the relationships and columns.'
 
 
 def remove_comments_from_line(line):
@@ -30,11 +42,11 @@ def remove_comments_from_line(line):
 
 def filter_lines_from_comments(lines):
     """ Filter the lines from comments and non code lines. """
-    for line in lines:
-        rv = remove_comments_from_line(line)
-        if rv == '':
+    for line_nb, raw_line in enumerate(lines):
+        clean_line = remove_comments_from_line(raw_line)
+        if clean_line == '':
             continue
-        yield rv
+        yield line_nb, clean_line, raw_line
 
 
 def parse_line(line):
@@ -116,8 +128,16 @@ def parse_line_iterator(line_iterator):
     current_table = None
     tables = []
     relations = []
-    for line in filter_lines_from_comments(line_iterator):
-        # Todo traceback mechanism.
-        new_obj = parse_line(line)
-        current_table, tables, relations = update_models(new_obj, current_table, tables, relations)
+    errors = []
+    for line_nb, line, raw_line in filter_lines_from_comments(line_iterator):
+        try:
+            new_obj = parse_line(line)
+            current_table, tables, relations = update_models(new_obj, current_table, tables, relations)
+        except ParsingException as e:
+            e.line_nb = line_nb
+            e.line = raw_line
+            errors.append(e)
+    if len(errors) != 0:
+        msg = 'ERAlchemy couldn\'t complete the generation due the {} following errors'.format(len(errors))
+        raise ParsingException(msg + '\n\n'.join(e.traceback for e in errors))
     return tables, relations
