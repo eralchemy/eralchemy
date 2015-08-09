@@ -62,19 +62,19 @@ child = Table(
 markdow_example = \
 """
 [parent]
-    *id
-    name
+    *id {label:"INTEGER"}
+    name {label:"VARCHAR(255)"}
 [child]
-    *id
-    parent_id
+    *id {label:"INTEGER"}
+    parent_id {label:"INTEGER"}
 parent *--? child
 """
 
 
-def assert_lst_equal(lst1, lst2):
-    assert len(lst1) == len(lst2)
-    for e in lst1:
-        assert e in lst2
+def assert_lst_equal(lst_actual, lst_expected):
+    assert len(lst_actual) == len(lst_expected)
+    for e in lst_actual:
+        assert e in lst_expected
 
 
 def check_intermediary_representation_simple_table(tables, relationships):

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from eralchemy.cst import TABLE, FONT_TAGS, ROW_TAGS
+import operator
 import re
 """
 All the intermediary syntax.
@@ -33,14 +34,14 @@ class Drawable:
 
 class Column(Drawable):
     """ Represents a Column in the intermediaty syntax """
-    RE = re.compile('(?P<primary>\*?)(?P<name>[^\s]+)')
+    RE = re.compile('(?P<primary>\*?)(?P<name>[^\s]+)\s*(\{label:\s*"(?P<label>[^"]+)"\})?')
 
     @staticmethod
     def make_from_match(match):
         return Column(
             name=match.group('name'),
-            type='',  # TODO add type
-            is_key='*' in match.group('primary'),  # TODO
+            type=match.group('label'),
+            is_key='*' in match.group('primary'),  # TODO foreign key
         )
 
     def __init__(self, name, type=None, is_key=False):
@@ -169,3 +170,13 @@ class Table(Drawable):
 
     def __str__(self):
         return self.header_markdown
+
+    def __eq__(self, other):
+        if not isinstance(other, Table):
+            return False
+        if other.name != self.name:
+            return False
+
+        if sorted(self.columns, key=operator.attrgetter('name')) != sorted(other.columns, key=operator.attrgetter('name')):
+            return False
+        return True

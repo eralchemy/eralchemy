@@ -58,6 +58,11 @@ def test_remove_from_lines():
         assert r('##{}'.format(code)) == ''
 
 
+def test_parse_line_type():
+    col = parse_line('parent_id {label:"INTEGER"}')
+    assert col.type == 'INTEGER'
+
+
 def test_parse_line():
     for s in columns_lst:
         rv = parse_line(s)
@@ -161,7 +166,7 @@ def test_update_models_add_column():
     assert c.parent_name in tables[0].columns
 
 
-# def test_integration_parser():
-#     tables, relations = parse_line_iterator(c.markdow_example.split('\n'))
-#     c.assert_lst_equal(tables, [c.parent, c.child])
-#     c.assert_lst_equal(relations, [c.relation])
+def test_integration_parser():
+    tables, relations = parse_line_iterator(c.markdow_example.split('\n'))
+    c.assert_lst_equal(tables, [c.parent, c.child])
+    c.assert_lst_equal(relations, [c.relation])

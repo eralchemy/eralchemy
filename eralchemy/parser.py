@@ -117,6 +117,7 @@ def parse_line_iterator(line_iterator):
     tables = []
     relations = []
     for line in filter_lines_from_comments(line_iterator):
+        # Todo traceback mechanism.
         new_obj = parse_line(line)
         current_table, tables, relations = update_models(new_obj, current_table, tables, relations)
     return tables, relations
