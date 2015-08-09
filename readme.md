@@ -27,11 +27,15 @@ render_er(Base, 'erd_from_sqlalchemy.png')
 render_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
 ``` 
 
-### Use from the command line
+### Use from the command line and a database
+    
+    $ eralchemy -i sqlite:///relative/path/to/db.db -o erd_from_sqlite.pdf
 
-    $ eralchemy -i sqlite:///relative/path/to/db.db -o erd_from_sqlite.png
+### Use from the command line and a markdown file.
 
-
+    $ curl 'https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/example/newsmeme.er' > markdown_file.er
+    $ eralchemy -i 'markdown_file.er' -o erd_from_markdown_file.pdf
+    
 ## Architecture
 ![Architecture schema](https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/eralchemy_architecture.png?raw=true "Architecture schema")
 
