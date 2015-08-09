@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytest
+from eralchemy.main import _intermediary_to_markdown
 from eralchemy.parser import (
     remove_comments_from_line,
     parse_line,
@@ -167,6 +168,13 @@ def test_update_models_add_column():
 
 
 def test_integration_parser():
-    tables, relations = parse_line_iterator(c.markdow_example.split('\n'))
-    c.assert_lst_equal(tables, [c.parent, c.child])
+    tables, relations = parse_line_iterator(c.markdown.split('\n'))
+    c.assert_lst_equal(tables, c.tables)
+    c.assert_lst_equal(relations, [c.relation])
+
+
+def test_generate_and_parse():
+    markdown = _intermediary_to_markdown(c.tables, [c.relation])
+    tables, relations = parse_line_iterator(markdown.split('\n'))
+    c.assert_lst_equal(tables, c.tables)
     c.assert_lst_equal(relations, [c.relation])

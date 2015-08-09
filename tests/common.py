@@ -58,8 +58,9 @@ child = Table(
     name='child',
     columns=[child_id, child_parent_id],
 )
+tables = [parent, child]
 
-markdow_example = \
+markdown = \
 """
 [parent]
     *id {label:"INTEGER"}
