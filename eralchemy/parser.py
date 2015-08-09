@@ -116,14 +116,14 @@ def update_models(new_obj, current_table, tables, relations):
     raise ValueError(msg.format(new_obj.__class__.__name__))
 
 
-def parse_file(filename):
+def markdown_file_to_intermediary(filename):
     """ Parse a file and return to intermediary syntax. """
     with open(filename) as f:
         lines = f.readall()
-    return parse_line_iterator(lines)
+    return line_iterator_to_intermediary(lines)
 
 
-def parse_line_iterator(line_iterator):
+def line_iterator_to_intermediary(line_iterator):
     """ Parse an iterator of str (one string per line) to the intermediary syntax"""
     current_table = None
     tables = []

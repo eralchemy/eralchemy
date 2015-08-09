@@ -1,19 +1,28 @@
 # -*- coding: utf-8 -*-
 from eralchemy.main import all_to_intermediary, get_output_mode, intermediary_to_schema,\
     intermediary_to_dot, intermediary_to_markdown
-from tests.common import Base, check_intermediary_representation_simple_table, create_db
+from tests.common import Base, check_intermediary_representation_simple_table, create_db, markdown
 
 import pytest
 
 
-def test_all_to_intermediary():
+def test_all_to_intermediary_base():
     tables, relationships = all_to_intermediary(Base)
     check_intermediary_representation_simple_table(tables, relationships)
 
+
+def test_all_to_intermediary_db():
     db_uri = create_db()
     tables, relationships = all_to_intermediary(db_uri)
     check_intermediary_representation_simple_table(tables, relationships)
 
+
+def test_all_to_intermediary_markdown():
+    tables, relationships = all_to_intermediary(markdown.split('\n'))
+    check_intermediary_representation_simple_table(tables, relationships)
+
+
+def test_all_to_intermediary_fails():
     with pytest.raises(ValueError):
         tables, relationships = all_to_intermediary('plop')
 

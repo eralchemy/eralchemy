@@ -10,7 +10,7 @@ from eralchemy.parser import (
     NoCurrentTableException,
     update_models,
     ParsingException,
-    parse_line_iterator
+    line_iterator_to_intermediary
 )
 from eralchemy.models import Column, Table, Relation
 from tests import common as c
@@ -169,14 +169,14 @@ def test_update_models_add_column():
 
 
 def test_integration_parser():
-    tables, relations = parse_line_iterator(c.markdown.split('\n'))
+    tables, relations = line_iterator_to_intermediary(c.markdown.split('\n'))
     c.assert_lst_equal(tables, c.tables)
     c.assert_lst_equal(relations, [c.relation])
 
 
 def test_generate_and_parse():
     markdown = _intermediary_to_markdown(c.tables, [c.relation])
-    tables, relations = parse_line_iterator(markdown.split('\n'))
+    tables, relations = line_iterator_to_intermediary(markdown.split('\n'))
     c.assert_lst_equal(tables, c.tables)
     c.assert_lst_equal(relations, [c.relation])
 
@@ -191,5 +191,5 @@ def test_integration_errors():
     parent *--? child
     """
     with pytest.raises(ParsingException):
-        parse_line_iterator(markdown_broken.split('\n'))
+        line_iterator_to_intermediary(markdown_broken.split('\n'))
     # TODO check error

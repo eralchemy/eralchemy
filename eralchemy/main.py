@@ -4,6 +4,7 @@ from eralchemy.sqla import metadata_to_intermediary, declarative_to_intermediary
 from pygraphviz.agraph import AGraph
 from sqlalchemy.engine.url import make_url
 from sqlalchemy.exc import ArgumentError
+from eralchemy.parser import markdown_file_to_intermediary, line_iterator_to_intermediary
 
 
 def intermediary_to_markdown(tables, relationships, output):
@@ -65,25 +66,37 @@ switch_output_mode = {
 }
 
 
-def all_to_intermediary(input):
-    """ Dispatch the input to the different function to produce the intermediary syntax.
+def all_to_intermediary(filename_or_input):
+    """ Dispatch the filename_or_input to the different function to produce the intermediary syntax.
     All the supported classes names are in `swich_input_class_to_method`.
     """
-    input_class_name = input.__class__.__name__
+    # Try to convert from the name of the class
+    input_class_name = filename_or_input.__class__.__name__
     try:
         this_to_intermediary = swich_input_class_to_method[input_class_name]
-        tables, relationships = this_to_intermediary(input)
+        tables, relationships = this_to_intermediary(filename_or_input)
         return tables, relationships
     except KeyError:
         pass
 
+    # try to read markdown file.
+    if isinstance(filename_or_input, basestring):
+        if filename_or_input.split('.')[-1] == 'er':
+            return markdown_file_to_intermediary(filename_or_input)
+
+    # try to read a markdown in a string
+    if not isinstance(filename_or_input, basestring):
+        if all(isinstance(e, basestring) for e in filename_or_input):
+            return line_iterator_to_intermediary(filename_or_input)
+
+    # try to read DB URI.
     try:
-        make_url(input)
-        return database_to_intermediary(input)
+        make_url(filename_or_input)
+        return database_to_intermediary(filename_or_input)
     except ArgumentError:
         pass
 
-    msg = 'Cannot process input {}'.format(input_class_name)
+    msg = 'Cannot process filename_or_input {}'.format(input_class_name)
     raise ValueError(msg)
 
 
