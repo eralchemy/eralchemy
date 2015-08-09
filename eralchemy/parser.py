@@ -119,7 +119,7 @@ def update_models(new_obj, current_table, tables, relations):
 def markdown_file_to_intermediary(filename):
     """ Parse a file and return to intermediary syntax. """
     with open(filename) as f:
-        lines = f.readall()
+        lines = f.readlines()
     return line_iterator_to_intermediary(lines)
 
 
