@@ -69,6 +69,8 @@ switch_output_mode = {
 def all_to_intermediary(filename_or_input):
     """ Dispatch the filename_or_input to the different function to produce the intermediary syntax.
     All the supported classes names are in `swich_input_class_to_method`.
+    The input can also be a list of strings in markdown format or a filename finishing by '.er' containing markdown
+    format.
     """
     # Try to convert from the name of the class
     input_class_name = filename_or_input.__class__.__name__
