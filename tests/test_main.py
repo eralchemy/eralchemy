@@ -24,7 +24,7 @@ def test_all_to_intermediary_markdown():
 
 def test_all_to_intermediary_fails():
     with pytest.raises(ValueError):
-        tables, relationships = all_to_intermediary('plop')
+        all_to_intermediary('plop')
 
 
 def test_get_output_mode():
