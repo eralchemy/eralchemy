@@ -84,13 +84,13 @@ def update_models(new_obj, current_table, tables, relations):
     if isinstance(new_obj, Table):
         tables_names = [t.name for t in tables]
         _check_not_creating_duplicates(new_obj.name, tables_names, 'table', DuplicateTableException)
-        return new_obj, tables + new_obj, relations
+        return new_obj, tables + [new_obj], relations
 
     if isinstance(new_obj, Relation):
-        columns_names = [c.name for t in tables for c in t.columns]
-        _check_colname_in_lst(new_obj.right_col, columns_names)
-        _check_colname_in_lst(new_obj.left_col, columns_names)
-        return current_table, tables, relations + new_obj
+        tables_names = [t.name for t in tables]
+        _check_colname_in_lst(new_obj.right_col, tables_names)
+        _check_colname_in_lst(new_obj.left_col, tables_names)
+        return current_table, tables, relations + [new_obj]
 
     if isinstance(new_obj, Column):
         columns_names = [c.name for c in current_table.columns]

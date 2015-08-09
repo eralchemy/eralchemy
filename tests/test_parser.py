@@ -107,3 +107,41 @@ def test_update_models_fails_duplicate_table():
                       relations=[],
                       )
 
+
+def test_update_models_add_relation():
+    current_table, tables, relations = \
+        update_models(
+            new_obj=c.relation,
+            current_table=c.parent,
+            tables=[c.parent, c.child],
+            relations=[],
+        )
+    assert c.relation in relations
+
+
+def test_update_models_add_table():
+    current_table, tables, relations = \
+        update_models(
+            new_obj=c.child,
+            current_table=c.parent,
+            tables=[c.parent, ],
+            relations=[],
+        )
+    assert c.child in tables
+
+
+def test_update_models_add_column():
+
+    parent = Table(
+        name='parent',
+        columns=[c.parent_id],
+    )
+    current_table, tables, relations = \
+        update_models(
+            new_obj=c.parent_name,
+            current_table=parent,
+            tables=[parent, ],
+            relations=[],
+        )
+    assert c.parent_name in current_table.columns
+    assert c.parent_name in tables[0].columns

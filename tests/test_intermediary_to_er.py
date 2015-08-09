@@ -35,7 +35,7 @@ def test_relation():
 
 
 def assert_table_well_rendered_to_er(table):
-    assert table.header_er == '[' + table.name + ']'
+    assert table.header_markdown == '[' + table.name + ']'
     table_er = table.to_markdown()
     for col in table.columns:
         assert col.to_markdown() in table_er

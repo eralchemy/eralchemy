@@ -27,6 +27,9 @@ class Drawable:
         """ Used in the parsing of files. Transforms a regex match to a Drawable object. """
         raise NotImplemented()
 
+    def __str__(self):
+        return self.to_markdown()
+
 
 class Column(Drawable):
     """ Represents a Column in the intermediaty syntax """
@@ -150,11 +153,11 @@ class Table(Drawable):
         )
 
     @property
-    def header_er(self):
+    def header_markdown(self):
         return '[{}]'.format(self.name)
 
     def to_markdown(self):
-        return self.header_er + '\n' + '\n'.join(c.to_markdown() for c in self.columns)
+        return self.header_markdown + '\n' + '\n'.join(c.to_markdown() for c in self.columns)
 
     @property
     def header_dot(self):
@@ -163,3 +166,6 @@ class Table(Drawable):
     def to_dot(self):
         body = ''.join(c.to_dot() for c in self.columns)
         return TABLE.format(self.name, self.header_dot, body)
+
+    def __str__(self):
+        return self.header_markdown
