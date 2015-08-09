@@ -20,10 +20,17 @@ def filter_lines_from_comments(lines):
         yield rv
 
 
+def parse_line():
+    pass
+
+
 def parse_file(filename):
+    """ Parse a file and return to intermediary syntax. """
     with open(filename) as f:
         lines = f.readall()
-    in_table = False
+
+    current_table = None
+    tables = []
     for line in filter_lines_from_comments(lines):
         pass
 
