@@ -24,7 +24,7 @@ class NoCurrentTableException(ParsingException):
 
 def remove_comments_from_line(line):
     if '#' not in line:
-        return line
+        return line.strip()
     return line[:line.index('#')].strip()
 
 
@@ -42,6 +42,8 @@ def parse_line(line):
         match = typ.RE.match(line)
         if match:
             return typ.make_from_match(match)
+    msg = 'Line "{}" could not be parsed to an object.'
+    raise ValueError(msg.format(line))
 
 
 def _check_no_current_table(new_obj, current_table):
@@ -106,12 +108,15 @@ def parse_file(filename):
     """ Parse a file and return to intermediary syntax. """
     with open(filename) as f:
         lines = f.readall()
+    return parse_line_iterator(lines)
 
+
+def parse_line_iterator(line_iterator):
+    """ Parse an iterator of str (one string per line) to the intermediary syntax"""
     current_table = None
     tables = []
     relations = []
-    for line in filter_lines_from_comments(lines):
+    for line in filter_lines_from_comments(line_iterator):
         new_obj = parse_line(line)
         current_table, tables, relations = update_models(new_obj, current_table, tables, relations)
-        pass
     return tables, relations

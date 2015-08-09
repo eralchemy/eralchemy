@@ -7,7 +7,9 @@ from eralchemy.parser import (
     DuplicateColumnException,
     RelationNoColException,
     NoCurrentTableException,
-    update_models)
+    update_models,
+    parse_line_iterator
+)
 from eralchemy.models import Column, Table, Relation
 from tests import common as c
 # examples from https://github.com/BurntSushi/erd/blob/master/examples/nfldb.er
@@ -45,6 +47,8 @@ def test_remove_from_lines():
     for code in elements_lst:
         assert r(code) == code
         assert r('{} ## some comment'.format(code)) == code
+        assert r('   {}'.format(code)) == code
+        assert r('{}   '.format(code)) == code
         assert r('{} ## some comment'.format(code)) == code
         assert r('{} #  # some comment'.format(code)) == code
         assert r('   {} #  # some comment'.format(code)) == code
@@ -130,6 +134,16 @@ def test_update_models_add_table():
     assert c.child in tables
 
 
+def test_update_models_new_obj_bad_class():
+    with pytest.raises(ValueError):
+        update_models(
+            new_obj=c.Child,
+            current_table=c.parent,
+            tables=[c.parent, ],
+            relations=[],
+        )
+
+
 def test_update_models_add_column():
 
     parent = Table(
@@ -145,3 +159,9 @@ def test_update_models_add_column():
         )
     assert c.parent_name in current_table.columns
     assert c.parent_name in tables[0].columns
+
+
+# def test_integration_parser():
+#     tables, relations = parse_line_iterator(c.markdow_example.split('\n'))
+#     c.assert_lst_equal(tables, [c.parent, c.child])
+#     c.assert_lst_equal(relations, [c.relation])

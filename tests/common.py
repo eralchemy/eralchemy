@@ -59,6 +59,23 @@ child = Table(
     columns=[child_id, child_parent_id],
 )
 
+markdow_example = \
+"""
+[parent]
+    *id
+    name
+[child]
+    *id
+    parent_id
+parent *--? child
+"""
+
+
+def assert_lst_equal(lst1, lst2):
+    assert len(lst1) == len(lst2)
+    for e in lst1:
+        assert e in lst2
+
 
 def check_intermediary_representation_simple_table(tables, relationships):
     """ Check that that the tables and relationships represents the model above. """
