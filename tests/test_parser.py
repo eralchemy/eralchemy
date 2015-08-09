@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pytest
-from eralchemy.parser import remove_comments_from_line
+from eralchemy.parser import remove_comments_from_line, parse_line
+from eralchemy.models import Column, Table, Relation
 # examples from https://github.com/BurntSushi/erd/blob/master/examples/nfldb.er
 table_lst = [
     '[player]',
@@ -19,8 +20,8 @@ relations_lst = [
 ]
 
 columns_lst = [
-    '*+gsis_id',
-    '*+drive_id',
+    # '*+gsis_id', # TODO add fk
+    # '*+drive_id',
     '*play_id',
     'time',
     'pos_team',
@@ -46,4 +47,15 @@ def test_remove_from_lines():
 
 
 def test_parse_line():
-    pass
+    for s in columns_lst:
+        rv = parse_line(s)
+        assert isinstance(rv, Column)
+
+    for s in relations_lst:
+        rv = parse_line(s)
+        assert isinstance(rv, Relation)
+
+    for s in table_lst:
+        rv = parse_line(s)
+        assert isinstance(rv, Table)
+

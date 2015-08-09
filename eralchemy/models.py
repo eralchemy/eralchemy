@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from eralchemy.cst import TABLE, FONT_TAGS, ROW_TAGS
+import re
 """
 All the intermediary syntax.
 We can several kinds of models can be translated to this syntax.
@@ -8,6 +9,8 @@ We can several kinds of models can be translated to this syntax.
 
 class Drawable:
     """ Abstract class to represent all the objects which are drawable."""
+    RE = None
+
     def to_markdown(self):
         """Transforms the intermediary object to it's syntax in the er markup. """
         raise NotImplemented()
@@ -19,9 +22,24 @@ class Drawable:
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
+    @staticmethod
+    def make_from_match(self):
+        """ Used in the parsing of files. Transforms a regex match to a Drawable object. """
+        raise NotImplemented()
+
 
 class Column(Drawable):
     """ Represents a Column in the intermediaty syntax """
+    RE = re.compile('(?P<primary>\*?)(?P<name>[^\s]+)')
+
+    @staticmethod
+    def make_from_match(match):
+        return Column(
+            name=match.group('name'),
+            type='',  # TODO add type
+            is_key='*' in match.group('primary'),  # TODO
+        )
+
     def __init__(self, name, type=None, is_key=False):
         """
         :param name: (str) Name of the column
@@ -52,6 +70,7 @@ class Column(Drawable):
 
 class Relation(Drawable):
     """ Represents a Relation in the intermediaty syntax """
+    RE = re.compile('(?P<left_name>[^\s]+)\s*(?P<left_cardinality>[*?+1])--(?P<right_cardinality>[*?+1])\s*(?P<right_name>[^\s]+)')
     cardinalities = {
         '*': '0..N',
         '?': '{0,1}',
@@ -59,6 +78,16 @@ class Relation(Drawable):
         '1': '1',
         '': None
     }
+
+    @staticmethod
+    def make_from_match(match):
+        return Relation(
+            right_col=match.group('right_name'),
+            left_col=match.group('left_name'),
+            right_cardinality=match.group('right_cardinality'),
+            left_cardinality=match.group('left_cardinality'),
+        )
+
 
     def __init__(self, right_col, left_col, right_cardinality=None, left_cardinality=None):
         if right_cardinality not in self.cardinalities.keys()\
@@ -108,9 +137,18 @@ class Relation(Drawable):
 
 class Table(Drawable):
     """ Represents a Table in the intermediaty syntax """
+    RE = re.compile('\[(?P<name>[^]]+)\]')
+
     def __init__(self, name, columns):
         self.name = name
         self.columns = columns
+
+    @staticmethod
+    def make_from_match(match):
+        return Table(
+            name=match.group('name'),
+            columns=[],
+        )
 
     @property
     def header_er(self):

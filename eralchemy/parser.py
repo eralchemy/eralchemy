@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-import re
-entity_re = re.compile('\[(?P<name>[^]]+)\]')
-column_re = re.compile('(?P<primary>\*?)(?P<name>[^\s]+)')
-relation_re = re.compile('(?P<l_name>[^\s]+)\s*(?P<l_card>[*?+1])--(?P<r_card>[*?+1])\s*(?P<r_name>[^\s]+)')
+from eralchemy.models import Table, Relation, Column
 
 
 def remove_comments_from_line(line):
@@ -20,8 +17,11 @@ def filter_lines_from_comments(lines):
         yield rv
 
 
-def parse_line():
-    pass
+def parse_line(line):
+    for typ in [Table, Relation, Column]:
+        match = typ.RE.match(line)
+        if match:
+            return typ.make_from_match(match)
 
 
 def parse_file(filename):
@@ -33,5 +33,3 @@ def parse_file(filename):
     tables = []
     for line in filter_lines_from_comments(lines):
         pass
-
-        

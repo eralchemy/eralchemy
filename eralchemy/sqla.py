@@ -28,6 +28,7 @@ def format_type(typ):
     except CompileError:
         return 'Null'
 
+
 def format_name(name):
     """ Transforms the name into a nice string representation. """
     return unicode(name)
