@@ -4,7 +4,8 @@ from eralchemy.sqla import metadata_to_intermediary, declarative_to_intermediary
 from pygraphviz.agraph import AGraph
 from sqlalchemy.engine.url import make_url
 from sqlalchemy.exc import ArgumentError
-from eralchemy.parser import markdown_file_to_intermediary, line_iterator_to_intermediary
+from eralchemy.parser import markdown_file_to_intermediary, line_iterator_to_intermediary, ParsingException
+import sys
 
 
 def intermediary_to_markdown(tables, relationships, output):
@@ -143,3 +144,5 @@ def render_er(input, output, mode='auto'):
     except ImportError as e:
         module_name = e.message.split()[-1]
         print('Please install {0} using "pip install {0}".'.format(module_name))
+    except ParsingException as e:
+        sys.stderr.write(e.message)
