@@ -68,9 +68,17 @@ def test_parse_line():
         assert isinstance(rv, Table)
 
 
-def test_update_models_fails():
+def test_update_models_fails_no_current_table():
     for new_obj in (c.relation, c.parent_id):
         with pytest.raises(ParsingException):
-            update_models(new_obj, None, [])
+            update_models(new_obj, None, [], [])
 
+
+def test_update_models_fails_relation_no_table():
+    with pytest.raises(ParsingException):
+        update_models(new_obj=c.relation,
+                      current_table=c.parent,
+                      tables=[c.parent],
+                      relations=[],
+                      )
 
