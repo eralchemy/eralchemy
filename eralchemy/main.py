@@ -7,6 +7,10 @@ from sqlalchemy.exc import ArgumentError
 from eralchemy.parser import markdown_file_to_intermediary, line_iterator_to_intermediary, ParsingException
 import sys
 
+try:
+  basestring
+except NameError:
+  basestring = str
 
 def intermediary_to_markdown(tables, relationships, output):
     """ Saves the intermediary representation to markdown. """

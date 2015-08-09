@@ -11,7 +11,7 @@ class ParsingException(Exception):
         rv = self.base_traceback.format(
             line_nb=getattr(self, 'line_nb', '?'),
             line=getattr(self, 'line', ''),
-            error=self.message,
+            error=self.args[0],
         )
         if self.hint is not None:
             rv += '\nHINT: {}'.format(self.hint)
