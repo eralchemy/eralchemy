@@ -88,7 +88,6 @@ class Relation(Drawable):
             left_cardinality=match.group('left_cardinality'),
         )
 
-
     def __init__(self, right_col, left_col, right_cardinality=None, left_cardinality=None):
         if right_cardinality not in self.cardinalities.keys()\
            or left_cardinality not in self.cardinalities.keys():

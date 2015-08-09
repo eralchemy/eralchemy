@@ -32,4 +32,6 @@ def parse_file(filename):
     current_table = None
     tables = []
     for line in filter_lines_from_comments(lines):
+        obj = parse_line(line)
+
         pass
