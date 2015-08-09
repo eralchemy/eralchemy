@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
 import pytest
-from eralchemy.parser import remove_comments_from_line, parse_line, ParsingException, update_models
+from eralchemy.parser import (
+    remove_comments_from_line,
+    parse_line,
+    DuplicateTableException,
+    DuplicateColumnException,
+    RelationNoColException,
+    NoCurrentTableException,
+    update_models)
 from eralchemy.models import Column, Table, Relation
 from tests import common as c
 # examples from https://github.com/BurntSushi/erd/blob/master/examples/nfldb.er
@@ -70,13 +77,31 @@ def test_parse_line():
 
 def test_update_models_fails_no_current_table():
     for new_obj in (c.relation, c.parent_id):
-        with pytest.raises(ParsingException):
+        with pytest.raises(NoCurrentTableException):
             update_models(new_obj, None, [], [])
 
 
-def test_update_models_fails_relation_no_table():
-    with pytest.raises(ParsingException):
+def test_update_models_fails_relation_no_col():
+    with pytest.raises(RelationNoColException):
         update_models(new_obj=c.relation,
+                      current_table=c.parent,
+                      tables=[c.parent],
+                      relations=[],
+                      )
+
+
+def test_update_models_fails_duplicate_col():
+    with pytest.raises(DuplicateColumnException):
+        update_models(new_obj=c.parent_name,
+                      current_table=c.parent,
+                      tables=[c.parent],
+                      relations=[],
+                      )
+
+
+def test_update_models_fails_duplicate_table():
+    with pytest.raises(DuplicateTableException):
+        update_models(new_obj=c.parent,
                       current_table=c.parent,
                       tables=[c.parent],
                       relations=[],
