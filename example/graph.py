@@ -57,5 +57,6 @@ class Edge(Base):
             self.lower_node = n2
             self.higher_node = n1
 
-
-render_er(Base, 'graph.png')
+if __name__ == '__main__':
+    render_er(Base, 'graph.png')
+    render_er(Base, 'graph.dot')

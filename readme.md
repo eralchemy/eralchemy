@@ -15,7 +15,7 @@ To install ERAlchemy, just do:
 
     $ pip install eralchemy
     
-`ERAlchemy` requires [GraphViz](http://www.graphviz.org/Download.php) to generate the graphs.
+`ERAlchemy` requires [GraphViz](http://www.graphviz.org/Download.php) to generate the graphs and Python. Both are available for Windows, Mac and Linux.
 
 ### Use from python
 ```python
