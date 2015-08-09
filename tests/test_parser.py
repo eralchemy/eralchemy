@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import pytest
-from eralchemy.parser import remove_comments_from_line, parse_line
+from eralchemy.parser import remove_comments_from_line, parse_line, ParsingException, update_models
 from eralchemy.models import Column, Table, Relation
+from tests import common as c
 # examples from https://github.com/BurntSushi/erd/blob/master/examples/nfldb.er
 table_lst = [
     '[player]',
@@ -65,4 +66,11 @@ def test_parse_line():
         assert rv.name == s[1:-1]
         assert rv.columns == []
         assert isinstance(rv, Table)
+
+
+def test_update_models_fails():
+    for new_obj in (c.relation, c.parent_id):
+        with pytest.raises(ParsingException):
+            update_models(new_obj, None, [])
+
 

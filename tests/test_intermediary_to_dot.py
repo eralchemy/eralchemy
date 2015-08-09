@@ -18,6 +18,7 @@ column_inside = re.compile(
     '(?P<key_closing>.*)\\<FONT\\>\\ \\[(?P<type>.*)\\]\\<\\/FONT\\>'
 )
 
+
 def assert_is_dot_format(dot):
     """ Checks that the dot is usable by graphviz. """
     # We launch a process calling graphviz to render the dot. If the exit code is not 0 we assume that the syntax

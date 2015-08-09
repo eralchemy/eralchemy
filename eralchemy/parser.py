@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from eralchemy.models import Table, Relation, Column
 
+class ParsingException(Exception):
+    pass
 
 def remove_comments_from_line(line):
     if '#' not in line:
@@ -24,6 +26,17 @@ def parse_line(line):
             return typ.make_from_match(match)
 
 
+def update_models(new_obj, current_table, tables):
+    assert current_table is None or current_table in tables
+    if current_table is None:
+        msg = 'Cannot add {} before adding table'
+        if isinstance(new_obj, Relation):
+            raise ParsingException(msg.format('relation'))
+        if isinstance(new_obj, Column):
+            raise ParsingException(msg.format('column'))
+
+
+
 def parse_file(filename):
     """ Parse a file and return to intermediary syntax. """
     with open(filename) as f:
@@ -32,6 +45,6 @@ def parse_file(filename):
     current_table = None
     tables = []
     for line in filter_lines_from_comments(lines):
-        obj = parse_line(line)
+        new_obj = parse_line(line)
 
         pass

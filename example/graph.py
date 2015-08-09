@@ -60,3 +60,4 @@ class Edge(Base):
 if __name__ == '__main__':
     render_er(Base, 'graph.png')
     render_er(Base, 'graph.dot')
+    render_er(Base, 'graph.pdf')
