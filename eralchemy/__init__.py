@@ -8,6 +8,7 @@ def cli():
     parser = argparse.ArgumentParser(prog='ERAlchemy')
     parser.add_argument('-i', nargs='?', help='Database URI to process.')
     parser.add_argument('-o', nargs='?', help='Name of the file to write.')
+    parser.add_argument('-x', nargs='*', help='Name of the table(s) to exclude.')
 
     args = parser.parse_args()
-    render_er(args.i, args.o)
+    render_er(args.i, args.o, exclude=args.x)

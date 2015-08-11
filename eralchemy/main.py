@@ -71,7 +71,7 @@ switch_output_mode = {
 }
 
 
-def all_to_intermediary(filename_or_input):
+def all_to_intermediary(filename_or_input, exclude=None):
     """ Dispatch the filename_or_input to the different function to produce the intermediary syntax.
     All the supported classes names are in `swich_input_class_to_method`.
     The input can also be a list of strings in markdown format or a filename finishing by '.er' containing markdown
@@ -81,7 +81,7 @@ def all_to_intermediary(filename_or_input):
     input_class_name = filename_or_input.__class__.__name__
     try:
         this_to_intermediary = swich_input_class_to_method[input_class_name]
-        tables, relationships = this_to_intermediary(filename_or_input)
+        tables, relationships = this_to_intermediary(filename_or_input, exclude=exclude)
         return tables, relationships
     except KeyError:
         pass
@@ -89,17 +89,17 @@ def all_to_intermediary(filename_or_input):
     # try to read markdown file.
     if isinstance(filename_or_input, basestring):
         if filename_or_input.split('.')[-1] == 'er':
-            return markdown_file_to_intermediary(filename_or_input)
+            return markdown_file_to_intermediary(filename_or_input, exclude=exclude)
 
     # try to read a markdown in a string
     if not isinstance(filename_or_input, basestring):
         if all(isinstance(e, basestring) for e in filename_or_input):
-            return line_iterator_to_intermediary(filename_or_input)
+            return line_iterator_to_intermediary(filename_or_input, exclude=exclude)
 
     # try to read DB URI.
     try:
         make_url(filename_or_input)
-        return database_to_intermediary(filename_or_input)
+        return database_to_intermediary(filename_or_input, exclude=exclude)
     except ArgumentError:
         pass
 
@@ -125,7 +125,7 @@ def get_output_mode(output, mode):
         return intermediary_to_schema
 
 
-def render_er(input, output, mode='auto'):
+def render_er(input, output, mode='auto', exclude=None):
     """
     Transforms the metadata into a representation.
     :param input: Possible inputs are instances of:
@@ -142,7 +142,7 @@ def render_er(input, output, mode='auto'):
             else: return a graph to the format graph
     """
     try:
-        tables, relationships = all_to_intermediary(input)
+        tables, relationships = all_to_intermediary(input, exclude=exclude)
         intermediary_to_output = get_output_mode(output, mode)
         intermediary_to_output(tables, relationships, output)
     except ImportError as e:
