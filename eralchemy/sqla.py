@@ -51,21 +51,19 @@ def table_to_intermediary(table):
     )
 
 
-def metadata_to_intermediary(metadata, exclude=None):
+def metadata_to_intermediary(metadata):
     """ Transforms SQLAlchemy metadata to the intermediary representation. """
-    excludes = exclude or []
-    filtered_tables = [table for table in metadata.tables.values() if table.name not in excludes]
-    tables = [table_to_intermediary(table) for table in filtered_tables]
-    relationships = [relation_to_intermediary(fk) for table in filtered_tables for fk in table.foreign_keys]
+    tables = [table_to_intermediary(table) for table in metadata.tables.values()]
+    relationships = [relation_to_intermediary(fk) for table in metadata.tables.values() for fk in table.foreign_keys]
     return tables, relationships
 
 
-def declarative_to_intermediary(base, exclude=None):
+def declarative_to_intermediary(base):
     """ Transform an SQLAlchemy Declarative Base to the intermediary representation. """
-    return metadata_to_intermediary(base.metadata, exclude=exclude)
+    return metadata_to_intermediary(base.metadata)
 
 
-def database_to_intermediary(database_uri, exclude=None):
+def database_to_intermediary(database_uri):
     """ Introspect from the database (given the database_uri) to create the intermediary representation. """
     from sqlalchemy.ext.automap import automap_base
     from sqlalchemy import create_engine
@@ -75,4 +73,4 @@ def database_to_intermediary(database_uri, exclude=None):
 
     # reflect the tables
     Base.prepare(engine, reflect=True)
-    return declarative_to_intermediary(Base, exclude=exclude)
+    return declarative_to_intermediary(Base)

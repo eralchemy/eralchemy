@@ -94,6 +94,7 @@ def update_models(new_obj, current_table, tables, relations):
     """ Update the state of the parsing. """
     _update_check_inputs(current_table, tables, relations)
     _check_no_current_table(new_obj, current_table)
+
     if isinstance(new_obj, Table):
         tables_names = [t.name for t in tables]
         _check_not_creating_duplicates(new_obj.name, tables_names, 'table', DuplicateTableException)
@@ -115,33 +116,23 @@ def update_models(new_obj, current_table, tables, relations):
     raise ValueError(msg.format(new_obj.__class__.__name__))
 
 
-def markdown_file_to_intermediary(filename, exclude=None):
+def markdown_file_to_intermediary(filename):
     """ Parse a file and return to intermediary syntax. """
     with open(filename) as f:
         lines = f.readlines()
-    return line_iterator_to_intermediary(lines, exclude=exclude)
+    return line_iterator_to_intermediary(lines)
 
 
-def line_iterator_to_intermediary(line_iterator, exclude=None):
+def line_iterator_to_intermediary(line_iterator):
     """ Parse an iterator of str (one string per line) to the intermediary syntax"""
-    excludes = exclude or []
     current_table = None
     tables = []
     relations = []
     errors = []
-    in_excluded = False
-    invalid_relation = False
     for line_nb, line, raw_line in filter_lines_from_comments(line_iterator):
         try:
             new_obj = parse_line(line)
-            if isinstance(new_obj, Table):
-                in_excluded = new_obj.name in excludes
-            elif isinstance(new_obj, Relation):
-                in_excluded = False  # no longer in a Table definition so can't be excluded
-                invalid_relation = new_obj.right_col in excludes or new_obj.left_col in excludes
-            if not in_excluded and not invalid_relation:
-                current_table, tables, relations = update_models(new_obj, current_table, tables, relations)
-
+            current_table, tables, relations = update_models(new_obj, current_table, tables, relations)
         except ParsingException as e:
             e.line_nb = line_nb
             e.line = raw_line

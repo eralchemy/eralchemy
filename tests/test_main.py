@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from eralchemy.main import all_to_intermediary, get_output_mode, intermediary_to_schema,\
-    intermediary_to_dot, intermediary_to_markdown
-from tests.common import Base, check_intermediary_representation_missing_excluded, check_intermediary_representation_simple_table, create_db, markdown
+    intermediary_to_dot, intermediary_to_markdown, filter_excludes
+from tests.common import Base, check_excluded_tables_relationships, check_intermediary_representation_simple_table, create_db, markdown, relationships, tables
 
 import pytest
 
@@ -11,21 +11,10 @@ def test_all_to_intermediary_base():
     check_intermediary_representation_simple_table(tables, relationships)
 
 
-def test_all_to_intermediary_base_exclude():
-    tables, relationships = all_to_intermediary(Base, exclude='exclude')
-    check_intermediary_representation_missing_excluded(tables, relationships)
-
-
 def test_all_to_intermediary_db():
     db_uri = create_db()
     tables, relationships = all_to_intermediary(db_uri)
     check_intermediary_representation_simple_table(tables, relationships)
-
-
-def test_all_to_intermediary_db_exclude():
-    db_uri = create_db()
-    tables, relationships = all_to_intermediary(db_uri, exclude='exclude')
-    check_intermediary_representation_missing_excluded(tables, relationships)
 
 
 def test_all_to_intermediary_markdown():
@@ -33,14 +22,20 @@ def test_all_to_intermediary_markdown():
     check_intermediary_representation_simple_table(tables, relationships)
 
 
-def test_all_to_intermediary_markdown_exclude():
-    tables, relationships = all_to_intermediary(markdown.split('\n'), exclude='exclude')
-    check_intermediary_representation_missing_excluded(tables, relationships)
-
-
 def test_all_to_intermediary_fails():
     with pytest.raises(ValueError):
         all_to_intermediary('plop')
+
+
+def test_filter_excludes_no_excludes():
+    actual_tables, actual_relationships = filter_excludes(tables, relationships, None)
+    assert actual_tables == tables
+    assert actual_relationships == relationships
+
+
+def test_filter_excludes_specified():
+    actual_tables, actual_relationships = filter_excludes(tables, relationships, 'exclude')
+    check_excluded_tables_relationships(actual_tables, actual_relationships)
 
 
 def test_get_output_mode():
