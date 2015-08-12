@@ -125,7 +125,13 @@ def get_output_mode(output, mode):
         return intermediary_to_schema
 
 
-def render_er(input, output, mode='auto'):
+def filter_excludes(tables, relationships, exclude):
+  exclude = exclude or []
+  return ([t for t in tables if t.name not in exclude],
+          [r for r in relationships if r.right_col not in exclude and r.left_col not in exclude])
+
+
+def render_er(input, output, mode='auto', exclude=None):
     """
     Transforms the metadata into a representation.
     :param input: Possible inputs are instances of:
@@ -143,6 +149,7 @@ def render_er(input, output, mode='auto'):
     """
     try:
         tables, relationships = all_to_intermediary(input)
+        tables, relationships = filter_excludes(tables, relationships, exclude)
         intermediary_to_output = get_output_mode(output, mode)
         intermediary_to_output(tables, relationships, output)
     except ImportError as e:

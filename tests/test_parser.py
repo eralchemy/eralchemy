@@ -171,7 +171,7 @@ def test_update_models_add_column():
 def test_integration_parser():
     tables, relations = line_iterator_to_intermediary(c.markdown.split('\n'))
     c.assert_lst_equal(tables, c.tables)
-    c.assert_lst_equal(relations, [c.relation])
+    c.assert_lst_equal(relations, [c.relation, c.exclude_relation])
 
 
 def test_generate_and_parse():

@@ -21,6 +21,13 @@ class Child(Base):
     parent = relationship('Parent', backref='children')
 
 
+class Exclude(Base):
+    __tablename__ = 'exclude'
+    id = Column(Integer, primary_key=True)
+    parent_id = Column(ForeignKey('parent.id'))
+    parent = relationship('Parent', backref='excludes')
+
+
 parent_id = ERColumn(
     name='id',
     type=u'INTEGER',
@@ -42,12 +49,33 @@ child_parent_id = ERColumn(
     name='parent_id',
     type=u'INTEGER',
 )
+
 relation = Relation(
     right_col=u'parent',
     left_col=u'child',
     right_cardinality='*',
     left_cardinality='?',
 )
+
+exclude_id = ERColumn(
+    name='id',
+    type=u'INTEGER',
+    is_key=True
+)
+
+exclude_parent_id = ERColumn(
+    name='parent_id',
+    type=u'INTEGER',
+)
+
+exclude_relation = Relation(
+    right_col=u'parent',
+    left_col=u'exclude',
+    right_cardinality='*',
+    left_cardinality='?',
+)
+
+relationships = [relation, exclude_relation]
 
 parent = Table(
     name='parent',
@@ -58,7 +86,13 @@ child = Table(
     name='child',
     columns=[child_id, child_parent_id],
 )
-tables = [parent, child]
+
+exclude = Table(
+    name='exclude',
+    columns=[exclude_id, exclude_parent_id],
+)
+
+tables = [parent, child, exclude]
 
 markdown = \
 """
@@ -68,7 +102,11 @@ markdown = \
 [child]
     *id {label:"INTEGER"}
     parent_id {label:"INTEGER"}
+[exclude]
+    *id {label:"INTEGER"}
+    parent_id {label:"INTEGER"}
 parent *--? child
+parent *--? exclude
 """
 
 
@@ -80,11 +118,20 @@ def assert_lst_equal(lst_actual, lst_expected):
 
 def check_intermediary_representation_simple_table(tables, relationships):
     """ Check that that the tables and relationships represents the model above. """
-    assert len(tables) == 2
-    assert len(relationships) == 1
+    assert len(tables) == 3
+    assert len(relationships) == 2
     assert all(isinstance(t, Table) for t in tables)
     assert all(isinstance(r, Relation) for r in relationships)
-    assert relation == relationships[0]
+    assert relation in relationships
+    assert exclude_relation in relationships
+
+
+def check_excluded_tables_relationships(actual_tables, actual_relationships):
+    assert len(actual_tables) == 2
+    assert parent in actual_tables
+    assert child in actual_tables
+    assert len(actual_relationships) == 1
+    assert relation in actual_relationships
 
 
 def create_db(db_uri="sqlite:///test.db"):
