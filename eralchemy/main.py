@@ -8,9 +8,10 @@ from eralchemy.parser import markdown_file_to_intermediary, line_iterator_to_int
 import sys
 
 try:
-  basestring
+    basestring
 except NameError:
-  basestring = str
+    basestring = str
+
 
 def intermediary_to_markdown(tables, relationships, output):
     """ Saves the intermediary representation to markdown. """
@@ -126,9 +127,13 @@ def get_output_mode(output, mode):
 
 
 def filter_excludes(tables, relationships, exclude):
-  exclude = exclude or []
-  return ([t for t in tables if t.name not in exclude],
-          [r for r in relationships if r.right_col not in exclude and r.left_col not in exclude])
+    """ This function excludes the tables and relationships with tables which are
+    in the exclude (lst of str, tables names) """
+    exclude = exclude or []
+    tables_filtered = [t for t in tables if t.name not in exclude]
+    relationships_filtered = [r for r in relationships
+                              if r.right_col not in exclude and r.left_col not in exclude]
+    return tables_filtered, relationships_filtered
 
 
 def render_er(input, output, mode='auto', exclude=None):
@@ -149,7 +154,8 @@ def render_er(input, output, mode='auto', exclude=None):
     """
     try:
         tables, relationships = all_to_intermediary(input)
-        tables, relationships = filter_excludes(tables, relationships, exclude)
+        if exclude is not None:
+            tables, relationships = filter_excludes(tables, relationships, exclude)
         intermediary_to_output = get_output_mode(output, mode)
         intermediary_to_output(tables, relationships, output)
     except ImportError as e:

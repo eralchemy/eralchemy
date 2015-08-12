@@ -35,6 +35,7 @@ def assert_is_dot_format(dot):
     p.join()
     assert p.exitcode == 0
 
+
 def test_all_to_dot():
     tables = [child, parent]
     relations = [relation]

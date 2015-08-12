@@ -10,7 +10,7 @@ except IOError:
 setup(
     name='ERAlchemy',
 
-    version='0.0.28',
+    version='0.0.30',
 
     description='Simple entity relation (ER) diagrams generation',
     long_description=long_description,
