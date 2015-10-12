@@ -57,5 +57,5 @@ def test_tables():
 
 def test_database_to_intermediary():
     db_uri = create_db()
-    tables, relationships = database_to_intermediary(db_uri)
+    tables, relationships = database_to_intermediary(db_uri, None)
     check_intermediary_representation_simple_table(tables, relationships)
