@@ -7,24 +7,24 @@ import pytest
 
 
 def test_all_to_intermediary_base():
-    tables, relationships = all_to_intermediary(Base)
+    tables, relationships = all_to_intermediary(Base, None)
     check_intermediary_representation_simple_table(tables, relationships)
 
 
 def test_all_to_intermediary_db():
     db_uri = create_db()
-    tables, relationships = all_to_intermediary(db_uri)
+    tables, relationships = all_to_intermediary(db_uri, None)
     check_intermediary_representation_simple_table(tables, relationships)
 
 
 def test_all_to_intermediary_markdown():
-    tables, relationships = all_to_intermediary(markdown.split('\n'))
+    tables, relationships = all_to_intermediary(markdown.split('\n'), None)
     check_intermediary_representation_simple_table(tables, relationships)
 
 
 def test_all_to_intermediary_fails():
     with pytest.raises(ValueError):
-        all_to_intermediary('plop')
+        all_to_intermediary('plop', None)
 
 
 def test_filter_excludes_no_excludes():
