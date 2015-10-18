@@ -13,6 +13,12 @@ def test_all_to_intermediary_base():
     check_intermediary_representation_simple_all_table(tables, relationships)
 
 
+def test_all_to_intermediary_db_sqlite():
+    db_uri = create_db(db_uri="sqlite:///test.db")
+    tables, relationships = all_to_intermediary(db_uri)
+    check_intermediary_representation_simple_table(tables, relationships)
+
+
 def test_all_to_intermediary_db():
     db_uri = create_db()
     tables, relationships = all_to_intermediary(db_uri)
