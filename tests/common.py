@@ -28,6 +28,29 @@ class Exclude(Base):
     parent = relationship('Parent', backref='excludes')
 
 
+class ParentWithSchema(Base):
+    __tablename__ = 'parent'
+    __table_args__ = {'schema': 'test'}
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+
+
+class ChildWithSchema(Base):
+    __tablename__ = 'child'
+    __table_args__ = {'schema': 'test'}
+    id = Column(Integer, primary_key=True)
+    parent_id = Column(ForeignKey('test.parent.id'))
+    parent = relationship('ParentWithSchema', backref='test.children')
+
+
+class ExcludeWithSchema(Base):
+    __tablename__ = 'exclude'
+    __table_args__ = {'schema': 'test'}
+    id = Column(Integer, primary_key=True)
+    parent_id = Column(ForeignKey('test.parent.id'))
+    parent = relationship('ParentWithSchema', backref='test.excludes')
+
+
 parent_id = ERColumn(
     name='id',
     type=u'INTEGER',
@@ -120,6 +143,16 @@ def check_intermediary_representation_simple_table(tables, relationships):
     """ Check that that the tables and relationships represents the model above. """
     assert len(tables) == 3
     assert len(relationships) == 2
+    assert all(isinstance(t, Table) for t in tables)
+    assert all(isinstance(r, Relation) for r in relationships)
+    assert relation in relationships
+    assert exclude_relation in relationships
+
+
+def check_intermediary_representation_simple_all_table(tables, relationships):
+    # The Base know there are 6 tables because the tables are created with this Base.
+    assert len(tables) == 6
+    assert len(relationships) == 4
     assert all(isinstance(t, Table) for t in tables)
     assert all(isinstance(r, Relation) for r in relationships)
     assert relation in relationships

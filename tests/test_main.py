@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 from eralchemy.main import all_to_intermediary, get_output_mode, intermediary_to_schema,\
     intermediary_to_dot, intermediary_to_markdown, filter_excludes
-from tests.common import Base, check_excluded_tables_relationships, check_intermediary_representation_simple_table, create_db, markdown, relationships, tables
+from tests.common import Base, check_excluded_tables_relationships, check_intermediary_representation_simple_table, create_db, markdown, relationships, tables, check_intermediary_representation_simple_all_table
 
 import pytest
 
 
 def test_all_to_intermediary_base():
     tables, relationships = all_to_intermediary(Base, None)
-    check_intermediary_representation_simple_table(tables, relationships)
+    check_intermediary_representation_simple_all_table(tables, relationships)
 
 
 def test_all_to_intermediary_db():
