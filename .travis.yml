@@ -1,4 +1,5 @@
 language: python
+sudo: false
 env:
     - TOXENV=py27-req2
     - TOXENV=py33-req3
