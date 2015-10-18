@@ -63,7 +63,7 @@ def declarative_to_intermediary(base):
     return metadata_to_intermediary(base.metadata)
 
 
-def database_to_intermediary(database_uri, schema):
+def database_to_intermediary(database_uri, schema=None):
     """ Introspect from the database (given the database_uri) to create the intermediary representation. """
     from sqlalchemy.ext.automap import automap_base
     from sqlalchemy import create_engine
