@@ -40,13 +40,6 @@ def test_columns_child():
 def test_declarative_to_intermediary():
     tables, relationships = declarative_to_intermediary(Base)
     check_intermediary_representation_simple_all_table(tables, relationships)
-    # The Base know there are 6 tables because the tables are created with this Base.
-    assert len(tables) == 6
-    assert len(relationships) == 4
-    assert all(isinstance(t, Table) for t in tables)
-    assert all(isinstance(r, Relation) for r in relationships)
-    assert relation in relationships
-    assert exclude_relation in relationships
 
 
 def table_equals_helper(sqla_table, expected_table):
