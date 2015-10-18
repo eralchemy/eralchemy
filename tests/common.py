@@ -134,7 +134,7 @@ def check_excluded_tables_relationships(actual_tables, actual_relationships):
     assert relation in actual_relationships
 
 
-def create_db(db_uri="sqlite:///test.db"):
+def create_db(db_uri="postgresql://postgres:postgres@localhost/test"):
     engine = create_engine(db_uri)
     Base.metadata.create_all(engine)
     return db_uri
