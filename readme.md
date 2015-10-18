@@ -40,6 +40,10 @@ render_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
 
     $ eralchemy -i 'postgresql+psycopg2://username:password@hostname:5432/databasename' -o filtered.er -x temp audit
 
+### Use from the command line with a Postgresql database to a markdown file for the schema `schema`
+
+    $ eralchemy -i 'postgresql+psycopg2://username:password@hostname:5432/databasename' -s schema
+
 ## Architecture
 ![Architecture schema](https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/eralchemy_architecture.png?raw=true "Architecture schema")
 
