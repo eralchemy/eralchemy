@@ -28,6 +28,29 @@ class Exclude(Base):
     parent = relationship('Parent', backref='excludes')
 
 
+class ParentWithSchema(Base):
+    __tablename__ = 'parent'
+    __table_args__ = {'schema': 'test'}
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+
+
+class ChildWithSchema(Base):
+    __tablename__ = 'child'
+    __table_args__ = {'schema': 'test'}
+    id = Column(Integer, primary_key=True)
+    parent_id = Column(ForeignKey('test.parent.id'))
+    parent = relationship('ParentWithSchema', backref='test.children')
+
+
+class ExcludeWithSchema(Base):
+    __tablename__ = 'exclude'
+    __table_args__ = {'schema': 'test'}
+    id = Column(Integer, primary_key=True)
+    parent_id = Column(ForeignKey('test.parent.id'))
+    parent = relationship('ParentWithSchema', backref='test.excludes')
+
+
 parent_id = ERColumn(
     name='id',
     type=u'INTEGER',
@@ -126,6 +149,16 @@ def check_intermediary_representation_simple_table(tables, relationships):
     assert exclude_relation in relationships
 
 
+def check_intermediary_representation_simple_all_table(tables, relationships):
+    # The Base know there are 6 tables because the tables are created with this Base.
+    assert len(tables) == 6
+    assert len(relationships) == 4
+    assert all(isinstance(t, Table) for t in tables)
+    assert all(isinstance(r, Relation) for r in relationships)
+    assert relation in relationships
+    assert exclude_relation in relationships
+
+
 def check_excluded_tables_relationships(actual_tables, actual_relationships):
     assert len(actual_tables) == 2
     assert parent in actual_tables
@@ -134,7 +167,7 @@ def check_excluded_tables_relationships(actual_tables, actual_relationships):
     assert relation in actual_relationships
 
 
-def create_db(db_uri="sqlite:///test.db"):
+def create_db(db_uri="postgresql://postgres:postgres@localhost/test"):
     engine = create_engine(db_uri)
     Base.metadata.create_all(engine)
     return db_uri

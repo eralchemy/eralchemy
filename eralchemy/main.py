@@ -72,7 +72,7 @@ switch_output_mode = {
 }
 
 
-def all_to_intermediary(filename_or_input):
+def all_to_intermediary(filename_or_input, schema):
     """ Dispatch the filename_or_input to the different function to produce the intermediary syntax.
     All the supported classes names are in `swich_input_class_to_method`.
     The input can also be a list of strings in markdown format or a filename finishing by '.er' containing markdown
@@ -100,7 +100,7 @@ def all_to_intermediary(filename_or_input):
     # try to read DB URI.
     try:
         make_url(filename_or_input)
-        return database_to_intermediary(filename_or_input)
+        return database_to_intermediary(filename_or_input, schema)
     except ArgumentError:
         pass
 
@@ -136,7 +136,7 @@ def filter_excludes(tables, relationships, exclude):
     return tables_filtered, relationships_filtered
 
 
-def render_er(input, output, mode='auto', exclude=None):
+def render_er(input, output, mode='auto', exclude=None, schema=None):
     """
     Transforms the metadata into a representation.
     :param input: Possible inputs are instances of:
@@ -151,9 +151,10 @@ def render_er(input, output, mode='auto', exclude=None):
             '*.er': writes to a file the markup to generate an ER style diagram.
             '.dot': returns the graph in the dot syntax.
             else: return a graph to the format graph
+    :param schema: name of the schema
     """
     try:
-        tables, relationships = all_to_intermediary(input)
+        tables, relationships = all_to_intermediary(input, schema)
         if exclude is not None:
             tables, relationships = filter_excludes(tables, relationships, exclude)
         intermediary_to_output = get_output_mode(output, mode)
