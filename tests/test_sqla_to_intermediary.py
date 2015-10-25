@@ -2,7 +2,8 @@
 
 from eralchemy.sqla import column_to_intermediary, declarative_to_intermediary, database_to_intermediary, table_to_intermediary
 from tests.common import parent_id, parent_name, child_id, child_parent_id, Parent, Child, Base,\
-    child, parent, Relation, Table, relation, exclude_relation, check_intermediary_representation_simple_all_table
+    child, parent, Relation, Table, relation, exclude_relation, \
+    check_intermediary_representation_simple_all_table
 from tests.common import check_intermediary_representation_simple_table, create_db
 
 
@@ -57,13 +58,13 @@ def test_tables():
 
 def test_database_to_intermediary():
     db_uri = create_db()
-    tables, relationships = database_to_intermediary(db_uri, None)
+    tables, relationships = database_to_intermediary(db_uri)
     check_intermediary_representation_simple_table(tables, relationships)
 
 
 def test_database_to_intermediary_with_schema():
     db_uri = create_db()
-    tables, relationships = database_to_intermediary(db_uri, 'test')
+    tables, relationships = database_to_intermediary(db_uri, schema='test')
 
     assert len(tables) == 3
     assert len(relationships) == 2
