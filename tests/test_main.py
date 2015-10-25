@@ -14,7 +14,7 @@ def test_all_to_intermediary_base():
 
 
 def test_all_to_intermediary_db_sqlite():
-    db_uri = create_db(db_uri="sqlite:///test.db")
+    db_uri = create_db(db_uri="sqlite:///test.db", use_sqlite=True)
     tables, relationships = all_to_intermediary(db_uri)
     check_intermediary_representation_simple_table(tables, relationships)
 
