@@ -2,7 +2,7 @@
 from eralchemy.main import render_er
 import argparse
 from eralchemy.helpers import check_args
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 
 
 def cli():
