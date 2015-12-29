@@ -1,5 +1,7 @@
 # Entity relation diagrams generator
 
+[![Join the chat at https://gitter.im/Alexis-benoist/eralchemy](https://badges.gitter.im/Alexis-benoist/eralchemy.svg)](https://gitter.im/Alexis-benoist/eralchemy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ERAlchemy generates Entity Relation (ER) diagram (like the one below) from databases or from SQLAlchemy models.
 
 ## Example
