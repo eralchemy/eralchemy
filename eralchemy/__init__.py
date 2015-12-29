@@ -17,7 +17,7 @@ def cli():
     args = parser.parse_args()
     check_args(args)
     if args.v:
-        print 'ERAlchemy version {}.'.format(__version__)
+        print('ERAlchemy version {}.'.format(__version__))
         exit(0)
     render_er(args.i, args.o, exclude=args.x, schema=args.s)
 
