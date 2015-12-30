@@ -28,10 +28,10 @@ def build_and_upload():
     rm('ERAlchemy.egg-info')
     rm('build')
     rm('dist')
-    Popen([sys.executable, 'pandoc', '--from=markdown', '--to=rst', 'README.md', '--output=readme.rst',
-           'release']).wait()
+    # Popen([sys.executable, 'pandoc', '--from=markdown', '--to=rst', 'README.md', '--output=readme.rst',
+    #        'release']).wait()
     Popen([sys.executable, 'setup.py', 'bdist_wheel', '--universal'], stdout=PIPE).wait()
-    Popen([sys.executable, 'setup.py', 'sdist']).wait()
+    # Popen([sys.executable, 'setup.py', 'sdist']).wait()
     # pypi_pwd = getpass(prompt='Pypi Password: ')
     # Popen(['twine', 'upload', 'dist/*', '-u', 'alexis.benoist', '-p', pypi_pwd]).wait()
     # Popen(['open', 'https://pypi.python.org/pypi/ERAlchemy'])
