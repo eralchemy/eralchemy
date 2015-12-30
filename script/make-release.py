@@ -35,6 +35,8 @@ def build_and_upload():
     pypi_pwd = getpass(prompt='Pypi Password: ')
     Popen(['twine', 'upload', 'dist/*', '-u', 'alexis.benoist', '-p', pypi_pwd]).wait()
     Popen(['open', 'https://pypi.python.org/pypi/ERAlchemy'])
+    Popen(['git', 'tag'], stdout=PIPE).communicate()[0].splitlines()
+    Popen(['git', 'push', '--tags']).wait()
 
 
 def fail(message, *args):
