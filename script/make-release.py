@@ -77,7 +77,7 @@ def parse_args():
     parser.add_argument('-m', action='store_true')
     parser.add_argument('-f', action='store_true')
     args = parser.parse_args()
-    major, minor, fix = args.M + args.m + args.f
+    major, minor, fix = args.M, args.m, args.f
     if major + minor + fix != 1:
         fail('Please select one and only one action.')
     return major, minor, fix
@@ -118,7 +118,7 @@ def main():
         fail('You have uncommitted changes in git')
 
     set_init_version(next_version_str)
-    make_git_commit('Bump version number to %s', version_str)
+    make_git_commit('Bump version number to %s', next_version)
     make_git_tag(next_version_str)
     build_and_upload()
 
