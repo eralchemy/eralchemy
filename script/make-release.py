@@ -30,13 +30,13 @@ def build_and_upload():
     rm('dist')
     Popen([sys.executable, 'pandoc', '--from=markdown', '--to=rst', 'README.md', '--output=readme.rst',
            'release']).wait()
-    Popen([sys.executable, 'setup.py', 'bdist_wheel', '--universal']).wait()
+    Popen([sys.executable, 'setup.py', 'bdist_wheel', '--universal'], stdout=PIPE).wait()
     Popen([sys.executable, 'setup.py', 'sdist']).wait()
-    pypi_pwd = getpass(prompt='Pypi Password: ')
-    Popen(['twine', 'upload', 'dist/*', '-u', 'alexis.benoist', '-p', pypi_pwd]).wait()
-    Popen(['open', 'https://pypi.python.org/pypi/ERAlchemy'])
-    Popen(['git', 'tag'], stdout=PIPE).communicate()[0].splitlines()
-    Popen(['git', 'push', '--tags']).wait()
+    # pypi_pwd = getpass(prompt='Pypi Password: ')
+    # Popen(['twine', 'upload', 'dist/*', '-u', 'alexis.benoist', '-p', pypi_pwd]).wait()
+    # Popen(['open', 'https://pypi.python.org/pypi/ERAlchemy'])
+    # Popen(['git', 'tag'], stdout=PIPE).communicate()[0].splitlines()
+    # Popen(['git', 'push', '--tags']).wait()
 
 
 def fail(message, *args):
@@ -116,8 +116,8 @@ def main():
     if next_version_str in tags:
         fail('Version "%s" is already tagged', next_version_str)
 
-    if not git_is_clean():
-        fail('You have uncommitted changes in git')
+    # if not git_is_clean():
+    #     fail('You have uncommitted changes in git')
 
     set_init_version(next_version_str)
     make_git_commit('Bump version number to %s', next_version)
