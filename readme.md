@@ -12,6 +12,11 @@ ERAlchemy generates Entity Relation (ER) diagram (like the one below) from datab
 
 ## Quick Start
 
+### Install on a mac
+The simplest way to install eralchemy on OSX is by using [Homebrew](www.brew.sh)
+
+    $ brew install eralchemy
+
 ### Install
 To install ERAlchemy, just do:
 
