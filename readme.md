@@ -24,6 +24,10 @@ To install ERAlchemy, just do:
 
 `ERAlchemy` requires [GraphViz](http://www.graphviz.org/Download.php) to generate the graphs and Python. Both are available for Windows, Mac and Linux.
 
+### Use from the command line and a database
+
+    $ eralchemy -i sqlite:///relative/path/to/db.db -o erd_from_sqlite.pdf
+
 ### Use from python
 ```python
 from eralchemy import render_er
@@ -33,10 +37,6 @@ render_er(Base, 'erd_from_sqlalchemy.png')
 ## Draw from database
 render_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
 ```
-
-### Use from the command line and a database
-
-    $ eralchemy -i sqlite:///relative/path/to/db.db -o erd_from_sqlite.pdf
 
 ### Use from the command line and a markdown file.
 
