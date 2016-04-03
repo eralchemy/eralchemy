@@ -1,8 +1,8 @@
 language: python
 env:
-    - TOXENV=py27-req2
-    - TOXENV=py33-req3
-    - TOXENV=py34-req3
+    - TOXENV=py27
+    - TOXENV=py33
+    - TOXENV=py34
 before_install:
     - sudo apt-get -qq install graphviz > /dev/null
     - travis_retry pip install tox
