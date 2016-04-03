@@ -56,10 +56,15 @@ render_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
 
 Thanks to it's modular architecture, it can be connected to other ORMs/ODMs/OGMs/O*Ms.
 
-## Notes
+## Contribute
+
 Every feedback is welcome on the [GitHub issues](https://github.com/Alexis-benoist/eralchemy/issues).
 
 To run the tests, use : `$ py.test`.
+
+All tested PR are welcome.
+
+## Notes
 
 ERAlchemy was inspired by [erd](https://github.com/BurntSushi/erd), though it is able to render the ER diagram directly
 from the database and not just only from the `ER` markup language.
