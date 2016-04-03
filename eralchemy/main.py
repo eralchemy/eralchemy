@@ -53,7 +53,9 @@ def _intermediary_to_dot(tables, relationships):
 # the intermediary representation.
 swich_input_class_to_method = {
     'MetaData': metadata_to_intermediary,
-    'DeclarativeMeta': declarative_to_intermediary
+    'DeclarativeMeta': declarative_to_intermediary,
+    # For compatibility with Flask-SQLAlchemy
+    '_BoundDeclarativeMeta': declarative_to_intermediary
 }
 
 # Routes from the mode to the method to transform the intermediary

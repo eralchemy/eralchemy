@@ -73,3 +73,17 @@ def test_database_to_intermediary_with_schema():
     # Not in because different schema.
     assert relation not in relationships
     assert exclude_relation not in relationships
+
+
+def test_flask_sqlalchemy():
+    from flask_sqlalchemy import SQLAlchemy
+    from flask import Flask
+    from eralchemy.main import all_to_intermediary
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+    db = SQLAlchemy(app)
+    model = db.Model
+    model.metadata = Base.metadata
+    tables, relationships = all_to_intermediary(db.Model)
+    check_intermediary_representation_simple_all_table(tables, relationships)
