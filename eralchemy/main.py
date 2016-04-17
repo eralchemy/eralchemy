@@ -51,7 +51,7 @@ def _intermediary_to_dot(tables, relationships):
 
 # Routes from the class name to the function transforming this class in
 # the intermediary representation.
-swich_input_class_to_method = {
+switch_input_class_to_method = {
     'MetaData': metadata_to_intermediary,
     'DeclarativeMeta': declarative_to_intermediary,
     # For compatibility with Flask-SQLAlchemy
@@ -60,7 +60,7 @@ swich_input_class_to_method = {
 
 # Routes from the mode to the method to transform the intermediary
 #  representation to the desired output.
-swich_output_mode_auto = {
+switch_output_mode_auto = {
     'er': intermediary_to_markdown,
     'graph': intermediary_to_schema,
     'dot': intermediary_to_dot
@@ -83,7 +83,7 @@ def all_to_intermediary(filename_or_input, schema=None):
     # Try to convert from the name of the class
     input_class_name = filename_or_input.__class__.__name__
     try:
-        this_to_intermediary = swich_input_class_to_method[input_class_name]
+        this_to_intermediary = switch_input_class_to_method[input_class_name]
         tables, relationships = this_to_intermediary(filename_or_input)
         return tables, relationships
     except KeyError:
@@ -117,7 +117,7 @@ def get_output_mode(output, mode):
     """
     if mode != 'auto':
         try:
-            return swich_output_mode_auto[mode]
+            return switch_output_mode_auto[mode]
         except KeyError:
             raise ValueError('Mode "{}" is not supported.')
 
