@@ -61,7 +61,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'eralchemy=eralchemy:cli',
+            'eralchemy=eralchemy.main:cli',
         ],
     },
 )

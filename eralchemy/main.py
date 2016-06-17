@@ -1,16 +1,36 @@
 # -*- coding: utf-8 -*-
+from eralchemy.version import version as __version__
 from eralchemy.cst import GRAPH_BEGINNING
 from eralchemy.sqla import metadata_to_intermediary, declarative_to_intermediary, database_to_intermediary
 from pygraphviz.agraph import AGraph
 from sqlalchemy.engine.url import make_url
 from sqlalchemy.exc import ArgumentError
+from eralchemy.helpers import check_args
 from eralchemy.parser import markdown_file_to_intermediary, line_iterator_to_intermediary, ParsingException
+import argparse
 import sys
 
 try:
     basestring
 except NameError:
     basestring = str
+
+
+def cli():
+    """Entry point for the application script"""
+    parser = argparse.ArgumentParser(prog='ERAlchemy')
+    parser.add_argument('-i', nargs='?', help='Database URI to process.')
+    parser.add_argument('-o', nargs='?', help='Name of the file to write.')
+    parser.add_argument('-s', nargs='?', help='Name of the schema.')
+    parser.add_argument('-x', nargs='*', help='Name of the table(s) to exclude.')
+    parser.add_argument('-v', help='Prints version number.', action='store_true')
+
+    args = parser.parse_args()
+    check_args(args)
+    if args.v:
+        print('ERAlchemy version {}.'.format(__version__))
+        exit(0)
+    render_er(args.i, args.o, exclude=args.x, schema=args.s)
 
 
 def intermediary_to_markdown(tables, relationships, output):
@@ -166,3 +186,7 @@ def render_er(input, output, mode='auto', exclude=None, schema=None):
         print('Please install {0} using "pip install {0}".'.format(module_name))
     except ParsingException as e:
         sys.stderr.write(e.message)
+
+
+if __name__ == '__main__':
+    cli()
