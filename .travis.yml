@@ -11,6 +11,7 @@ before_install:
     - travis_retry pip install tox
     - psql -U postgres -c "CREATE DATABASE test ENCODING 'UTF8';"
     - psql -U postgres test -c "CREATE SCHEMA test;"
+install: true
 script:
     - travis_retry tox
 after_success:
