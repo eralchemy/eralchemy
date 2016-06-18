@@ -1,13 +1,17 @@
 language: python
 env:
-    - TOXENV=py27
-    - TOXENV=py33
-    - TOXENV=py34
+    - TOXENV=py27-test
+    - TOXENV=py27-install
+    - TOXENV=py33-test
+    - TOXENV=py33-install
+    - TOXENV=py34-test
+    - TOXENV=py34-install
 before_install:
     - sudo apt-get -qq install graphviz > /dev/null
     - travis_retry pip install tox
     - psql -U postgres -c "CREATE DATABASE test ENCODING 'UTF8';"
     - psql -U postgres test -c "CREATE SCHEMA test;"
+install: true
 script:
     - travis_retry tox
 after_success:
