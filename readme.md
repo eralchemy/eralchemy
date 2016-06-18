@@ -28,6 +28,14 @@ To install ERAlchemy, just do:
 
     $ eralchemy -i sqlite:///relative/path/to/db.db -o erd_from_sqlite.pdf
 
+The database is specified as a [SQLAlchemy](http://docs.sqlalchemy.org/en/rel_1_0/core/engines.html#database-urls)
+database url.
+
+### Use from the command line and a markdown file.
+
+    $ curl 'https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/example/newsmeme.er' > markdown_file.er
+    $ eralchemy -i 'markdown_file.er' -o erd_from_markdown_file.pdf
+
 ### Use from python
 ```python
 from eralchemy import render_er
@@ -37,11 +45,6 @@ render_er(Base, 'erd_from_sqlalchemy.png')
 ## Draw from database
 render_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
 ```
-
-### Use from the command line and a markdown file.
-
-    $ curl 'https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/example/newsmeme.er' > markdown_file.er
-    $ eralchemy -i 'markdown_file.er' -o erd_from_markdown_file.pdf
 
 ### Use from the command line with a Postgresql database to a markdown file excluding tables named `temp` and `audit`
 
