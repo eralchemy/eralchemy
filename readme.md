@@ -63,7 +63,7 @@ Thanks to it's modular architecture, it can be connected to other ORMs/ODMs/OGMs
 
 Every feedback is welcome on the [GitHub issues](https://github.com/Alexis-benoist/eralchemy/issues).
 
-To run the tests, use : `$ py.test`.
+To run the tests, use : `$ py.test`. Some tests require a local postgres database with a schema named test in a database named test all owned by a user named postgres with a password of postgres.
 
 All tested PR are welcome.
 
