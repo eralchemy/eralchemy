@@ -1,5 +1,4 @@
 from setuptools import setup
-from eralchemy import __version__
 try:
     with open('readme.rst') as f:
         long_description = f.read()
@@ -7,10 +6,18 @@ except IOError:
     with open('readme.md') as f:
         long_description = f.read()
 
+
+def read_version():
+    with open('eralchemy/version.py') as f:
+        code = f.readlines()[0]
+    exec(code)
+    assert('version' in locals())
+    return locals()['version']
+
 setup(
     name='ERAlchemy',
 
-    version=__version__,
+    version=read_version(),
 
     description='Simple entity relation (ER) diagrams generation',
     long_description=long_description,

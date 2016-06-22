@@ -2,6 +2,9 @@
 from eralchemy.version import version as __version__
 from eralchemy.cst import GRAPH_BEGINNING
 from eralchemy.sqla import metadata_to_intermediary, declarative_to_intermediary, database_to_intermediary
+from pygraphviz.agraph import AGraph
+from sqlalchemy.engine.url import make_url
+from sqlalchemy.exc import ArgumentError
 from eralchemy.helpers import check_args
 from eralchemy.parser import markdown_file_to_intermediary, line_iterator_to_intermediary, ParsingException
 import argparse
@@ -118,9 +121,6 @@ def all_to_intermediary(filename_or_input, schema=None):
             return line_iterator_to_intermediary(filename_or_input)
 
     # try to read DB URI.
-    from sqlalchemy.engine.url import make_url
-    from sqlalchemy.exc import ArgumentError
-
     try:
         make_url(filename_or_input)
         return database_to_intermediary(filename_or_input, schema=schema)
