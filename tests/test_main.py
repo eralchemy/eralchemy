@@ -57,3 +57,7 @@ def test_get_output_mode():
 
     with pytest.raises(ValueError):
         get_output_mode('anything', 'mode')
+
+
+def test_import_render_er():
+    from eralchemy import render_er
