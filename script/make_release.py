@@ -67,7 +67,7 @@ def version_str_to_lst(v):
 
 
 def version_lst_to_str(v):
-    return '.'.join(str(n) for n in v)
+    return 'v' + '.'.join(str(n) for n in v)
 
 
 def parse_args():
@@ -120,7 +120,7 @@ def main():
         fail('You have uncommitted changes in git')
 
     set_init_version(next_version_str)
-    make_git_commit('Bump version number to %s', next_version)
+    make_git_commit('Bump version number to %s', next_version_str)
     make_git_tag(next_version_str)
     build_and_upload()
 
