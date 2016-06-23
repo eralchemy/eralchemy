@@ -49,7 +49,6 @@ def intermediary_to_dot(tables, relationships, output):
 
 def intermediary_to_schema(tables, relationships, output):
     """ Transforms and save the intermediary representation to the file chosen. """
-    from pygraphviz.agraph import AGraph
     dot_file = _intermediary_to_dot(tables, relationships)
     graph = AGraph()
     graph = graph.from_string(dot_file)
