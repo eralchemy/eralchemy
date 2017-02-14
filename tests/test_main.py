@@ -53,7 +53,7 @@ def test_filter_excludes_no_excludes():
 
 
 def test_filter_excludes_specified():
-    actual_tables, actual_relationships = filter_excludes(tables, relationships, 'exclude')
+    actual_tables, actual_relationships = filter_excludes(tables, relationships, ['exclude'])
     check_excluded_tables_relationships(actual_tables, actual_relationships)
 
 
