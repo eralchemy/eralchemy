@@ -148,17 +148,29 @@ def get_output_mode(output, mode):
         return intermediary_to_schema
 
 
+def filter_includes(tables, relationships, include):
+    """ This function includes the tables and relationships with tables which are
+    in the include (lst of str, tables names) """
+    if include is not None:
+        include = set(include)
+        tables = [t for t in tables if t.name in include]
+        relationships = [r for r in relationships
+                         if r.right_col in include and r.left_col in include]
+    return tables, relationships
+
+
 def filter_excludes(tables, relationships, exclude):
     """ This function excludes the tables and relationships with tables which are
     in the exclude (lst of str, tables names) """
-    exclude = exclude or []
-    tables_filtered = [t for t in tables if t.name not in exclude]
-    relationships_filtered = [r for r in relationships
-                              if r.right_col not in exclude and r.left_col not in exclude]
-    return tables_filtered, relationships_filtered
+    if exclude is not None:
+        exclude = set(exclude)
+        tables = [t for t in tables if t.name not in exclude]
+        relationships = [r for r in relationships
+                         if r.right_col not in exclude and r.left_col not in exclude]
+    return tables, relationships
 
 
-def render_er(input, output, mode='auto', exclude=None, schema=None):
+def render_er(input, output, mode='auto', include=None, exclude=None, schema=None):
     """
     Transforms the metadata into a representation.
     :param input: Possible inputs are instances of:
@@ -173,10 +185,14 @@ def render_er(input, output, mode='auto', exclude=None, schema=None):
             '*.er': writes to a file the markup to generate an ER style diagram.
             '.dot': returns the graph in the dot syntax.
             else: return a graph to the format graph
+    :param include: lst of str, table names to include, None means include all
+    :param exclude: lst of str, table names to exclude, None means exclude nothing
     :param schema: name of the schema
     """
     try:
         tables, relationships = all_to_intermediary(input, schema=schema)
+        if include is not None:
+            tables, relationships = filter_includes(tables, relationships, include)
         if exclude is not None:
             tables, relationships = filter_excludes(tables, relationships, exclude)
         intermediary_to_output = get_output_mode(output, mode)
