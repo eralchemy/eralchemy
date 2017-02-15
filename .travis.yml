@@ -8,6 +8,8 @@ env:
     - TOXENV=py34-install
     - TOXENV=py35-test
     - TOXENV=py35-install
+    - TOXENV=py36-test
+    - TOXENV=py36-install
 before_install:
     - sudo apt-get -qq install graphviz > /dev/null
     - travis_retry pip install tox
