@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from eralchemy.main import all_to_intermediary, get_output_mode, intermediary_to_schema,\
-    intermediary_to_dot, intermediary_to_markdown, filter_excludes
-from tests.common import Base, check_excluded_tables_relationships, \
+    intermediary_to_dot, intermediary_to_markdown, filter_includes, filter_excludes
+from tests.common import Base, check_included_tables_relationships, check_excluded_tables_relationships, \
     check_intermediary_representation_simple_table, create_db, markdown, relationships,\
     tables, check_intermediary_representation_simple_all_table
 
@@ -35,6 +35,17 @@ def test_all_to_intermediary_fails():
         all_to_intermediary('plop')
 
 
+def test_filter_includes_no_includes():
+    actual_tables, actual_relationships = filter_includes(tables, relationships, None)
+    assert actual_tables == tables
+    assert actual_relationships == relationships
+
+
+def test_filter_includes_specified():
+    actual_tables, actual_relationships = filter_includes(tables, relationships, ['parent', 'child'])
+    check_included_tables_relationships(actual_tables, actual_relationships)
+
+
 def test_filter_excludes_no_excludes():
     actual_tables, actual_relationships = filter_excludes(tables, relationships, None)
     assert actual_tables == tables
@@ -42,7 +53,7 @@ def test_filter_excludes_no_excludes():
 
 
 def test_filter_excludes_specified():
-    actual_tables, actual_relationships = filter_excludes(tables, relationships, 'exclude')
+    actual_tables, actual_relationships = filter_excludes(tables, relationships, ['exclude'])
     check_excluded_tables_relationships(actual_tables, actual_relationships)
 
 

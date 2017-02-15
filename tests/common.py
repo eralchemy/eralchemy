@@ -159,6 +159,14 @@ def check_intermediary_representation_simple_all_table(tables, relationships):
     assert exclude_relation in relationships
 
 
+def check_included_tables_relationships(actual_tables, actual_relationships):
+    assert len(actual_tables) == 2
+    assert parent in actual_tables
+    assert child in actual_tables
+    assert len(actual_relationships) == 1
+    assert relation in actual_relationships
+
+
 def check_excluded_tables_relationships(actual_tables, actual_relationships):
     assert len(actual_tables) == 2
     assert parent in actual_tables
