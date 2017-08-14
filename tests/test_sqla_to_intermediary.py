@@ -3,8 +3,9 @@
 from eralchemy.sqla import column_to_intermediary, declarative_to_intermediary, database_to_intermediary, table_to_intermediary
 from tests.common import parent_id, parent_name, child_id, child_parent_id, Parent, Child, Base,\
     child, parent, Relation, Table, relation, exclude_relation, \
-    check_intermediary_representation_simple_all_table
+    check_intermediary_representation_simple_all_table, ParentWithSchema , ChildWithSchema
 from tests.common import check_intermediary_representation_simple_table, create_db
+
 
 
 def check_column(column, column_intermediary):
@@ -65,6 +66,8 @@ def test_database_to_intermediary():
 def test_database_to_intermediary_with_schema():
     db_uri = create_db()
     tables, relationships = database_to_intermediary(db_uri, schema='test')
+    assert relationships[0].left_col == 'test.parent'
+    assert relationships[0].right_col == 'test.child'
 
     assert len(tables) == 3
     assert len(relationships) == 2
@@ -73,6 +76,7 @@ def test_database_to_intermediary_with_schema():
     # Not in because different schema.
     assert relation not in relationships
     assert exclude_relation not in relationships
+
 
 
 def test_flask_sqlalchemy():
