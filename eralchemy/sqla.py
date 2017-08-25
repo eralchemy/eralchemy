@@ -63,6 +63,12 @@ def declarative_to_intermediary(base):
     return metadata_to_intermediary(base.metadata)
 
 
+def name_for_scalar_relationship(base, local_cls, referred_cls, constraint):
+    """ Overriding naming schemes. """
+    name = referred_cls.__name__.lower() + "_ref"
+    return name
+
+
 def database_to_intermediary(database_uri, schema=None):
     """ Introspect from the database (given the database_uri) to create the intermediary representation. """
     from sqlalchemy.ext.automap import automap_base
@@ -74,5 +80,5 @@ def database_to_intermediary(database_uri, schema=None):
         Base.metadata.schema = schema
 
     # reflect the tables
-    Base.prepare(engine, reflect=True)
+    Base.prepare(engine, reflect=True, name_for_scalar_relationship=name_for_scalar_relationship)
     return declarative_to_intermediary(Base)
