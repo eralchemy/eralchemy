@@ -1,4 +1,5 @@
-language: python
+dist: trusty
+sudo: required
 env:
     - TOXENV=py27-test
     - TOXENV=py27-install
