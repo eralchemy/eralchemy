@@ -1,16 +1,12 @@
-dist: trusty
-sudo: required
+language: python
+python:
+  - "2.7"
+  - "3.4"
+  - "3.5"
+  - "3.6"
 env:
-    - TOXENV=py27-test
-    - TOXENV=py27-install
-    - TOXENV=py33-test
-    - TOXENV=py33-install
-    - TOXENV=py34-test
-    - TOXENV=py34-install
-    - TOXENV=py35-test
-    - TOXENV=py35-install
-    - TOXENV=py36-test
-    - TOXENV=py36-install
+    - TOXENV=test
+    - TOXENV=install
 before_install:
     - sudo apt-get -qq install graphviz > /dev/null
     - travis_retry pip install tox

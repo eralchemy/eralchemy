@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import sys
 from subprocess import Popen, PIPE
@@ -40,12 +41,12 @@ def build_and_upload():
 
 
 def fail(message, *args):
-    print >> sys.stderr, 'Error:', message % args
+    print('Error:', message % args, file=sys.stderr)
     sys.exit(1)
 
 
 def info(message, *args):
-    print >> sys.stderr, message % args
+    print('Error:', message % args, file=sys.stderr)
 
 
 def git_is_clean():

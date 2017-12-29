@@ -1,9 +1,10 @@
+from __future__ import print_function
 import sys
 
 
 # from https://github.com/mitsuhiko/flask/blob/master/scripts/make-release.py L92
 def fail(message, *args):
-    print >> sys.stderr, 'Error:', message % args
+    print('Error:', message % args, file=sys.stderr)
     sys.exit(1)
 
 
