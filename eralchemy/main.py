@@ -75,7 +75,9 @@ switch_input_class_to_method = {
     'MetaData': metadata_to_intermediary,
     'DeclarativeMeta': declarative_to_intermediary,
     # For compatibility with Flask-SQLAlchemy
-    '_BoundDeclarativeMeta': declarative_to_intermediary
+    '_BoundDeclarativeMeta': declarative_to_intermediary,
+    # Renamed in Flask-SQLAlchemy 2.3
+    'DefaultMeta': declarative_to_intermediary
 }
 
 # Routes from the mode to the method to transform the intermediary
