@@ -5,7 +5,8 @@ import re
 import sys
 from importlib.metadata import PackageNotFoundError, version
 
-from pygraphviz.agraph import AGraph
+#from pygraphviz.agraph import AGraph
+from graphviz import Source
 from sqlalchemy.engine.url import make_url
 from sqlalchemy.exc import ArgumentError
 
@@ -139,10 +140,12 @@ def intermediary_to_dot(tables, relationships, output, title=""):
 def intermediary_to_schema(tables, relationships, output, title=""):
     """Transforms and save the intermediary representation to the file chosen."""
     dot_file = _intermediary_to_dot(tables, relationships, title)
-    graph = AGraph()
-    graph = graph.from_string(dot_file)
-    extension = output.split(".")[-1]
-    graph.draw(path=output, prog="dot", format=extension)
+    #graph = AGraph()
+    #graph = graph.from_string(dot_file)
+    extension = output.split('.')[-1]
+    #graph.draw(path=output, prog='dot', format=extension)
+    #Source.from_file(filename, engine='dot', format=extension)
+    return Source(dot_file, engine='dot', format=extension)
 
 
 def _intermediary_to_markdown(tables, relationships):
@@ -363,16 +366,13 @@ def render_er(
     """
     try:
         tables, relationships = all_to_intermediary(input, schema=schema)
-        tables, relationships = filter_resources(
-            tables,
-            relationships,
-            include_tables=include_tables,
-            include_columns=include_columns,
-            exclude_tables=exclude_tables,
-            exclude_columns=exclude_columns,
-        )
+        if include is not None:
+            tables, relationships = filter_includes(tables, relationships, include)
+        if exclude is not None:
+            tables, relationships = filter_excludes(tables, relationships, exclude)
         intermediary_to_output = get_output_mode(output, mode)
-        intermediary_to_output(tables, relationships, output, title)
+        out = intermediary_to_output(tables, relationships, output)
+        return out
     except ImportError as e:
         module_name = e.message.split()[-1]
         print(f'Please install {module_name} using "pip install {module_name}".')
