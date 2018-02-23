@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
-from eralchemy.version import version as __version__
-from eralchemy.cst import GRAPH_BEGINNING
-from eralchemy.sqla import metadata_to_intermediary, declarative_to_intermediary, database_to_intermediary
+import argparse
+import sys
+import copy
+
 from pygraphviz.agraph import AGraph
 from sqlalchemy.engine.url import make_url
 from sqlalchemy.exc import ArgumentError
+
+from eralchemy.version import version as __version__
+from eralchemy.cst import GRAPH_BEGINNING
+from eralchemy.sqla import metadata_to_intermediary, declarative_to_intermediary, database_to_intermediary
 from eralchemy.helpers import check_args
 from eralchemy.parser import markdown_file_to_intermediary, line_iterator_to_intermediary, ParsingException
-import argparse
-import sys
 
 try:
     basestring
@@ -22,7 +25,12 @@ def cli():
     parser.add_argument('-i', nargs='?', help='Database URI to process.')
     parser.add_argument('-o', nargs='?', help='Name of the file to write.')
     parser.add_argument('-s', nargs='?', help='Name of the schema.')
-    parser.add_argument('-x', nargs='*', help='Name of the table(s) to exclude.')
+
+    parser.add_argument('--exclude-tables', '-x', nargs='+', help='Name of tables not to be displayed.')
+    parser.add_argument('--exclude-columns', nargs='+', help='Name of columns not to be displayed (for all tables).')
+    parser.add_argument('--include-tables', nargs='+', help='Name of tables to be displayed alone.')
+    parser.add_argument('--include-columns', nargs='+', help='Name of columns to be displayed alone (for all tables).')
+
     parser.add_argument('-v', help='Prints version number.', action='store_true')
 
     args = parser.parse_args()
@@ -30,7 +38,15 @@ def cli():
     if args.v:
         print('ERAlchemy version {}.'.format(__version__))
         exit(0)
-    render_er(args.i, args.o, exclude=args.x, schema=args.s)
+    render_er(
+        args.i,
+        args.o,
+        include_tables=args.include_tables,
+        include_columns=args.include_columns,
+        exclude_tables=args.exclude_tables,
+        exclude_columns=args.exclude_columns,
+        schema=args.s
+    )
 
 
 def intermediary_to_markdown(tables, relationships, output):
@@ -68,6 +84,7 @@ def _intermediary_to_dot(tables, relationships):
     t = '\n'.join(t.to_dot() for t in tables)
     r = '\n'.join(r.to_dot() for r in relationships)
     return '{}\n{}\n{}\n}}'.format(GRAPH_BEGINNING, t, r)
+
 
 # Routes from the class name to the function transforming this class in
 # the intermediary representation.
@@ -150,31 +167,45 @@ def get_output_mode(output, mode):
         return intermediary_to_schema
 
 
-def filter_includes(tables, relationships, include):
-    """ This function includes the tables and relationships with tables which are
-    in the include (lst of str, tables names) """
-    if include is not None:
-        include = set(include)
-        tables = [t for t in tables if t.name in include]
-        relationships = [r for r in relationships
-                         if r.right_col in include and r.left_col in include]
-    return tables, relationships
-
-
-def filter_excludes(tables, relationships, exclude):
-    """ This function excludes the tables and relationships with tables which are
-    in the exclude (lst of str, tables names) """
-    if exclude is not None:
-        exclude = set(exclude)
-        tables = [t for t in tables if t.name not in exclude]
-        relationships = [r for r in relationships
-                         if r.right_col not in exclude and r.left_col not in exclude]
-    return tables, relationships
-
-
-def render_er(input, output, mode='auto', include=None, exclude=None, schema=None):
+def filter_resources(tables, relationships,
+                     include_tables=None, include_columns=None,
+                     exclude_tables=None, exclude_columns=None):
     """
-    Transforms the metadata into a representation.
+    Include the following:
+        1. Tables and relationships with tables present in the include_tables (lst of str, tables names)
+        2. Columns (of whichever table) present in the include_columns (lst of str, columns names)
+    Exclude the following:
+        1. Tables and relationships with tables present in the exclude_tables (lst of str, tables names)
+        2. Columns (of whichever table) present in the exclude_columns (lst of str, columns names)
+    Disclosure note:
+        All relationships are taken into consideration before ignoring columns.
+        In other words, if one excludes primary or foreign keys, it will still keep the relations display amongst tables
+    """
+    _tables = copy.deepcopy(tables)
+    _relationships = copy.deepcopy(relationships)
+
+    include_tables = include_tables or [t.name for t in _tables]
+    include_columns = include_columns or [c.name for t in _tables for c in t.columns]
+    exclude_tables = exclude_tables or list()
+    exclude_columns = exclude_columns or list()
+
+    _tables = [t for t in _tables if t.name not in exclude_tables and t.name in include_tables]
+    _relationships = [r for r in _relationships
+                      if r.right_col not in exclude_tables
+                      and r.left_col not in exclude_tables
+                      and r.right_col in include_tables
+                      and r.left_col in include_tables]
+
+    for t in _tables:
+        t.columns = [c for c in t.columns if c.name not in exclude_columns and c.name in include_columns]
+
+    return _tables, _relationships
+
+
+def render_er(input, output, mode='auto', include_tables=None, include_columns=None,
+              exclude_tables=None, exclude_columns=None, schema=None):
+    """
+    Transform the metadata into a representation.
     :param input: Possible inputs are instances of:
         MetaData: SQLAlchemy Metadata
         DeclarativeMeta: SQLAlchemy declarative Base
@@ -187,16 +218,17 @@ def render_er(input, output, mode='auto', include=None, exclude=None, schema=Non
             '*.er': writes to a file the markup to generate an ER style diagram.
             '.dot': returns the graph in the dot syntax.
             else: return a graph to the format graph
-    :param include: lst of str, table names to include, None means include all
-    :param exclude: lst of str, table names to exclude, None means exclude nothing
+    :param include_tables: lst of str, table names to include, None means include all
+    :param include_columns: lst of str, column names to include, None means include all
+    :param exclude_tables: lst of str, table names to exclude, None means exclude nothing
+    :param exclude_columns: lst of str, field names to exclude, None means exclude nothing
     :param schema: name of the schema
     """
     try:
         tables, relationships = all_to_intermediary(input, schema=schema)
-        if include is not None:
-            tables, relationships = filter_includes(tables, relationships, include)
-        if exclude is not None:
-            tables, relationships = filter_excludes(tables, relationships, exclude)
+        tables, relationships = filter_resources(tables, relationships,
+                                                 include_tables=include_tables, include_columns=include_columns,
+                                                 exclude_tables=exclude_tables, exclude_columns=exclude_columns)
         intermediary_to_output = get_output_mode(output, mode)
         intermediary_to_output(tables, relationships, output)
     except ImportError as e:

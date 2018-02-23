@@ -24,19 +24,33 @@ To install ERAlchemy, just do:
 
 `ERAlchemy` requires [GraphViz](http://www.graphviz.org/Download.php) to generate the graphs and Python. Both are available for Windows, Mac and Linux.
 
-### Use from the command line and a database
+### Usage from Command Line
+
+#### From a database
 
     $ eralchemy -i sqlite:///relative/path/to/db.db -o erd_from_sqlite.pdf
 
 The database is specified as a [SQLAlchemy](http://docs.sqlalchemy.org/en/rel_1_0/core/engines.html#database-urls)
 database url.
 
-### Use from the command line and a markdown file.
+#### From a markdown file.
 
     $ curl 'https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/example/newsmeme.er' > markdown_file.er
     $ eralchemy -i 'markdown_file.er' -o erd_from_markdown_file.pdf
 
-### Use from python
+#### From a Postgresql DB to a markdown file excluding tables named `temp` and `audit`
+
+    $ eralchemy -i 'postgresql+psycopg2://username:password@hostname:5432/databasename' -o filtered.er --exclude-tables temp audit
+
+#### From a Postgresql DB to a markdown file excluding columns named `created_at` and `updated_at` from all tables
+
+    $ eralchemy -i 'postgresql+psycopg2://username:password@hostname:5432/databasename' -o filtered.er --exclude-columns created_at updated_at
+
+#### From a Postgresql DB to a markdown file for the schema `schema`
+
+    $ eralchemy -i 'postgresql+psycopg2://username:password@hostname:5432/databasename' -s schema
+
+### Usage from Python
 ```python
 from eralchemy import render_er
 ## Draw from SQLAlchemy base
@@ -45,14 +59,6 @@ render_er(Base, 'erd_from_sqlalchemy.png')
 ## Draw from database
 render_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
 ```
-
-### Use from the command line with a Postgresql database to a markdown file excluding tables named `temp` and `audit`
-
-    $ eralchemy -i 'postgresql+psycopg2://username:password@hostname:5432/databasename' -o filtered.er -x temp audit
-
-### Use from the command line with a Postgresql database to a markdown file for the schema `schema`
-
-    $ eralchemy -i 'postgresql+psycopg2://username:password@hostname:5432/databasename' -s schema
 
 ## Architecture
 ![Architecture schema](https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/eralchemy_architecture.png?raw=true "Architecture schema")
