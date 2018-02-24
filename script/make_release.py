@@ -88,8 +88,10 @@ def parse_args():
 
 def get_current_version():
     with open('eralchemy/version.py') as f:
-        exec (f.readlines()[0])
-        return version_str_to_lst(version)
+        lines = f.readlines()
+        namespace = {}
+        exec (lines[0], namespace)
+        return version_str_to_lst(namespace['version'])
 
 
 def get_git_tags():
