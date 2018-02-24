@@ -159,7 +159,7 @@ def check_intermediary_representation_simple_all_table(tables, relationships):
     assert exclude_relation in relationships
 
 
-def check_included_tables_relationships(actual_tables, actual_relationships):
+def check_tables_relationships(actual_tables, actual_relationships):
     assert len(actual_tables) == 2
     assert parent in actual_tables
     assert child in actual_tables
@@ -173,6 +173,20 @@ def check_excluded_tables_relationships(actual_tables, actual_relationships):
     assert child in actual_tables
     assert len(actual_relationships) == 1
     assert relation in actual_relationships
+
+
+def check_tables_columns(actual_tables, id_is_included=True):
+    assert len(actual_tables) == 3
+    for t in actual_tables:
+        columns_ = [c.name for c in t.columns]
+        assert ('id' in columns_) == id_is_included
+        assert len(t.columns) == 1
+
+
+def check_filter(actual_tables, actual_relationships):
+    assert actual_tables == tables
+    assert actual_relationships == relationships
+    assert [len(t.columns) for t in actual_tables] == [2, 2, 2]
 
 
 def create_db(db_uri="postgresql://postgres:postgres@localhost/test", use_sqlite=False):

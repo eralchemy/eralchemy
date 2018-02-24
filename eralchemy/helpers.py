@@ -9,7 +9,7 @@ def fail(message, *args):
 
 
 def check_args(args):
-    """Checks that the args are coherant."""
+    """Checks that the args are coherent."""
     if args.v:
         if args.i is not None or \
            args.o is not None or \
