@@ -51,6 +51,7 @@ database url.
     $ eralchemy -i 'postgresql+psycopg2://username:password@hostname:5432/databasename' -s schema
 
 ### Usage from Python
+
 ```python
 from eralchemy import render_er
 ## Draw from SQLAlchemy base
@@ -82,4 +83,4 @@ from the database and not just only from the `ER` markup language.
 
 Released under an Apache License 2.0
 
-Creator: Alexis Benoist [@Alexis_Benoist](https://twitter.com/Alexis_Benoist)
+Creator: Alexis Benoist [Alexis_Benoist](https://twitter.com/Alexis_Benoist)
