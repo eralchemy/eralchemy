@@ -74,4 +74,4 @@ def test_get_output_mode():
 
 
 def test_import_render_er():
-    from eralchemy import render_er
+    from eralchemy import render_er  # noqa: F401

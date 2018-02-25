@@ -1,11 +1,12 @@
 from poet.poet import formula_for
-from subprocess import Popen, PIPE
+from subprocess import Popen
 from script import make_release
 import os
 
+
 def main():
     with open('eralchemy.template.rb') as f:
-        template = f.readlines()
+        f.readlines()
 
     formula = formula_for('eralchemy')
     with open('/usr/local/Library/Formula/eralchemy.rb', 'w+') as f:
@@ -21,12 +22,13 @@ def main():
     Popen(['git', 'checkout', '-b', branch_name])
     Popen(['git', 'add', 'Library/Formula/eralchemy.rb', branch_name])
     commit_message = \
-"""ERAlchemy v{version}'
+        """ERAlchemy v{version}'
 
 
 Updated ERAlchemy to v{version}.
 """.format(version=version)
     Popen(['git', 'commit', branch_name, '-m', commit_message])
+
 
 if __name__ == '__main__':
     main()

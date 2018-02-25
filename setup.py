@@ -1,4 +1,5 @@
 from setuptools import setup
+
 try:
     with open('readme.rst') as f:
         long_description = f.read()
@@ -10,9 +11,10 @@ except IOError:
 def read_version():
     with open('eralchemy/version.py') as f:
         code = f.readlines()[0]
-    exec(code)
-    assert('version' in locals())
+    exec (code)
+    assert ('version' in locals())
     return locals()['version']
+
 
 setup(
     name='ERAlchemy',

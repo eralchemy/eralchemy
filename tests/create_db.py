@@ -27,10 +27,10 @@ def create_db(path):
         department_id = Column(Integer, ForeignKey('department.id'))
         # Use cascade='delete,all' to propagate the deletion of a Department onto its Employees
         department = relationship(
-                Department,
-                backref=backref('employees',
-                                uselist=True,
-                                cascade='delete,all'))
+            Department,
+            backref=backref('employees',
+                            uselist=True,
+                            cascade='delete,all'))
 
     from sqlalchemy import create_engine
     engine = create_engine('sqlite:///{}'.format(path))

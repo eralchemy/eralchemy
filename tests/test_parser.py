@@ -14,6 +14,7 @@ from eralchemy.parser import (
 )
 from eralchemy.models import Column, Table, Relation
 from tests import common as c
+
 # examples from https://github.com/BurntSushi/erd/blob/master/examples/nfldb.er
 table_lst = [
     '[player]',
@@ -152,7 +153,6 @@ def test_update_models_new_obj_bad_class():
 
 
 def test_update_models_add_column():
-
     parent = Table(
         name='parent',
         columns=[c.parent_id],
@@ -183,13 +183,13 @@ def test_generate_and_parse():
 
 def test_integration_errors():
     markdown_broken = \
-    """
-        name {label:"VARCHAR(255)"}
-    [child]
-        *id {label:"INTEGER"}
-        parent_id {label:"INTEGER"}
-    parent *--? child
-    """
+        """
+            name {label:"VARCHAR(255)"}
+        [child]
+            *id {label:"INTEGER"}
+            parent_id {label:"INTEGER"}
+        parent *--? child
+        """
     with pytest.raises(ParsingException):
         line_iterator_to_intermediary(markdown_broken.split('\n'))
     # TODO check error

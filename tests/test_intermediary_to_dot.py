@@ -7,8 +7,6 @@ from tests.common import parent_id, parent_name, child_id, child_parent_id, rela
 from eralchemy.main import _intermediary_to_dot
 from eralchemy.cst import GRAPH_BEGINNING
 
-import pytest
-
 GRAPH_LAYOUT = GRAPH_BEGINNING + "%s }"
 column_re = re.compile('\\<TR\\>\\<TD\\ ALIGN\\=\\"LEFT\\"\\>(.*)\\<\\/TD\\>\\<\\/TR\\>')
 header_re = re.compile('\\<TR\\>\\<TD\\>\\<B\\>\\<FONT\\ POINT\\-SIZE\\=\\"16\\"\\>(.*)'
@@ -21,6 +19,7 @@ column_inside = re.compile(
 
 def assert_is_dot_format(dot):
     """ Checks that the dot is usable by graphviz. """
+
     # We launch a process calling graphviz to render the dot. If the exit code is not 0 we assume that the syntax
     # wasn't good
     def run_graph(dot):
@@ -30,6 +29,7 @@ def assert_is_dot_format(dot):
         extension = 'png'
         graph.draw(path='output.png', prog='dot', format=extension)
         sys.exit(0)
+
     p = Process(target=run_graph, args=(dot,))
     p.start()
     p.join()

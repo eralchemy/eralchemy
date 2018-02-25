@@ -3,7 +3,7 @@ from tests.common import parent_id, parent_name, child_id, child_parent_id, rela
 from eralchemy.main import _intermediary_to_markdown
 
 import re
-import pytest
+
 column_re = re.compile('(?P<key>\*?)(?P<name>[^*].+) \{label:\"(?P<type>.+)\"\}')
 
 

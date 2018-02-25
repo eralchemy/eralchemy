@@ -3,6 +3,7 @@ from sqlalchemy import Column, Integer, ForeignKey, UnicodeText, Text, Boolean, 
 from sqlalchemy.orm import relation
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
+
 """
 Example of NewsMeme (open source forum like hacker news or Reddit).
 # Adapted from https://bitbucket.org/danjac/newsmeme (newsmeme / newsmeme / models)
@@ -115,4 +116,5 @@ class Tag(Base):
 
 if __name__ == '__main__':
     from eralchemy import render_er
+
     render_er(Base, 'newsmeme.pdf')

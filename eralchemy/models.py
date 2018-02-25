@@ -2,6 +2,7 @@
 from eralchemy.cst import TABLE, FONT_TAGS, ROW_TAGS
 import operator
 import re
+
 """
 All the intermediary syntax.
 We can several kinds of models can be translated to this syntax.
@@ -74,7 +75,8 @@ class Column(Drawable):
 
 class Relation(Drawable):
     """ Represents a Relation in the intermediaty syntax """
-    RE = re.compile('(?P<left_name>[^\s]+)\s*(?P<left_cardinality>[*?+1])--(?P<right_cardinality>[*?+1])\s*(?P<right_name>[^\s]+)')
+    RE = re.compile(
+        '(?P<left_name>[^\s]+)\s*(?P<left_cardinality>[*?+1])--(?P<right_cardinality>[*?+1])\s*(?P<right_name>[^\s]+)')  # noqa: E501
     cardinalities = {
         '*': '0..N',
         '?': '{0,1}',
@@ -93,8 +95,8 @@ class Relation(Drawable):
         )
 
     def __init__(self, right_col, left_col, right_cardinality=None, left_cardinality=None):
-        if right_cardinality not in self.cardinalities.keys()\
-           or left_cardinality not in self.cardinalities.keys():
+        if right_cardinality not in self.cardinalities.keys() \
+                or left_cardinality not in self.cardinalities.keys():
             raise ValueError('Cardinality should be in {}"'.format(self.cardinalities.keys()))
         self.right_col = right_col
         self.left_col = left_col
@@ -161,6 +163,10 @@ class Table(Drawable):
         return self.header_markdown + '\n' + '\n'.join(c.to_markdown() for c in self.columns)
 
     @property
+    def columns_sorted(self):
+        return sorted(self.columns, key=operator.attrgetter('name'))
+
+    @property
     def header_dot(self):
         return ROW_TAGS.format('', '<B><FONT POINT-SIZE="16">{}</FONT></B>').format(self.name)
 
@@ -177,6 +183,6 @@ class Table(Drawable):
         if other.name != self.name:
             return False
 
-        if sorted(self.columns, key=operator.attrgetter('name')) != sorted(other.columns, key=operator.attrgetter('name')):
+        if self.columns_sorted != other.columns_sorted:
             return False
         return True

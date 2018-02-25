@@ -27,5 +27,6 @@ def example():
     render_er(Base, 'simple.pdf')
     render_er(Base, 'simple.er')
 
+
 if __name__ == '__main__':
     example()

@@ -12,7 +12,7 @@ def check_args(args):
     """Checks that the args are coherent."""
     check_args_has_attributes(args)
     if args.v:
-        non_version_attrs = [v for k, v in args.__dict__.items()if k != 'v']
+        non_version_attrs = [v for k, v in args.__dict__.items() if k != 'v']
         print('non_version_attrs', non_version_attrs)
         if len([v for v in non_version_attrs if v is not None]) != 0:
             fail('Cannot show the version number with another command.')
@@ -36,5 +36,3 @@ def check_args_has_attributes(args):
 def check_args_has_attribute(args, name):
     if not hasattr(args, name):
         raise Exception('{} should be set'.format(name))
-
-

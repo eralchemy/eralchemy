@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from eralchemy.sqla import column_to_intermediary, declarative_to_intermediary, database_to_intermediary, table_to_intermediary
-from tests.common import parent_id, parent_name, child_id, child_parent_id, Parent, Child, Base,\
+from eralchemy.sqla import column_to_intermediary, declarative_to_intermediary, database_to_intermediary, \
+    table_to_intermediary
+from tests.common import parent_id, parent_name, child_id, child_parent_id, Parent, Child, Base, \
     child, parent, Relation, Table, relation, exclude_relation, \
     check_intermediary_representation_simple_all_table
 from tests.common import check_intermediary_representation_simple_table, create_db

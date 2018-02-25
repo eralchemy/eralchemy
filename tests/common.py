@@ -118,19 +118,19 @@ exclude = Table(
 tables = [parent, child, exclude]
 
 markdown = \
-"""
-[parent]
-    *id {label:"INTEGER"}
-    name {label:"VARCHAR(255)"}
-[child]
-    *id {label:"INTEGER"}
-    parent_id {label:"INTEGER"}
-[exclude]
-    *id {label:"INTEGER"}
-    parent_id {label:"INTEGER"}
-parent *--? child
-parent *--? exclude
-"""
+    """
+    [parent]
+        *id {label:"INTEGER"}
+        name {label:"VARCHAR(255)"}
+    [child]
+        *id {label:"INTEGER"}
+        parent_id {label:"INTEGER"}
+    [exclude]
+        *id {label:"INTEGER"}
+        parent_id {label:"INTEGER"}
+    parent *--? child
+    parent *--? exclude
+    """
 
 
 def assert_lst_equal(lst_actual, lst_expected):
