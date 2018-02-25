@@ -90,7 +90,7 @@ def get_current_version():
     with open('eralchemy/version.py') as f:
         lines = f.readlines()
         namespace = {}
-        exec (lines[0], namespace)
+        exec(lines[0], namespace)
         return version_str_to_lst(namespace['version'])
 
 

@@ -11,7 +11,7 @@ except IOError:
 def read_version():
     with open('eralchemy/version.py') as f:
         code = f.readlines()[0]
-    exec (code)
+    exec(code)
     assert ('version' in locals())
     return locals()['version']
 
