@@ -12,7 +12,7 @@ import argparse
 
 def set_filename_version(filename, version_number):
     with open(filename, 'w+') as f:
-        f.write("version = '{}'".format(version_number))
+        f.write("version = '{}'\n".format(version_number))
 
 
 def set_init_version(version_str):
