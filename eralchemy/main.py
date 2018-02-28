@@ -25,12 +25,9 @@ def cli():
 
     args = parser.parse_args()
     check_args(args)
-    if args.v:
-        print('ERAlchemy version {}.'.format(__version__))
-        exit(0)
     render_er(
-        args.i,
-        args.o,
+        args.uri,
+        args.output,
         include_tables=args.include_tables,
         include_columns=args.include_columns,
         exclude_tables=args.exclude_tables,
@@ -41,14 +38,17 @@ def cli():
 
 def get_argparser():
     parser = argparse.ArgumentParser(prog='ERAlchemy')
-    parser.add_argument('-i', nargs='?', help='Database URI to process.')
-    parser.add_argument('-o', nargs='?', help='Name of the file to write.')
+    parser.add_argument(
+        'uri', help='Database URI to process. Example: sqlite:///relative/path/to/db.db')
+    parser.add_argument(
+        'output', help='Name of the file to write. Example: erd_from_sqlite.pdf')
     parser.add_argument('-s', nargs='?', help='Name of the schema.')
     parser.add_argument('--exclude-tables', '-x', nargs='+', help='Name of tables not to be displayed.')
     parser.add_argument('--exclude-columns', nargs='+', help='Name of columns not to be displayed (for all tables).')
     parser.add_argument('--include-tables', nargs='+', help='Name of tables to be displayed alone.')
     parser.add_argument('--include-columns', nargs='+', help='Name of columns to be displayed alone (for all tables).')
-    parser.add_argument('-v', help='Prints version number.', action='store_true')
+    parser.add_argument('-v', '--version', action='version',
+                        version='ERAlchemy version {}.'.format(__version__))
     return parser
 
 
