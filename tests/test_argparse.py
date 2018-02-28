@@ -1,3 +1,5 @@
+import pytest
+
 from eralchemy.helpers import check_args
 from eralchemy.main import get_argparser
 
@@ -9,8 +11,10 @@ def parse_test(lst_arguments):
 
 
 def test_version():
-    parse_test(['-v'])
+    with pytest.raises(SystemExit) as se:
+        parse_test(['-v'])
+    assert se.value.code == 0
 
 
 def test_normal():
-    parse_test('-i sqlite:///relative/path/to/db.db -o erd_from_sqlite.pdf'.split(' '))
+    parse_test('sqlite:///relative/path/to/db.db erd_from_sqlite.pdf'.split(' '))
