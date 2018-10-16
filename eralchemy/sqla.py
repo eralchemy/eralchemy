@@ -16,8 +16,8 @@ def relation_to_intermediary(fk):
     return Relation(
         right_col=format_name(fk.parent.table.fullname),
         left_col=format_name(fk._column_tokens[1]),
-        right_cardinality='?',
-        left_cardinality='*',
+        right_cardinality='*',
+        left_cardinality='?',
     )
 
 

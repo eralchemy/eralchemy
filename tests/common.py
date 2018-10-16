@@ -76,8 +76,8 @@ child_parent_id = ERColumn(
 relation = Relation(
     right_col=u'parent',
     left_col=u'child',
-    right_cardinality='*',
-    left_cardinality='?',
+    right_cardinality='?',
+    left_cardinality='*',
 )
 
 exclude_id = ERColumn(
@@ -94,8 +94,8 @@ exclude_parent_id = ERColumn(
 exclude_relation = Relation(
     right_col=u'parent',
     left_col=u'exclude',
-    right_cardinality='*',
-    left_cardinality='?',
+    right_cardinality='?',
+    left_cardinality='*',
 )
 
 relationships = [relation, exclude_relation]
@@ -128,8 +128,8 @@ markdown = \
     [exclude]
         *id {label:"INTEGER"}
         parent_id {label:"INTEGER"}
-    parent *--? child
-    parent *--? exclude
+    parent ?--* child
+    parent ?--* exclude
     """
 
 
