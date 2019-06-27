@@ -14,11 +14,11 @@ class Drawable:
     RE = None
 
     def to_markdown(self):
-        """Transforms the intermediary object to it's syntax in the er markup. """
+        """Transforms the intermediary object to its syntax in the er markup. """
         raise NotImplemented()
 
     def to_dot(self):
-        """Transforms the intermediary object to it's syntax in the dot format. """
+        """Transforms the intermediary object to its syntax in the dot format. """
         raise NotImplemented()
 
     def __eq__(self, other):
