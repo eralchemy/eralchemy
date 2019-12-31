@@ -15,11 +15,11 @@ class Drawable:
 
     def to_markdown(self):
         """Transforms the intermediary object to it's syntax in the er markup. """
-        raise NotImplemented()
+        raise NotImplementedError()
 
     def to_dot(self):
         """Transforms the intermediary object to it's syntax in the dot format. """
-        raise NotImplemented()
+        raise NotImplementedError()
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
@@ -27,7 +27,7 @@ class Drawable:
     @staticmethod
     def make_from_match(self):
         """ Used in the parsing of files. Transforms a regex match to a Drawable object. """
-        raise NotImplemented()
+        raise NotImplementedError()
 
     def __str__(self):
         return self.to_markdown()
@@ -35,7 +35,7 @@ class Drawable:
 
 class Column(Drawable):
     """ Represents a Column in the intermediaty syntax """
-    RE = re.compile('(?P<primary>\*?)(?P<name>[^\s]+)\s*(\{label:\s*"(?P<label>[^"]+)"\})?')
+    RE = re.compile(r'(?P<primary>\*?)(?P<name>[^\s]+)\s*(\{label:\s*"(?P<label>[^"]+)"\})?')
 
     @staticmethod
     def make_from_match(match):
@@ -76,7 +76,7 @@ class Column(Drawable):
 class Relation(Drawable):
     """ Represents a Relation in the intermediaty syntax """
     RE = re.compile(
-        '(?P<left_name>[^\s]+)\s*(?P<left_cardinality>[*?+1])--(?P<right_cardinality>[*?+1])\s*(?P<right_name>[^\s]+)')  # noqa: E501
+        r'(?P<left_name>[^\s]+)\s*(?P<left_cardinality>[*?+1])--(?P<right_cardinality>[*?+1])\s*(?P<right_name>[^\s]+)')  # noqa: E501
     cardinalities = {
         '*': '0..N',
         '?': '{0,1}',
@@ -142,7 +142,7 @@ class Relation(Drawable):
 
 class Table(Drawable):
     """ Represents a Table in the intermediaty syntax """
-    RE = re.compile('\[(?P<name>[^]]+)\]')
+    RE = re.compile(r'\[(?P<name>[^]]+)\]')
 
     def __init__(self, name, columns):
         self.name = name
