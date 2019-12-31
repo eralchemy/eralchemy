@@ -8,6 +8,8 @@ env:
     - TOXENV=test
     - TOXENV=install
     - TOXENV=flasksqlalchemy
+services:
+    - postgresql
 before_install:
     - sudo apt-get -qq install graphviz > /dev/null
     - travis_retry pip install tox flake8
