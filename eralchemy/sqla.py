@@ -13,9 +13,20 @@ if sys.version_info[0] == 3:
 
 def relation_to_intermediary(fk):
     """Transform an SQLAlchemy ForeignKey object to it's intermediary representation. """
+
+    # In the cases where schema name is provided, _column_tokens[1] is
+    # insufficient to correctly identify the relationship. Therefore, assuming
+    # that the schema name is _column_tokens[0], when set seems the least
+    # intrusive approach. The other one would be sending in the schema name
+    # as another parameter into this function from metadata_to_intermediary()
+    left_column = format_name(fk._column_tokens[1])
+    if fk._column_tokens[0]:
+        left_column = "{}.{}".format(format_name(fk._column_tokens[0]),
+                                     format_name(fk._column_tokens[1]))
+
     return Relation(
-        right_col=format_name(fk.parent.table.fullname),
-        left_col=format_name(fk._column_tokens[1]),
+        right_col=sqla.format_name(fk.parent.table.fullname),
+        left_col=left_column,
         right_cardinality='?',
         left_cardinality='*',
     )
