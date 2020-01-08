@@ -66,6 +66,7 @@ def test_database_to_intermediary():
 def test_database_to_intermediary_with_schema():
     db_uri = create_db()
     tables, relationships = database_to_intermediary(db_uri, schema='test')
+    table_names = [t.name for t in tables]
 
     assert len(tables) == 3
     assert len(relationships) == 2
@@ -74,6 +75,9 @@ def test_database_to_intermediary_with_schema():
     # Not in because different schema.
     assert relation not in relationships
     assert exclude_relation not in relationships
+    # Assert column names match table names, including schema
+    assert all(r.right_col in table_names for r in relationships)
+    assert all(r.left_col in table_names for r in relationships)
 
 
 def test_flask_sqlalchemy():

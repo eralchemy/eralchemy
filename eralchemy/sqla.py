@@ -11,22 +11,28 @@ if sys.version_info[0] == 3:
     unicode = str
 
 
-def relation_to_intermediary(fk):
+def get_relationship_left_column(fk, schema):
+    """Return the proper 'parent' name of the relationship described with the
+    specified `fk` and `schema`. The 'parent' is the entity stored in the left
+    column of the Relation object.
+    """
+    if schema:
+        return "{}.{}".format(schema, format_name(fk._column_tokens[1]))
+
+    return format_name(fk._column_tokens[1])
+
+
+def relation_to_intermediary(fk, schema=None):
     """Transform an SQLAlchemy ForeignKey object to it's intermediary representation. """
 
     # In the cases where schema name is provided, _column_tokens[1] is
-    # insufficient to correctly identify the relationship. Therefore, assuming
-    # that the schema name is _column_tokens[0], when set seems the least
-    # intrusive approach. The other one would be sending in the schema name
-    # as another parameter into this function from metadata_to_intermediary()
-    left_column = format_name(fk._column_tokens[1])
-    if fk._column_tokens[0]:
-        left_column = "{}.{}".format(format_name(fk._column_tokens[0]),
-                                     format_name(fk._column_tokens[1]))
+    # insufficient to correctly identify the relationship. Therefore, we use
+    # the schema name provided in the invocation of the script to prefix the
+    # retrieved table names.
 
     return Relation(
         right_col=format_name(fk.parent.table.fullname),
-        left_col=left_column,
+        left_col=get_relationship_left_column(fk, schema),
         right_cardinality='?',
         left_cardinality='*',
     )
@@ -65,7 +71,9 @@ def table_to_intermediary(table):
 def metadata_to_intermediary(metadata):
     """ Transforms SQLAlchemy metadata to the intermediary representation. """
     tables = [table_to_intermediary(table) for table in metadata.tables.values()]
-    relationships = [relation_to_intermediary(fk) for table in metadata.tables.values() for fk in table.foreign_keys]
+    relationships = [relation_to_intermediary(fk, metadata.schema)
+                     for table in metadata.tables.values()
+                     for fk in table.foreign_keys]
     return tables, relationships
 
 
