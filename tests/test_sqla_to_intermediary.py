@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import re
+
 from eralchemy.sqla import column_to_intermediary, declarative_to_intermediary, database_to_intermediary, \
     table_to_intermediary
 from tests.common import parent_id, parent_name, child_id, child_parent_id, Parent, Child, Base, \
@@ -75,9 +77,46 @@ def test_database_to_intermediary_with_schema():
     # Not in because different schema.
     assert relation not in relationships
     assert exclude_relation not in relationships
+
+
+def test_table_names_in_relationships():
+    db_uri = create_db()
+    tables, relationships = database_to_intermediary(db_uri)
+    table_names = [t.name for t in tables]
+
+    # Assert column names are table names
+    assert all(r.right_col in table_names for r in relationships)
+    assert all(r.left_col in table_names for r in relationships)
+
+    # Assert column names match table names
+    for r in relationships:
+        r_name = table_names[table_names.index(r.right_col)]
+        l_name = table_names[table_names.index(r.left_col)]
+
+        # Table name in relationship should *NOT* have a schema
+        assert(r_name.find('.') == -1)
+        assert(l_name.find('.') == -1)
+
+
+def test_table_names_in_relationships_with_schema():
+    db_uri = create_db()
+    schema_name = 'test'
+    matcher = re.compile("{}\.[\S+]".format(schema_name), re.I)
+    tables, relationships = database_to_intermediary(db_uri, schema=schema_name)
+    table_names = [t.name for t in tables]
+
     # Assert column names match table names, including schema
     assert all(r.right_col in table_names for r in relationships)
     assert all(r.left_col in table_names for r in relationships)
+
+    # Assert column names match table names, including schema
+    for r in relationships:
+        r_name = table_names[table_names.index(r.right_col)]
+        l_name = table_names[table_names.index(r.left_col)]
+
+        # Table name in relationship *SHOULD* have a schema
+        assert(re.match(matcher, r_name) is not None)
+        assert(re.match(matcher, l_name) is not None)
 
 
 def test_flask_sqlalchemy():
