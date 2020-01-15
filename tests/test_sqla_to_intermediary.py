@@ -68,7 +68,6 @@ def test_database_to_intermediary():
 def test_database_to_intermediary_with_schema():
     db_uri = create_db()
     tables, relationships = database_to_intermediary(db_uri, schema='test')
-    table_names = [t.name for t in tables]
 
     assert len(tables) == 3
     assert len(relationships) == 2
@@ -101,7 +100,7 @@ def test_table_names_in_relationships():
 def test_table_names_in_relationships_with_schema():
     db_uri = create_db()
     schema_name = 'test'
-    matcher = re.compile("{}\.[\S+]".format(schema_name), re.I)
+    matcher = re.compile(r"{}\.[\S+]".format(schema_name), re.I)
     tables, relationships = database_to_intermediary(db_uri, schema=schema_name)
     table_names = [t.name for t in tables]
 
