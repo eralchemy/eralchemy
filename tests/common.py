@@ -4,6 +4,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from eralchemy.models import Column as ERColumn, Relation, Table
 from sqlalchemy import create_engine
+import pytest
+import testing.postgresql
+
 
 Base = declarative_base()
 
@@ -189,8 +192,20 @@ def check_filter(actual_tables, actual_relationships):
     assert [len(t.columns) for t in actual_tables] == [2, 2, 2]
 
 
-def create_db(db_uri="postgresql://postgres:postgres@localhost/test", use_sqlite=False):
-    engine = create_engine(db_uri)
-    tables = (use_sqlite and [m.__table__ for m in (Parent, Child, Exclude)]) or None
+@pytest.fixture
+def sqlite_db():
+    db_url = "sqlite:///test.db"
+    engine = create_engine(db_url)
+    tables = [m.__table__ for m in (Parent, Child, Exclude)]
     Base.metadata.create_all(engine, tables=tables)
-    return db_uri
+    return db_url
+
+
+@pytest.yield_fixture(scope="session")
+def postgresql_db():
+    psql_db = testing.postgresql.Postgresql()
+    engine = create_engine(psql_db.url())
+    engine.execute('CREATE SCHEMA test;')
+    Base.metadata.create_all(engine)
+    yield psql_db.url()
+    psql_db.stop()

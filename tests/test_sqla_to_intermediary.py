@@ -5,7 +5,7 @@ from eralchemy.sqla import column_to_intermediary, declarative_to_intermediary, 
 from tests.common import parent_id, parent_name, child_id, child_parent_id, Parent, Child, Base, \
     child, parent, Relation, Table, relation, exclude_relation, \
     check_intermediary_representation_simple_all_table
-from tests.common import check_intermediary_representation_simple_table, create_db
+from tests.common import check_intermediary_representation_simple_table
 
 
 def check_column(column, column_intermediary):
@@ -57,15 +57,14 @@ def test_tables():
     table_equals_helper(Parent, parent)
 
 
-def test_database_to_intermediary():
-    db_uri = create_db()
-    tables, relationships = database_to_intermediary(db_uri)
+def test_database_to_intermediary(postgresql_db):
+    tables, relationships = database_to_intermediary(postgresql_db)
     check_intermediary_representation_simple_table(tables, relationships)
 
 
-def test_database_to_intermediary_with_schema():
-    db_uri = create_db()
-    tables, relationships = database_to_intermediary(db_uri, schema='test')
+def test_database_to_intermediary_with_schema(postgresql_db):
+
+    tables, relationships = database_to_intermediary(postgresql_db, schema='test')
 
     assert len(tables) == 3
     assert len(relationships) == 2

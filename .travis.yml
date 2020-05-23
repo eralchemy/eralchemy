@@ -11,8 +11,6 @@ env:
 before_install:
     - sudo apt-get -qq install graphviz > /dev/null
     - travis_retry pip install tox flake8
-    - psql -U postgres -c "CREATE DATABASE test ENCODING 'UTF8';"
-    - psql -U postgres test -c "CREATE SCHEMA test;"
 install: true
 script:
     - flake8 .
