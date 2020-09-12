@@ -63,6 +63,13 @@ class Column(Drawable):
     def to_markdown(self):
         return '    {}{} {{label:"{}"}}'.format(self.key_symbol, self.name, self.type)
 
+    def to_mermaid(self):
+        return ' {}{} {}'.format(
+            self.key_symbol,
+            self.type.replace("(", "<").replace(")", ">"),
+            self.name
+        )
+
     def to_dot(self):
         base = ROW_TAGS.format(' ALIGN="LEFT"', '{key_opening}{col_name}{key_closing}{type}')
         return base.format(
@@ -83,6 +90,11 @@ class Relation(Drawable):
         '+': '1..N',
         '1': '1',
         '': None
+    }
+    cardinalities_mermaid = {
+        '*': '0..n',
+        '?': '0..1',
+        '+': '1..n',
     }
 
     @staticmethod
@@ -110,6 +122,17 @@ class Relation(Drawable):
             self.right_cardinality,
             self.right_col,
         )
+
+    def to_mermaid(self):
+        normalized = (
+            Relation.cardinalities_mermaid.get(k, k) for k in (
+                self.left_col,
+                self.left_cardinality,
+                self.right_cardinality,
+                self.right_col,
+            )
+        )
+        return '{} "{}" -- "{}" {}'.format(*normalized)
 
     def graphviz_cardinalities(self, card):
         if card == '':
@@ -159,8 +182,12 @@ class Table(Drawable):
     def header_markdown(self):
         return '[{}]'.format(self.name)
 
+
     def to_markdown(self):
         return self.header_markdown + '\n' + '\n'.join(c.to_markdown() for c in self.columns)
+
+    def to_mermaid(self):
+        return "class {}{{\n  ".format(self.name) + '\n  '.format(self.name).join(c.to_mermaid() for c in self.columns) + "\n}"
 
     @property
     def columns_sorted(self):

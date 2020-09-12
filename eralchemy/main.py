@@ -2,6 +2,7 @@
 import argparse
 import sys
 import copy
+import base64
 
 from pygraphviz.agraph import AGraph
 from sqlalchemy.engine.url import make_url
@@ -59,6 +60,15 @@ def intermediary_to_markdown(tables, relationships, output):
         file_out.write(er_markup)
 
 
+def intermediary_to_mermaid(tables, relationships, output):
+    """ Saves the intermediary representation to markdown. """
+    markup = _intermediary_to_mermaid(tables, relationships)
+    md_markup = "<!--\n\n{}\n\n-->\n".format(markup)
+    markup_b64 = base64.urlsafe_b64encode(markup.encode("utf8")).decode("ascii")
+    md_markup += "![](https://mermaid.ink/img/{})\n".format(markup_b64)
+    with open(output, "w") as file_out:
+        file_out.write(md_markup)
+
 def intermediary_to_dot(tables, relationships, output):
     """ Save the intermediary representation to dot format. """
     dot_file = _intermediary_to_dot(tables, relationships)
@@ -81,6 +91,11 @@ def _intermediary_to_markdown(tables, relationships):
     r = '\n'.join(r.to_markdown() for r in relationships)
     return '{}\n{}'.format(t, r)
 
+def _intermediary_to_mermaid(tables, relationships):
+    """ Returns the er markup source in a string. """
+    t = '\n'.join(t.to_mermaid() for t in tables)
+    r = '\n'.join(r.to_mermaid() for r in relationships)
+    return 'classDiagram\n{}\n{}'.format(t, r)
 
 def _intermediary_to_dot(tables, relationships):
     """ Returns the dot source representing the database in a string. """
@@ -104,6 +119,7 @@ switch_input_class_to_method = {
 #  representation to the desired output.
 switch_output_mode_auto = {
     'er': intermediary_to_markdown,
+    'mermaid': intermediary_to_mermaid,
     'graph': intermediary_to_schema,
     'dot': intermediary_to_dot
 }
@@ -112,6 +128,7 @@ switch_output_mode_auto = {
 # the intermediary representation to the desired output.
 switch_output_mode = {
     'er': intermediary_to_markdown,
+    'md': intermediary_to_mermaid,
     'dot': intermediary_to_dot,
 }
 
@@ -216,10 +233,12 @@ def render_er(input, output, mode='auto', include_tables=None, include_columns=N
     :param mode: str in list:
         'er': writes to a file the markup to generate an ER style diagram.
         'graph': writes the image of the ER diagram.
+        'mermaid': writes to a file the markup to generate an Mermaid-JS style diagram
         'dot': write to file the diagram in dot format.
         'auto': choose from the filename:
             '*.er': writes to a file the markup to generate an ER style diagram.
             '.dot': returns the graph in the dot syntax.
+            '.md': writes to a file the markup to generate an Mermaid-JS style diagram
             else: return a graph to the format graph
     :param include_tables: lst of str, table names to include, None means include all
     :param include_columns: lst of str, column names to include, None means include all
