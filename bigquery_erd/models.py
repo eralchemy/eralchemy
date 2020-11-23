@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from eralchemy.cst import TABLE, FONT_TAGS, ROW_TAGS
+from .cst import TABLE, FONT_TAGS, ROW_TAGS
 import operator
 import re
 
@@ -71,6 +71,9 @@ class Column(Drawable):
             col_name=FONT_TAGS.format(self.name),
             type=FONT_TAGS.format(' [{}]').format(self.type) if self.type is not None else ''
         )
+    
+    def __repr__(self):
+        return f"{self.__class__.__name__}(name={self.name}, type={self.type}, is_key={self.is_key})"
 
 
 class Relation(Drawable):
@@ -138,6 +141,9 @@ class Relation(Drawable):
             left_cardinality=other.right_cardinality,
         )
         return other_inversed.__dict__ == self.__dict__
+    
+    def __repr__(self):
+        return f"{self.__class__.__name__}(left_col={self.left_col}, right_col={self.right_col}, left_cardinality={self.left_cardinality}, right_cardinality={self.right_cardinality})"
 
 
 class Table(Drawable):
@@ -186,3 +192,6 @@ class Table(Drawable):
         if self.columns_sorted != other.columns_sorted:
             return False
         return True
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}(name={self.name}, columns={self.columns})"
