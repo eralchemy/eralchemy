@@ -6,7 +6,7 @@ Entity Relationship Diagram (ERD) Generator for Google BigQuery, based upon [era
 
 ERD for a NewsMeme database schema (taken from the original project).
 
-![./examples/newsmeme.png]
+![NewsMeme Example](./examples/newsmeme.png)
 
 ## Installation
 
