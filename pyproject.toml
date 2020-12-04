@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Building Entity Relationship Diagrams for Google BigQuery."
 authors = ["Jan-Benedikt Jagusch <jan.jagusch@gmail.com>"]
 license = "MIT"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.8"
