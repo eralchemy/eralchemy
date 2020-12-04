@@ -14,7 +14,7 @@ ERD for a NewsMeme database schema (taken from the original project).
 pip install bigquery-erd
 ```
 
-`ERAlchemy` requires [GraphViz](http://www.graphviz.org/download) to generate the graphs and Python. Both are available for Windows, Mac and Linux.
+`eralchemy` requires [GraphViz](http://www.graphviz.org/download) to generate the graphs and Python. Both are available for Windows, Mac and Linux.
 
 ## Usage
 
