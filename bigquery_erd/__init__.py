@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
-# flake8: noqa: F401
-from .main import render_er
-from .version import version as __version__
+"""
+Building Entity Relationship Diagrams for Google BigQuery.
+"""
+
+from .bigquery import bigquery_to_intermediary

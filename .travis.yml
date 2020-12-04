@@ -1,21 +1,44 @@
 language: python
-python:
-  - "2.7"
-  - "3.4"
-  - "3.5"
-  - "3.6"
-env:
-    - TOXENV=test
-    - TOXENV=install
-    - TOXENV=flasksqlalchemy
+python: "3.8"
+dist: xenial
+
+stages:
+  - lint
+  - name: release
+    if: tag IS present
+
+cache:
+  paths:
+    - .venv
+
 before_install:
-    - sudo apt-get -qq install graphviz > /dev/null
-    - travis_retry pip install tox flake8
-    - psql -U postgres -c "CREATE DATABASE test ENCODING 'UTF8';"
-    - psql -U postgres test -c "CREATE SCHEMA test;"
-install: true
-script:
-    - flake8 .
-    - travis_retry tox
-after_success:
-    - coveralls
+  - .bin/check_version
+  - curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+  - source $HOME/.poetry/env
+
+install:
+  - poetry install -v
+
+jobs:
+  include:
+    - stage: lint
+      name: lint_black
+      script:
+        - make lint_black
+    - stage: lint
+      name: lint_pylint
+      script:
+        - make lint_pylint
+    - stage: lint
+      name: lint_prettier
+      language: node_js
+      node_js:
+        - "12"
+      before_install: skip
+      install: skip
+      script:
+        - make lint_prettier
+    - stage: release
+      script:
+        - .bin/check_release
+        - poetry publish --build

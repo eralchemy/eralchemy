@@ -1,0 +1,25 @@
+set -e
+
+compare_versions() {
+    if [ "${1}" != "${2}" ]; then
+        echo "Version mismatch!"
+        exit "1"
+    fi
+}
+
+main() {
+
+    release_version="${1}"
+    changelog_version=$(sed "3q;d" "CHANGELOG.md" | cut -c 4-)
+    package_version=$(cat pyproject.toml | grep ^version | sed 's/^.*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*[^"]*\).*$/\1/')
+
+    echo "Release version: ${release_version}"
+    echo "Package version: ${package_version}"
+    echo "Changelog version: ${changelog_version}"
+
+    release_version=$(echo "${release_version}" | sed -r 's/([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
+    compare_versions "${release_version}" "${package_version}"
+    compare_versions "${release_version}" "${changelog_version}"
+}
+
+main "$@"
