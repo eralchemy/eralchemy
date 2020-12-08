@@ -5,7 +5,7 @@ Converts Google BigQuery tables into the eralchemy intermediate representation.
 import os
 import re
 from collections import namedtuple
-from typing import Iterable, Tuple, Any
+from typing import Iterable, Tuple, Union
 
 from google.cloud.bigquery import Table
 
@@ -80,7 +80,7 @@ def _process_table(table: Table) -> ERTable:
 
 def bigquery_to_intermediary(
     tables: Iterable[Table],
-) -> Tuple[Iterable[Any[ERTable, ERRelation]]]:
+) -> Tuple[Iterable[Union[ERTable, ERRelation]]]:
     """
     Converts BigQuery tables into the eralchemy intermediary format.
 
