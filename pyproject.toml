@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bigquery-erd"
-version = "0.1.0"
+version = "0.1.1"
 description = "Building Entity Relationship Diagrams for Google BigQuery."
 authors = ["Jan-Benedikt Jagusch <jan.jagusch@gmail.com>"]
 license = "MIT"
