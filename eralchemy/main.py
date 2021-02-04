@@ -187,20 +187,20 @@ def filter_resources(tables, relationships,
     _tables = copy.deepcopy(tables)
     _relationships = copy.deepcopy(relationships)
 
-    include_tables = include_tables or [t.name for t in _tables]
+    include_tables = include_tables or [t.name.strip() for t in _tables]
     include_columns = include_columns or [c.name for t in _tables for c in t.columns]
     exclude_tables = exclude_tables or list()
     exclude_columns = exclude_columns or list()
 
-    _tables = [t for t in _tables if t.name not in exclude_tables and t.name in include_tables]
+    _tables = [t for t in _tables if t.name.strip() not in exclude_tables and t.name.strip() in include_tables]
     _relationships = [r for r in _relationships
-                      if r.right_col not in exclude_tables
-                      and r.left_col not in exclude_tables
-                      and r.right_col in include_tables
-                      and r.left_col in include_tables]
+                      if r.right_col.strip() not in exclude_tables
+                      and r.left_col.strip() not in exclude_tables
+                      and r.right_col.strip() in include_tables
+                      and r.left_col.strip() in include_tables]
 
     for t in _tables:
-        t.columns = [c for c in t.columns if c.name not in exclude_columns and c.name in include_columns]
+        t.columns = [c for c in t.columns if c.name.strip() not in exclude_columns and c.name.strip() in include_columns
 
     return _tables, _relationships
 
