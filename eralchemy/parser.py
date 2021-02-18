@@ -102,8 +102,8 @@ def update_models(new_obj, current_table, tables, relations):
 
     if isinstance(new_obj, Relation):
         tables_names = [t.name for t in tables]
-        _check_colname_in_lst(new_obj.right_col, tables_names)
-        _check_colname_in_lst(new_obj.left_col, tables_names)
+        _check_colname_in_lst(new_obj.right_table, tables_names)
+        _check_colname_in_lst(new_obj.left_table, tables_names)
         return current_table, tables, relations + [new_obj]
 
     if isinstance(new_obj, Column):

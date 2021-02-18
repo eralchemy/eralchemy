@@ -194,10 +194,10 @@ def filter_resources(tables, relationships,
 
     _tables = [t for t in _tables if t.name not in exclude_tables and t.name in include_tables]
     _relationships = [r for r in _relationships
-                      if r.right_col not in exclude_tables
-                      and r.left_col not in exclude_tables
-                      and r.right_col in include_tables
-                      and r.left_col in include_tables]
+                      if r.right_table not in exclude_tables
+                      and r.left_table not in exclude_tables
+                      and r.right_table in include_tables
+                      and r.left_table in include_tables]
 
     for t in _tables:
         t.columns = [c for c in t.columns if c.name not in exclude_columns and c.name in include_columns]

@@ -64,7 +64,7 @@ class Column(Drawable):
         return '    {}{} {{label:"{}"}}'.format(self.key_symbol, self.name, self.type)
 
     def to_dot(self):
-        base = ROW_TAGS.format(' ALIGN="LEFT"', '{key_opening}{col_name}{key_closing}{type}')
+        base = ROW_TAGS.format(' ALIGN="LEFT" PORT="{}"'.format(self.name), '{key_opening}{col_name}{key_closing}{type}')
         return base.format(
             key_opening='<u>' if self.is_key else '',
             key_closing='</u>' if self.is_key else '',
@@ -75,8 +75,20 @@ class Column(Drawable):
 
 class Relation(Drawable):
     """ Represents a Relation in the intermediaty syntax """
-    RE = re.compile(
-        '(?P<left_name>[^\s]+)\s*(?P<left_cardinality>[*?+1])--(?P<right_cardinality>[*?+1])\s*(?P<right_name>[^\s]+)')  # noqa: E501
+    RE = re.compile(r'''
+        (?P<left_table>[^\s]+?)
+        (?:\.\"(?P<left_column>.+)\")?
+        \s*
+        (?P<left_cardinality>[*?+1])
+        --
+        (?P<right_cardinality>[*?+1])
+        \s*
+        (?P<right_table>[^\s]+?)
+        (?:\.\"(?P<right_column>.+)\")?
+        \s*$
+        ''',
+        re.VERBOSE
+    )
     cardinalities = {
         '*': '0..N',
         '?': '{0,1}',
@@ -87,28 +99,27 @@ class Relation(Drawable):
 
     @staticmethod
     def make_from_match(match):
-        return Relation(
-            right_col=match.group('right_name'),
-            left_col=match.group('left_name'),
-            right_cardinality=match.group('right_cardinality'),
-            left_cardinality=match.group('left_cardinality'),
-        )
+        return Relation(**match.groupdict())
 
-    def __init__(self, right_col, left_col, right_cardinality=None, left_cardinality=None):
+    def __init__(self, right_table, left_table, right_cardinality=None, left_cardinality=None, right_column=None, left_column=None):
         if right_cardinality not in self.cardinalities.keys() \
                 or left_cardinality not in self.cardinalities.keys():
             raise ValueError('Cardinality should be in {}"'.format(self.cardinalities.keys()))
-        self.right_col = right_col
-        self.left_col = left_col
+        self.right_table = right_table
+        self.right_column = right_column
+        self.left_table = left_table
+        self.left_column = left_column
         self.right_cardinality = right_cardinality
         self.left_cardinality = left_cardinality
 
     def to_markdown(self):
-        return "{} {}--{} {}".format(
-            self.left_col,
+        return '{}{} {}--{} {}{}'.format(
+            self.left_table,
+            '' if self.left_column is None else '."%s"' % self.left_column,
             self.left_cardinality,
             self.right_cardinality,
-            self.right_col,
+            self.right_table,
+            '' if self.right_column is None else '."%s"' % self.right_column,
         )
 
     def graphviz_cardinalities(self, card):
@@ -126,14 +137,16 @@ class Relation(Drawable):
         if self.right_cardinality != '':
             cards.append('head' +
                          self.graphviz_cardinalities(self.right_cardinality))
-        return '"{}" -- "{}" [{}];'.format(self.left_col, self.right_col, ','.join(cards))
+        return '"{}":"{}" -- "{}":"{}" [{}];'.format(self.left_table, self.left_column, self.right_table, self.right_column, ','.join(cards))
 
     def __eq__(self, other):
         if Drawable.__eq__(self, other):
             return True
         other_inversed = Relation(
-            right_col=other.left_col,
-            left_col=other.right_col,
+            right_table=other.left_table,
+            right_column=other.left_column,
+            left_table=other.right_table,
+            left_column=other.right_column,
             right_cardinality=other.left_cardinality,
             left_cardinality=other.right_cardinality,
         )

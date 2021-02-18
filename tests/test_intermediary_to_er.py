@@ -31,7 +31,7 @@ def test_column_to_er():
 
 
 def test_relation():
-    assert relation.to_markdown() in ['parent *--? child', 'child ?--* parent']
+    assert relation.to_markdown() in ['parent."id" *--? child."parent_id"', 'child."parent_id" ?--* parent."id"']
 
 
 def assert_table_well_rendered_to_er(table):
