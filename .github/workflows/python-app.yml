@@ -29,8 +29,8 @@ jobs:
       run: |
         sudo pg_ctlcluster 12 main start
         sudo apt-get -qq install graphviz 
-        psql -U postgres -c "CREATE DATABASE test ENCODING 'UTF8';"
-        psql -U postgres test -c "CREATE SCHEMA test;" 
+        psql -p 5433 -U postgres -c "CREATE DATABASE test ENCODING 'UTF8';"
+        psql -p 5433 -U postgres test -c "CREATE SCHEMA test;" 
     - name: Install python dependencies
       run: |
         python -m pip install --upgrade pip
