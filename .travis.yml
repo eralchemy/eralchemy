@@ -9,7 +9,7 @@ env:
     - TOXENV=install
     - TOXENV=flasksqlalchemy
 before_install:
-    - apt update && apt install -qq postgresql postgresql-contrib
+    - apt update && apt install -qq postgresql postgresql-contrib 
     - sudo apt-get -qq install graphviz > /dev/null
     - travis_retry pip install tox flake8
     - psql -U postgres -c "CREATE DATABASE test ENCODING 'UTF8';"
