@@ -27,7 +27,7 @@ jobs:
         
     - name: Launch pg 
       run: |
-        sudo pg_ctlcluster 12 main start
+        sudo pg_ctlcluster 12 main -w start
         sudo apt-get -qq install graphviz > /dev/null
         psql -U postgres -c "CREATE DATABASE test ENCODING 'UTF8';"
         psql -U postgres test -c "CREATE SCHEMA test;" 
