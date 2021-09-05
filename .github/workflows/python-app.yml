@@ -28,9 +28,6 @@ jobs:
     - name: Launch pg 
       run: |
         sudo pg_ctlcluster 12 main start
-    
-    - name: Set up system dependencies
-      run: |
         psql -U postgres -c "CREATE DATABASE test ENCODING 'UTF8';"
         psql -U postgres test -c "CREATE SCHEMA test;" 
         sudo apt-get -qq install graphviz > /dev/null
