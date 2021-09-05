@@ -28,7 +28,7 @@ jobs:
     - name: Launch pg 
       run: |
         sudo pg_ctlcluster 12 main start
-        sudo apt-get -qq install graphviz 
+        sudo apt-get -qq install graphviz python-dev libgraphviz-dev pkg-config
         sudo -u postgres psql -p 5433 -U postgres -c "CREATE DATABASE test ENCODING 'UTF8';"
         sudo -u postgres psql -p 5433 -U postgres test -c "CREATE SCHEMA test;" 
     - name: Install python dependencies
