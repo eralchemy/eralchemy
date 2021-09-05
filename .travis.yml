@@ -12,6 +12,7 @@ before_install:
     - apt update && apt install -qq postgresql postgresql-contrib 
     - sudo apt-get -qq install graphviz > /dev/null
     - travis_retry pip install tox flake8
+    - sudo service postgresql start
     - psql -U postgres -c "CREATE DATABASE test ENCODING 'UTF8';"
     - psql -U postgres test -c "CREATE SCHEMA test;"
 install: true
