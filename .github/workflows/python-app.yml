@@ -20,13 +20,10 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.6
-    - name: Setup PostgreSQL
-      # You may pin to the exact commit or the version.
-      # uses: Harmon758/postgresql-action@0be19fa37850b22cb4c9bbf28a03abbf44abd863
-      uses: Harmon758/postgresql-action@v1.0.0
     - name: Set up system dependencies
       run: |
         # stop the build if there are Python syntax errors or undefined names
+        sudo apt-get install postgresql postgresql-contrib
         sudo service postgres start
         psql -U postgres -c "CREATE DATABASE test ENCODING 'UTF8';"
         psql -U postgres test -c "CREATE SCHEMA test;" 
