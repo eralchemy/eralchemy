@@ -189,7 +189,7 @@ def check_filter(actual_tables, actual_relationships):
     assert [len(t.columns) for t in actual_tables] == [2, 2, 2]
 
 
-def create_db(db_uri="postgresql://postgres:postgres@localhost:5433/test", use_sqlite=False):
+def create_db(db_uri="postgresql://postgres@localhost:5433/test", use_sqlite=False):
     engine = create_engine(db_uri)
     tables = (use_sqlite and [m.__table__ for m in (Parent, Child, Exclude)]) or None
     Base.metadata.create_all(engine, tables=tables)
