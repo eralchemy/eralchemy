@@ -12,5 +12,5 @@ pytest==2.9.2
 SQLAlchemy==1.0.13
 tox==2.3.1
 virtualenv==15.0.2
-Werkzeug===0.14
+Werkzeug===0.15.3
 wheel==0.29.0
