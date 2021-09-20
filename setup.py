@@ -66,7 +66,7 @@ setup(
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
-        'SQLAlchemy',
+        'SQLAlchemy>=1.4',
         'pygraphviz'
     ],
     entry_points={
