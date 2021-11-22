@@ -1,3 +1,3 @@
-psycopg2==2.7.4
+psycopg2-binary==2.9.2
 pygraphviz==1.7
 SQLAlchemy==1.0.13

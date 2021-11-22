@@ -1,9 +1,19 @@
+
 # -*- coding: utf-8 -*-
+import os
+
+from dotenv import load_dotenv
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from eralchemy.models import Column as ERColumn, Relation, Table
 from sqlalchemy import create_engine
+
+
+load_dotenv()
+TEST_DB_USER = os.environ.get("DB_USER", "postgres")
+TEST_DB_NAME = os.environ.get("DB_NAME", "postgres")
+DEFAULT_DB_URI = f'postgresql://{TEST_DB_USER}@localhost/{TEST_DB_NAME}'
 
 Base = declarative_base()
 
@@ -189,7 +199,7 @@ def check_filter(actual_tables, actual_relationships):
     assert [len(t.columns) for t in actual_tables] == [2, 2, 2]
 
 
-def create_db(db_uri="postgresql://postgres/test", use_sqlite=False):
+def create_db(db_uri=DEFAULT_DB_URI, use_sqlite=False):
     engine = create_engine(db_uri)
     tables = (use_sqlite and [m.__table__ for m in (Parent, Child, Exclude)]) or None
     Base.metadata.create_all(engine, tables=tables)
