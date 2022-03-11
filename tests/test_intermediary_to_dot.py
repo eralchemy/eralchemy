@@ -71,8 +71,8 @@ def test_relation():
     r = relation_re.match(dot)
     assert r.group('l_name') == 'child'
     assert r.group('r_name') == 'parent'
-    assert r.group('l_card') == '{0,1}'
-    assert r.group('r_card') == '0..N'
+    assert r.group('l_card') == '0..N'
+    assert r.group('r_card') == '{0,1}'
 
 
 def assert_table_well_rendered_to_dot(table):
