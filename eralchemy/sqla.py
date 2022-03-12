@@ -40,6 +40,7 @@ def column_to_intermediary(col, type_formatter=format_type):
         name=col.name,
         type=type_formatter(col.type),
         is_key=col.primary_key,
+        is_null=col.nullable,
     )
 
 

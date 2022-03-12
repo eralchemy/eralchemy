@@ -45,7 +45,7 @@ class Column(Drawable):
             is_key='*' in match.group('primary'),  # TODO foreign key
         )
 
-    def __init__(self, name, type=None, is_key=False):
+    def __init__(self, name, type=None, is_key=False, is_null=False):
         """
         :param name: (str) Name of the column
         :param type:
@@ -55,6 +55,7 @@ class Column(Drawable):
         self.name = name
         self.type = type
         self.is_key = is_key
+        self.is_null = is_null
 
     @property
     def key_symbol(self):
@@ -64,12 +65,13 @@ class Column(Drawable):
         return '    {}{} {{label:"{}"}}'.format(self.key_symbol, self.name, self.type)
 
     def to_dot(self):
-        base = ROW_TAGS.format(' ALIGN="LEFT"', '{key_opening}{col_name}{key_closing}{type}')
+        base = ROW_TAGS.format(' ALIGN="LEFT"', '{key_opening}{col_name}{key_closing}{type}{null}')
         return base.format(
             key_opening='<u>' if self.is_key else '',
             key_closing='</u>' if self.is_key else '',
             col_name=FONT_TAGS.format(self.name),
-            type=FONT_TAGS.format(' [{}]').format(self.type) if self.type is not None else ''
+            type=FONT_TAGS.format(' [{}]').format(self.type) if self.type is not None else '',
+            null=" NOT NULL" if not self.is_null else ""
         )
 
 
