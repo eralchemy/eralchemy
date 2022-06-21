@@ -70,9 +70,21 @@ Thanks to it's modular architecture, it can be connected to other ORMs/ODMs/OGMs
 
 Every feedback is welcome on the [GitHub issues](https://github.com/Alexis-benoist/eralchemy/issues).
 
-To run the tests, use : `$ py.test`.
-Some tests require a local postgres database with a schema named test in a database
-named test all owned by a user named postgres with a password of postgres.
+To run the tests:
+
+* Install GraphViz. On Linux Ubuntu: `$ apt install graphviz graphviz-dev`
+* Install tox: `$ pip install tox`
+* Run tox: `$ tox`
+
+Some tests require a local postgres database. By default the following database URL is used:
+
+```
+postgresql://postgres:postgres@localhost:5432/eralchemy-test
+```
+
+You may also pass your own database URL using: `$ DATABASE_URL=... tox`.
+
+**NOTE**: The database must have a schema named `test`. To create it, connect to the database, then run: `CREATE SCHEMA test;`.
 
 All tested PR are welcome.
 

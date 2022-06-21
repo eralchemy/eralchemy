@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import os
+
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -189,7 +191,10 @@ def check_filter(actual_tables, actual_relationships):
     assert [len(t.columns) for t in actual_tables] == [2, 2, 2]
 
 
-def create_db(db_uri="postgresql://postgres/test", use_sqlite=False):
+_default_db_uri = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/eralchemy-test")
+
+
+def create_db(db_uri=_default_db_uri, use_sqlite=False):
     engine = create_engine(db_uri)
     tables = (use_sqlite and [m.__table__ for m in (Parent, Child, Exclude)]) or None
     Base.metadata.create_all(engine, tables=tables)
