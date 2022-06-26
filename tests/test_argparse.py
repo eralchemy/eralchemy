@@ -1,5 +1,5 @@
-from eralchemy.helpers import check_args
-from eralchemy.main import get_argparser
+from eralchemy2.helpers import check_args
+from eralchemy2.main import get_argparser
 
 
 def parse_test(lst_arguments):

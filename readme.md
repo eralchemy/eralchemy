@@ -26,7 +26,7 @@ To install eralchemy2, just do:
 
 #### From a database
 
-    $ eralchemy -i sqlite:///relative/path/to/db.db -o erd_from_sqlite.pdf
+    $ eralchemy2 -i sqlite:///relative/path/to/db.db -o erd_from_sqlite.pdf
 
 The database is specified as a [SQLAlchemy](http://docs.sqlalchemy.org/en/rel_1_0/core/engines.html#database-urls)
 database url.
@@ -34,24 +34,24 @@ database url.
 #### From a markdown file.
 
     $ curl 'https://raw.githubusercontent.com/maurerle/eralchemy2/master/example/newsmeme.er' > markdown_file.er
-    $ eralchemy -i 'markdown_file.er' -o erd_from_markdown_file.pdf
+    $ eralchemy2 -i 'markdown_file.er' -o erd_from_markdown_file.pdf
 
 #### From a Postgresql DB to a markdown file excluding tables named `temp` and `audit`
 
-    $ eralchemy -i 'postgresql+psycopg2://username:password@hostname:5432/databasename' -o filtered.er --exclude-tables temp audit
+    $ eralchemy2 -i 'postgresql+psycopg2://username:password@hostname:5432/databasename' -o filtered.er --exclude-tables temp audit
 
 #### From a Postgresql DB to a markdown file excluding columns named `created_at` and `updated_at` from all tables
 
-    $ eralchemy -i 'postgresql+psycopg2://username:password@hostname:5432/databasename' -o filtered.er --exclude-columns created_at updated_at
+    $ eralchemy2 -i 'postgresql+psycopg2://username:password@hostname:5432/databasename' -o filtered.er --exclude-columns created_at updated_at
 
 #### From a Postgresql DB to a markdown file for the schema `schema`
 
-    $ eralchemy -i 'postgresql+psycopg2://username:password@hostname:5432/databasename' -s schema
+    $ eralchemy2 -i 'postgresql+psycopg2://username:password@hostname:5432/databasename' -s schema
 
 ### Usage from Python
 
 ```python
-from eralchemy import render_er
+from eralchemy2 import render_er
 ## Draw from SQLAlchemy base
 render_er(Base, 'erd_from_sqlalchemy.png')
 
@@ -76,7 +76,7 @@ All tested PR are welcome.
 
 ## Notes
 
-eralchemy2 is a fork of its precessor [ERAlchemy](https://github.com/Alexis-benoist/eralchemy) by @Alexis-benoist, which is not maintained anymore and does not work with SQLAlchemy > 1.4.
+eralchemy2 is a fork of its predecessor [ERAlchemy](https://github.com/Alexis-benoist/eralchemy) by @Alexis-benoist, which is not maintained anymore and does not work with SQLAlchemy > 1.4.
 If it is maintained again, I'd like to push the integrated changes upstream.
 
 ERAlchemy was inspired by [erd](https://github.com/BurntSushi/erd), though it is able to render the ER diagram directly

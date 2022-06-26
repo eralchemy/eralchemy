@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from eralchemy.main import all_to_intermediary, get_output_mode, intermediary_to_schema, \
+from eralchemy2.main import all_to_intermediary, get_output_mode, intermediary_to_schema, \
     intermediary_to_dot, intermediary_to_markdown, filter_resources
 from tests.common import Base, check_tables_relationships, check_intermediary_representation_simple_table, create_db, \
     markdown, relationships, tables, check_intermediary_representation_simple_all_table, check_tables_columns, \
@@ -74,4 +74,4 @@ def test_get_output_mode():
 
 
 def test_import_render_er():
-    from eralchemy import render_er  # noqa: F401
+    from eralchemy2 import render_er  # noqa: F401

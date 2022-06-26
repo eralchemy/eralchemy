@@ -9,7 +9,7 @@ except IOError:
 
 
 def read_version():
-    with open('eralchemy/version.py') as f:
+    with open('eralchemy2/version.py') as f:
         code = f.readlines()[0]
     exec(code)
     assert ('version' in locals())
@@ -56,7 +56,7 @@ setup(
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
     packages=[
-        'eralchemy',
+        'eralchemy2',
     ],
 
     # List run-time dependencies here.  These will be installed by pip when
@@ -69,7 +69,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'eralchemy=eralchemy.main:cli',
+            'eralchemy2=eralchemy2.main:cli',
         ],
     },
 )

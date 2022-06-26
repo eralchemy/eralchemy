@@ -17,7 +17,7 @@ def set_filename_version(filename, version_number):
 
 def set_init_version(version_str):
     info('Setting __init__.py version to %s', version_str)
-    set_filename_version('eralchemy/version.py', version_str)
+    set_filename_version('eralchemy2/version.py', version_str)
 
 
 def rm(filename):
@@ -26,7 +26,7 @@ def rm(filename):
 
 
 def build_and_upload():
-    rm('ERAlchemy.egg-info')
+    rm('eralchemy2.egg-info')
     rm('build')
     rm('dist')
     Popen(['pandoc', '--from=markdown', '--to=rst', 'readme.md', '--output=readme.rst'],
@@ -35,7 +35,7 @@ def build_and_upload():
     Popen([sys.executable, 'setup.py', 'sdist'], stdout=PIPE).wait()
     pypi_pwd = getpass(prompt='Pypi Password: ')
     Popen(['twine', 'upload', 'dist/*', '-u', 'alexis.benoist', '-p', pypi_pwd]).wait()
-    Popen(['open', 'https://pypi.python.org/pypi/ERAlchemy'])
+    Popen(['open', 'https://pypi.python.org/pypi/eralchemy2'])
     Popen(['git', 'tag'], stdout=PIPE).communicate()[0].splitlines()
     Popen(['git', 'push', '--tags']).wait()
 
@@ -87,7 +87,7 @@ def parse_args():
 
 
 def get_current_version():
-    with open('eralchemy/version.py') as f:
+    with open('eralchemy2/version.py') as f:
         lines = f.readlines()
         namespace = {}
         exec(lines[0], namespace)

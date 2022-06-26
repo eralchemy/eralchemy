@@ -138,6 +138,6 @@ def line_iterator_to_intermediary(line_iterator):
             e.line = raw_line
             errors.append(e)
     if len(errors) != 0:
-        msg = 'ERAlchemy couldn\'t complete the generation due the {} following errors'.format(len(errors))
+        msg = 'eralchemy2 couldn\'t complete the generation due the {} following errors'.format(len(errors))
         raise ParsingException(msg + '\n\n'.join(e.traceback for e in errors))
     return tables, relations

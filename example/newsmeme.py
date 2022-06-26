@@ -115,6 +115,6 @@ class Tag(Base):
 
 
 if __name__ == '__main__':
-    from eralchemy import render_er
+    from eralchemy2 import render_er
 
     render_er(Base, 'newsmeme.pdf')

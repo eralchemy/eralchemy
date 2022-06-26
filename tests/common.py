@@ -2,7 +2,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
-from eralchemy.models import Column as ERColumn, Relation, Table
+from eralchemy2.models import Column as ERColumn, Relation, Table
 from sqlalchemy import create_engine
 
 Base = declarative_base()

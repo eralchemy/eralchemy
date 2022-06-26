@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from eralchemy.sqla import column_to_intermediary, declarative_to_intermediary, database_to_intermediary, \
+from eralchemy2.sqla import column_to_intermediary, declarative_to_intermediary, database_to_intermediary, \
     table_to_intermediary
 from tests.common import parent_id, parent_name, child_id, child_parent_id, Parent, Child, Base, \
     child, parent, Relation, Table, relation, exclude_relation, \
@@ -79,7 +79,7 @@ def test_database_to_intermediary_with_schema():
 def test_flask_sqlalchemy():
     from flask_sqlalchemy import SQLAlchemy
     from flask import Flask
-    from eralchemy.main import all_to_intermediary
+    from eralchemy2.main import all_to_intermediary
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True

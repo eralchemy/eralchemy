@@ -5,27 +5,27 @@ import os
 
 
 def main():
-    with open('eralchemy.template.rb') as f:
+    with open('eralchemy2.template.rb') as f:
         f.readlines()
 
-    formula = formula_for('eralchemy')
-    with open('/usr/local/Library/Formula/eralchemy.rb', 'w+') as f:
+    formula = formula_for('eralchemy2')
+    with open('/usr/local/Library/Formula/eralchemy2.rb', 'w+') as f:
         f.writelines(formula)
     Popen(['brew', 'update'])
     os.chdir('/usr/local')
     version_list = make_release.get_current_version()
     version = make_release.version_lst_to_str(version_list)
-    Popen(['brew', 'uninstall', 'eralchemy'])
-    Popen(['brew', 'install', 'eralchemy'])
-    Popen(['brew', 'audit', '--strict', '--online', 'eralchemy'])
-    branch_name = 'eralchemy_v{}'.format(version)
+    Popen(['brew', 'uninstall', 'eralchemy2'])
+    Popen(['brew', 'install', 'eralchemy2'])
+    Popen(['brew', 'audit', '--strict', '--online', 'eralchemy2'])
+    branch_name = 'eralchemy2{}'.format(version)
     Popen(['git', 'checkout', '-b', branch_name])
-    Popen(['git', 'add', 'Library/Formula/eralchemy.rb', branch_name])
+    Popen(['git', 'add', 'Library/Formula/eralchemy2.rb', branch_name])
     commit_message = \
-        """ERAlchemy v{version}'
+        """eralchemy2 v{version}'
 
 
-Updated ERAlchemy to v{version}.
+Updated eralchemy2 to v{version}.
 """.format(version=version)
     Popen(['git', 'commit', branch_name, '-m', commit_message])
 

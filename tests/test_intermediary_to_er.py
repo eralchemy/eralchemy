@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from tests.common import parent_id, parent_name, child_id, child_parent_id, relation, child, parent
-from eralchemy.main import _intermediary_to_markdown
+from eralchemy2.main import _intermediary_to_markdown
 
 import re
 

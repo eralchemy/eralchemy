@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from eralchemy import render_er
+from eralchemy2 import render_er
 
 
 app = Flask(__name__)

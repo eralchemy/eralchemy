@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import pytest
-from eralchemy.main import _intermediary_to_markdown
-from eralchemy.parser import (
+from eralchemy2.main import _intermediary_to_markdown
+from eralchemy2.parser import (
     remove_comments_from_line,
     parse_line,
     DuplicateTableException,
@@ -12,7 +12,7 @@ from eralchemy.parser import (
     ParsingException,
     line_iterator_to_intermediary
 )
-from eralchemy.models import Column, Table, Relation
+from eralchemy2.models import Column, Table, Relation
 from tests import common as c
 
 # examples from https://github.com/BurntSushi/erd/blob/master/examples/nfldb.er

@@ -4,8 +4,8 @@ import re
 from multiprocessing import Process
 from pygraphviz import AGraph
 from tests.common import parent_id, parent_name, child_id, child_parent_id, relation, child, parent
-from eralchemy.main import _intermediary_to_dot
-from eralchemy.cst import GRAPH_BEGINNING
+from eralchemy2.main import _intermediary_to_dot
+from eralchemy2.cst import GRAPH_BEGINNING
 
 GRAPH_LAYOUT = GRAPH_BEGINNING + "%s }"
 column_re = re.compile('\\<TR\\>\\<TD\\ ALIGN\\=\\"LEFT\\"\\>(.*)\\<\\/TD\\>\\<\\/TR\\>')
