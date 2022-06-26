@@ -72,8 +72,6 @@ class Post(Base):
 
     author = relation(User, innerjoin=True, lazy="joined")
 
-    __mapper_args__ = {'order_by': id.desc()}
-
 
 class Comment(Base):
     __tablename__ = "comments"
@@ -117,4 +115,4 @@ class Tag(Base):
 if __name__ == '__main__':
     from eralchemy2 import render_er
 
-    render_er(Base, 'newsmeme.pdf')
+    render_er(Base, '../newsmeme.svg')

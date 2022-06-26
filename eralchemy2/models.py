@@ -57,8 +57,13 @@ class Column(Drawable):
         self.is_key = is_key
         self.is_null = is_null
 
-    def __eq__(self,other):
-        return self.__dict__==other.__dict__
+    def __lt__(self, other):
+        if self.is_key > other.is_key:
+            return True
+        elif self.is_key < other.is_key:
+            return False
+        else:
+            return self.name < other.name
 
     @property
     def key_symbol(self):
@@ -68,10 +73,11 @@ class Column(Drawable):
         return '    {}{} {{label:"{}"}}'.format(self.key_symbol, self.name, self.type)
 
     def to_mermaid(self):
-        return ' {}{} {}'.format(
+        return ' {}{} {}{}'.format(
             self.key_symbol,
             self.type.replace("(", "<").replace(")", ">"),
-            self.name
+            self.name,
+            " NOT NULL" if not self.is_null else ""
         )
 
     def to_dot(self):
@@ -157,7 +163,7 @@ class Relation(Drawable):
         return '"{}" -- "{}" [{}];'.format(self.left_col, self.right_col, ','.join(cards))
 
     def __eq__(self, other):
-        if Drawable.__eq__(self, other):
+        if super().__eq__(other):
             return True
         other_inversed = Relation(
             right_col=other.left_col,

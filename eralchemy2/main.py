@@ -217,7 +217,8 @@ def filter_resources(tables, relationships,
                       and r.left_col in include_tables]
 
     for t in _tables:
-        t.columns = [c for c in t.columns if c.name not in exclude_columns and c.name in include_columns]
+        t.columns = sorted([c for c in t.columns if c.name not in exclude_columns and c.name in include_columns])
+
 
     return _tables, _relationships
 

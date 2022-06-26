@@ -4,7 +4,7 @@ eralchemy2 generates Entity Relation (ER) diagram (like the one below) from data
 
 ## Example
 
-![Example for a graph](https://raw.githubusercontent.com/maurerle/eralchemy2/master/newsmeme.png?raw=true "Example for NewsMeme")
+![Example for a graph](https://raw.githubusercontent.com/maurerle/eralchemy2/master/newsmeme.svg?raw=true "Example for NewsMeme")
 
 [Example for NewsMeme](https://bitbucket.org/danjac/newsmeme)
 
