@@ -57,6 +57,9 @@ class Column(Drawable):
         self.is_key = is_key
         self.is_null = is_null
 
+    def __eq__(self,other):
+        return self.__dict__==other.__dict__
+
     @property
     def key_symbol(self):
         return '*' if self.is_key else ''

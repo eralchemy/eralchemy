@@ -60,6 +60,7 @@ parent_id = ERColumn(
 parent_name = ERColumn(
     name='name',
     type=u'VARCHAR(255)',
+    is_null=True,
 )
 
 child_id = ERColumn(
@@ -71,6 +72,7 @@ child_id = ERColumn(
 child_parent_id = ERColumn(
     name='parent_id',
     type=u'INTEGER',
+    is_null=True,
 )
 
 relation = Relation(
