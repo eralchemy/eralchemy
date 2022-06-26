@@ -29,12 +29,12 @@ def build_and_upload():
     rm('eralchemy2.egg-info')
     rm('build')
     rm('dist')
-    Popen(['pandoc', '--from=markdown', '--to=rst', 'readme.md', '--output=readme.rst'],
+    Popen(['pandoc', '--from=markdown', '--to=rst', 'README.md', '--output=README.rst'],
           stdout=PIPE).wait()
     Popen([sys.executable, 'setup.py', 'bdist_wheel', '--universal'], stdout=PIPE).wait()
     Popen([sys.executable, 'setup.py', 'sdist'], stdout=PIPE).wait()
     pypi_pwd = getpass(prompt='Pypi Password: ')
-    Popen(['twine', 'upload', 'dist/*', '-u', 'alexis.benoist', '-p', pypi_pwd]).wait()
+    Popen(['twine', 'upload', 'dist/*', '-u', 'maurerle', '-p', pypi_pwd]).wait()
     Popen(['open', 'https://pypi.python.org/pypi/eralchemy2'])
     Popen(['git', 'tag'], stdout=PIPE).communicate()[0].splitlines()
     Popen(['git', 'push', '--tags']).wait()

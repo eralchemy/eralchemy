@@ -84,4 +84,4 @@ from the database and not just only from the `ER` markup language.
 
 Released under an Apache License 2.0
 
-Creator: Alexis Benoist [Alexis_Benoist](https://twitter.com/Alexis_Benoist)
+Initial Creator: Alexis Benoist [Alexis_Benoist](https://twitter.com/Alexis_Benoist)

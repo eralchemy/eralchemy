@@ -1,10 +1,10 @@
 from setuptools import setup
 
 try:
-    with open('readme.rst') as f:
+    with open('README.rst') as f:
         long_description = f.read()
 except IOError:
-    with open('readme.md') as f:
+    with open('README.md') as f:
         long_description = f.read()
 
 
