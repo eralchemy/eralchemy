@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from eralchemy.cst import TABLE, FONT_TAGS, ROW_TAGS
+from .cst import TABLE, FONT_TAGS, ROW_TAGS
 import operator
 import re
 

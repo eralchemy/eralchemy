@@ -3,7 +3,7 @@
 This class allow to transform SQLAlchemy metadata to the intermediary syntax.
 """
 
-from eralchemy.models import Relation, Column, Table
+from .models import Relation, Column, Table
 import sys
 from sqlalchemy.exc import CompileError
 

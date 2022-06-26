@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from eralchemy.models import Table, Relation, Column
+from .models import Table, Relation, Column
 
 
 class ParsingException(Exception):

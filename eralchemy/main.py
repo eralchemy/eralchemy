@@ -8,11 +8,11 @@ from pygraphviz.agraph import AGraph
 from sqlalchemy.engine.url import make_url
 from sqlalchemy.exc import ArgumentError
 
-from eralchemy.version import version as __version__
-from eralchemy.cst import GRAPH_BEGINNING
-from eralchemy.sqla import metadata_to_intermediary, declarative_to_intermediary, database_to_intermediary
-from eralchemy.helpers import check_args
-from eralchemy.parser import markdown_file_to_intermediary, line_iterator_to_intermediary, ParsingException
+from .version import version as __version__
+from .cst import GRAPH_BEGINNING
+from .sqla import metadata_to_intermediary, declarative_to_intermediary, database_to_intermediary
+from .helpers import check_args
+from .parser import markdown_file_to_intermediary, line_iterator_to_intermediary, ParsingException
 
 try:
     basestring
