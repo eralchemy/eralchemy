@@ -17,7 +17,7 @@ def read_version():
 
 
 setup(
-    name='ERAlchemy',
+    name='eralchemy2',
 
     version=read_version(),
 
@@ -25,11 +25,11 @@ setup(
     long_description=long_description,
 
     # The project's main homepage.d
-    url='https://github.com/Alexis-benoist/eralchemy',
+    url='https://github.com/maurerle/eralchemy2',
 
     # Author details
-    author='Alexis Benoist',
-    author_email='alexis.benoist@gmail.com',
+    author='Florian Maurer',
+    author_email='fmaurer+github@disroot.org',
 
     # Choose your license
     license='Apache License 2.0',
@@ -41,12 +41,10 @@ setup(
         'Intended Audience :: Developers',
 
         # that you indicate whether you support Python 2, Python 3 or both.
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         'Topic :: Scientific/Engineering :: Visualization',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Database',

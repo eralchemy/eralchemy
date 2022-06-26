@@ -1,12 +1,10 @@
 # Entity relation diagrams generator
 
-[![Join the chat at https://gitter.im/Alexis-benoist/eralchemy](https://badges.gitter.im/Alexis-benoist/eralchemy.svg)](https://gitter.im/Alexis-benoist/eralchemy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-ERAlchemy generates Entity Relation (ER) diagram (like the one below) from databases or from SQLAlchemy models.
+eralchemy2 generates Entity Relation (ER) diagram (like the one below) from databases or from SQLAlchemy models.
 
 ## Example
 
-![Example for a graph](https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/newsmeme.png?raw=true "Example for NewsMeme")
+![Example for a graph](https://raw.githubusercontent.com/maurerle/eralchemy2/master/newsmeme.png?raw=true "Example for NewsMeme")
 
 [Example for NewsMeme](https://bitbucket.org/danjac/newsmeme)
 
@@ -15,14 +13,14 @@ ERAlchemy generates Entity Relation (ER) diagram (like the one below) from datab
 ### Install on a mac
 The simplest way to install eralchemy on OSX is by using [Homebrew](http://brew.sh)
 
-    $ brew install eralchemy
+    $ brew install eralchemy2
 
 ### Install
-To install ERAlchemy, just do:
+To install eralchemy2, just do:
 
-    $ pip install eralchemy
+    $ pip install eralchemy2
 
-`ERAlchemy` requires [GraphViz](http://www.graphviz.org/download) to generate the graphs and Python. Both are available for Windows, Mac and Linux.
+`eralchemy2` requires [GraphViz](http://www.graphviz.org/download) to generate the graphs and Python. Both are available for Windows, Mac and Linux.
 
 ### Usage from Command Line
 
@@ -35,7 +33,7 @@ database url.
 
 #### From a markdown file.
 
-    $ curl 'https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/example/newsmeme.er' > markdown_file.er
+    $ curl 'https://raw.githubusercontent.com/maurerle/eralchemy2/master/example/newsmeme.er' > markdown_file.er
     $ eralchemy -i 'markdown_file.er' -o erd_from_markdown_file.pdf
 
 #### From a Postgresql DB to a markdown file excluding tables named `temp` and `audit`
@@ -62,13 +60,13 @@ render_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
 ```
 
 ## Architecture
-![Architecture schema](https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/eralchemy_architecture.png?raw=true "Architecture schema")
+![Architecture schema](https://raw.githubusercontent.com/maurerle/eralchemy2/master/eralchemy_architecture.png?raw=true "Architecture schema")
 
 Thanks to it's modular architecture, it can be connected to other ORMs/ODMs/OGMs/O*Ms.
 
 ## Contribute
 
-Every feedback is welcome on the [GitHub issues](https://github.com/Alexis-benoist/eralchemy/issues).
+Every feedback is welcome on the [GitHub issues](https://github.com/maurerle/eralchemy2/issues).
 
 To run the tests, use : `$ py.test`.
 Some tests require a local postgres database with a schema named test in a database
@@ -77,6 +75,9 @@ named test all owned by a user named postgres with a password of postgres.
 All tested PR are welcome.
 
 ## Notes
+
+eralchemy2 is a fork of its precessor [ERAlchemy](https://github.com/Alexis-benoist/eralchemy) by @Alexis-benoist, which is not maintained anymore and does not work with SQLAlchemy > 1.4.
+If it is maintained again, I'd like to push the integrated changes upstream.
 
 ERAlchemy was inspired by [erd](https://github.com/BurntSushi/erd), though it is able to render the ER diagram directly
 from the database and not just only from the `ER` markup language.

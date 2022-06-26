@@ -27,7 +27,7 @@ def cli():
     args = parser.parse_args()
     check_args(args)
     if args.v:
-        print('ERAlchemy version {}.'.format(__version__))
+        print('eralchemy2 version {}.'.format(__version__))
         exit(0)
     render_er(
         args.i,
@@ -41,7 +41,7 @@ def cli():
 
 
 def get_argparser():
-    parser = argparse.ArgumentParser(prog='ERAlchemy')
+    parser = argparse.ArgumentParser(prog='eralchemy2')
     parser.add_argument('-i', nargs='?', help='Database URI to process.')
     parser.add_argument('-o', nargs='?', help='Name of the file to write.')
     parser.add_argument('-s', nargs='?', help='Name of the schema.')
