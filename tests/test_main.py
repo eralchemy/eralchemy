@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from eralchemy2.main import all_to_intermediary, get_output_mode, intermediary_to_schema, \
     intermediary_to_dot, intermediary_to_markdown, filter_resources
 from tests.common import Base, check_tables_relationships, check_intermediary_representation_simple_table, create_db, \

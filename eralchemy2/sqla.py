@@ -1,14 +1,9 @@
-# -*- coding: utf-8 -*-
 """
 This class allow to transform SQLAlchemy metadata to the intermediary syntax.
 """
 
 from .models import Relation, Column, Table
-import sys
 from sqlalchemy.exc import CompileError
-
-if sys.version_info[0] == 3:
-    unicode = str
 
 
 def relation_to_intermediary(fk):
@@ -24,14 +19,14 @@ def relation_to_intermediary(fk):
 def format_type(typ):
     """ Transforms the type into a nice string representation. """
     try:
-        return unicode(typ)
+        return str(typ)
     except CompileError:
         return 'Null'
 
 
 def format_name(name):
     """ Transforms the name into a nice string representation. """
-    return unicode(name)
+    return str(name)
 
 
 def column_to_intermediary(col, type_formatter=format_type):

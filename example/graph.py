@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # from https://github.com/zzzeek/sqlalchemy/blob/master/examples/graphs/directed_graph.py
 """a directed graph example."""
 from eralchemy2 import render_er

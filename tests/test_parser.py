@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import pytest
 from eralchemy2.main import _intermediary_to_markdown
 from eralchemy2.parser import (
