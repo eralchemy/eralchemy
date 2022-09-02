@@ -13,11 +13,6 @@ from .sqla import metadata_to_intermediary, declarative_to_intermediary, databas
 from .helpers import check_args
 from .parser import markdown_file_to_intermediary, line_iterator_to_intermediary, ParsingException
 
-try:
-    basestring
-except NameError:
-    basestring = str
-
 
 def cli():
     """Entry point for the application script"""
@@ -148,13 +143,13 @@ def all_to_intermediary(filename_or_input, schema=None):
         pass
 
     # try to read markdown file.
-    if isinstance(filename_or_input, basestring):
+    if isinstance(filename_or_input, str):
         if filename_or_input.split('.')[-1] == 'er':
             return markdown_file_to_intermediary(filename_or_input)
 
     # try to read a markdown in a string
-    if not isinstance(filename_or_input, basestring):
-        if all(isinstance(e, basestring) for e in filename_or_input):
+    if not isinstance(filename_or_input, str):
+        if all(isinstance(e, str) for e in filename_or_input):
             return line_iterator_to_intermediary(filename_or_input)
 
     # try to read DB URI.
