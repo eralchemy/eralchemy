@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from sqlalchemy import Column, Integer, ForeignKey, UnicodeText, Text, Boolean, DateTime, Unicode, String, Table
 from sqlalchemy.orm import relation
 from sqlalchemy.ext.declarative import declarative_base

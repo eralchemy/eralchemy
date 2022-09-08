@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 All the constants used in the module.
 """

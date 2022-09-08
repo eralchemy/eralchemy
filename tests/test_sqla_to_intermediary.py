@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 from eralchemy2.sqla import column_to_intermediary, declarative_to_intermediary, database_to_intermediary, \
     table_to_intermediary

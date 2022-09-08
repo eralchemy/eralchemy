@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from .cst import TABLE, FONT_TAGS, ROW_TAGS
 import operator
 import re
