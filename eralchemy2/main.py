@@ -14,7 +14,7 @@ from .helpers import check_args
 from .parser import markdown_file_to_intermediary, line_iterator_to_intermediary, ParsingException
 
 
-def cli():
+def cli() -> None:
     """Entry point for the application script"""
     parser = get_argparser()
 
@@ -34,7 +34,7 @@ def cli():
     )
 
 
-def get_argparser():
+def get_argparser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog='eralchemy2')
     parser.add_argument('-i', nargs='?', help='Database URI to process.')
     parser.add_argument('-o', nargs='?', help='Name of the file to write.')
