@@ -2,9 +2,9 @@
 This class allow to transform SQLAlchemy metadata to the intermediary syntax.
 """
 
-from sqlalchemy.exc import CompileError
 from typing import Any
-from .models import Column, Relation, Table
+
+from sqlalchemy.exc import CompileError
 
 from .models import Column, Relation, Table
 

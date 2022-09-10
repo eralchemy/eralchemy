@@ -1,13 +1,25 @@
 import pytest
 
-from eralchemy2.main import (all_to_intermediary, filter_resources,
-                             get_output_mode, intermediary_to_dot,
-                             intermediary_to_markdown, intermediary_to_schema)
-from tests.common import (Base, check_filter,
-                          check_intermediary_representation_simple_all_table,
-                          check_intermediary_representation_simple_table,
-                          check_tables_columns, check_tables_relationships,
-                          create_db, markdown, relationships, tables)
+from eralchemy2.main import (
+    all_to_intermediary,
+    filter_resources,
+    get_output_mode,
+    intermediary_to_dot,
+    intermediary_to_markdown,
+    intermediary_to_schema,
+)
+from tests.common import (
+    Base,
+    check_filter,
+    check_intermediary_representation_simple_all_table,
+    check_intermediary_representation_simple_table,
+    check_tables_columns,
+    check_tables_relationships,
+    create_db,
+    markdown,
+    relationships,
+    tables,
+)
 
 
 def test_all_to_intermediary_base():

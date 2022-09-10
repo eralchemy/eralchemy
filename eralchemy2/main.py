@@ -9,10 +9,16 @@ from sqlalchemy.exc import ArgumentError
 
 from .cst import GRAPH_BEGINNING
 from .helpers import check_args
-from .parser import (ParsingException, line_iterator_to_intermediary,
-                     markdown_file_to_intermediary)
-from .sqla import (database_to_intermediary, declarative_to_intermediary,
-                   metadata_to_intermediary)
+from .parser import (
+    ParsingException,
+    line_iterator_to_intermediary,
+    markdown_file_to_intermediary,
+)
+from .sqla import (
+    database_to_intermediary,
+    declarative_to_intermediary,
+    metadata_to_intermediary,
+)
 from .version import version as __version__
 
 

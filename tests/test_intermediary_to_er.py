@@ -1,8 +1,15 @@
 import re
 
 from eralchemy2.main import _intermediary_to_markdown
-from tests.common import (child, child_id, child_parent_id, parent, parent_id,
-                          parent_name, relation)
+from tests.common import (
+    child,
+    child_id,
+    child_parent_id,
+    parent,
+    parent_id,
+    parent_name,
+    relation,
+)
 
 column_re = re.compile('(?P<key>\*?)(?P<name>[^*].+) \{label:"(?P<type>.+)"\}')
 

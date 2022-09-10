@@ -2,12 +2,17 @@ import pytest
 
 from eralchemy2.main import _intermediary_to_markdown
 from eralchemy2.models import Column, Relation, Table
-from eralchemy2.parser import (DuplicateColumnException,
-                               DuplicateTableException,
-                               NoCurrentTableException, ParsingException,
-                               RelationNoColException,
-                               line_iterator_to_intermediary, parse_line,
-                               remove_comments_from_line, update_models)
+from eralchemy2.parser import (
+    DuplicateColumnException,
+    DuplicateTableException,
+    NoCurrentTableException,
+    ParsingException,
+    RelationNoColException,
+    line_iterator_to_intermediary,
+    parse_line,
+    remove_comments_from_line,
+    update_models,
+)
 from tests import common as c
 
 # examples from https://github.com/BurntSushi/erd/blob/master/examples/nfldb.er

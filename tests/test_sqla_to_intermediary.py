@@ -1,12 +1,27 @@
-from eralchemy2.sqla import (column_to_intermediary, database_to_intermediary,
-                             declarative_to_intermediary,
-                             table_to_intermediary)
-from tests.common import (Base, Child, Parent, Relation, Table,
-                          check_intermediary_representation_simple_all_table,
-                          check_intermediary_representation_simple_table,
-                          child, child_id, child_parent_id, create_db,
-                          exclude_relation, parent, parent_id, parent_name,
-                          relation)
+from eralchemy2.sqla import (
+    column_to_intermediary,
+    database_to_intermediary,
+    declarative_to_intermediary,
+    table_to_intermediary,
+)
+from tests.common import (
+    Base,
+    Child,
+    Parent,
+    Relation,
+    Table,
+    check_intermediary_representation_simple_all_table,
+    check_intermediary_representation_simple_table,
+    child,
+    child_id,
+    child_parent_id,
+    create_db,
+    exclude_relation,
+    parent,
+    parent_id,
+    parent_name,
+    relation,
+)
 
 
 def check_column(column, column_intermediary):

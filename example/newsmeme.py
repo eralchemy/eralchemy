@@ -1,7 +1,17 @@
 from datetime import datetime
 
-from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer, String,
-                        Table, Text, Unicode, UnicodeText)
+from sqlalchemy import (
+    Boolean,
+    Column,
+    DateTime,
+    ForeignKey,
+    Integer,
+    String,
+    Table,
+    Text,
+    Unicode,
+    UnicodeText,
+)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relation
 

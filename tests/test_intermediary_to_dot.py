@@ -6,8 +6,15 @@ from pygraphviz import AGraph
 
 from eralchemy2.cst import GRAPH_BEGINNING
 from eralchemy2.main import _intermediary_to_dot
-from tests.common import (child, child_id, child_parent_id, parent, parent_id,
-                          parent_name, relation)
+from tests.common import (
+    child,
+    child_id,
+    child_parent_id,
+    parent,
+    parent_id,
+    parent_name,
+    relation,
+)
 
 GRAPH_LAYOUT = GRAPH_BEGINNING + "%s }"
 column_re = re.compile(
