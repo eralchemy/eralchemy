@@ -3,35 +3,37 @@ This class allow to transform SQLAlchemy metadata to the intermediary syntax.
 """
 
 from typing import Any
-from .models import Relation, Column, Table
+
 from sqlalchemy.exc import CompileError
+
+from .models import Column, Relation, Table
 
 
 def relation_to_intermediary(fk) -> Relation:
-    """Transform an SQLAlchemy ForeignKey object to it's intermediary representation. """
+    """Transform an SQLAlchemy ForeignKey object to it's intermediary representation."""
     return Relation(
         right_col=format_name(fk.parent.table.fullname),
         left_col=format_name(fk._column_tokens[1]),
-        right_cardinality='*',
-        left_cardinality='?',
+        right_cardinality="*",
+        left_cardinality="?",
     )
 
 
 def format_type(typ: Any) -> str:
-    """ Transforms the type into a nice string representation. """
+    """Transforms the type into a nice string representation."""
     try:
         return str(typ)
     except CompileError:
-        return 'Null'
+        return "Null"
 
 
 def format_name(name: Any) -> str:
-    """ Transforms the name into a nice string representation. """
+    """Transforms the name into a nice string representation."""
     return str(name)
 
 
 def column_to_intermediary(col, type_formatter=format_type):
-    """Transform an SQLAlchemy Column object to it's intermediary representation. """
+    """Transform an SQLAlchemy Column object to it's intermediary representation."""
     return Column(
         name=col.name,
         type=type_formatter(col.type),
@@ -41,34 +43,39 @@ def column_to_intermediary(col, type_formatter=format_type):
 
 
 def table_to_intermediary(table) -> Table:
-    """Transform an SQLAlchemy Table object to it's intermediary representation. """
+    """Transform an SQLAlchemy Table object to it's intermediary representation."""
     return Table(
         name=table.fullname,
-        columns=[column_to_intermediary(col) for col in table.c._colset]
+        columns=[column_to_intermediary(col) for col in table.c._colset],
     )
 
 
 def metadata_to_intermediary(metadata):
-    """ Transforms SQLAlchemy metadata to the intermediary representation. """
+    """Transforms SQLAlchemy metadata to the intermediary representation."""
     tables = [table_to_intermediary(table) for table in metadata.tables.values()]
-    relationships = [relation_to_intermediary(fk) for table in metadata.tables.values() for fk in table.foreign_keys]
+    relationships = [
+        relation_to_intermediary(fk)
+        for table in metadata.tables.values()
+        for fk in table.foreign_keys
+    ]
     return tables, relationships
 
 
 def declarative_to_intermediary(base):
-    """ Transform an SQLAlchemy Declarative Base to the intermediary representation. """
+    """Transform an SQLAlchemy Declarative Base to the intermediary representation."""
     return metadata_to_intermediary(base.metadata)
 
 
 def name_for_scalar_relationship(base, local_cls, referred_cls, constraint) -> str:
-    """ Overriding naming schemes. """
-    return referred_cls.__name__.lower() + "_ref"
+    """Overriding naming schemes."""
+    name = referred_cls.__name__.lower() + "_ref"
+    return name
 
 
 def database_to_intermediary(database_uri, schema=None):
-    """ Introspect from the database (given the database_uri) to create the intermediary representation. """
-    from sqlalchemy.ext.automap import automap_base
+    """Introspect from the database (given the database_uri) to create the intermediary representation."""
     from sqlalchemy import create_engine
+    from sqlalchemy.ext.automap import automap_base
 
     Base = automap_base()
     engine = create_engine(database_uri)
@@ -76,5 +83,7 @@ def database_to_intermediary(database_uri, schema=None):
         Base.metadata.schema = schema
 
     # reflect the tables
-    Base.prepare(engine, reflect=True, name_for_scalar_relationship=name_for_scalar_relationship)
+    Base.prepare(
+        engine, reflect=True, name_for_scalar_relationship=name_for_scalar_relationship
+    )
     return declarative_to_intermediary(Base)
