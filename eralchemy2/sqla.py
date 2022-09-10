@@ -3,11 +3,13 @@ This class allow to transform SQLAlchemy metadata to the intermediary syntax.
 """
 
 from sqlalchemy.exc import CompileError
+from typing import Any
+from .models import Column, Relation, Table
 
 from .models import Column, Relation, Table
 
 
-def relation_to_intermediary(fk):
+def relation_to_intermediary(fk) -> Relation:
     """Transform an SQLAlchemy ForeignKey object to it's intermediary representation."""
     return Relation(
         right_col=format_name(fk.parent.table.fullname),
@@ -17,7 +19,7 @@ def relation_to_intermediary(fk):
     )
 
 
-def format_type(typ):
+def format_type(typ: Any) -> str:
     """Transforms the type into a nice string representation."""
     try:
         return str(typ)
@@ -25,7 +27,7 @@ def format_type(typ):
         return "Null"
 
 
-def format_name(name):
+def format_name(name: Any) -> str:
     """Transforms the name into a nice string representation."""
     return str(name)
 
@@ -40,7 +42,7 @@ def column_to_intermediary(col, type_formatter=format_type):
     )
 
 
-def table_to_intermediary(table):
+def table_to_intermediary(table) -> Table:
     """Transform an SQLAlchemy Table object to it's intermediary representation."""
     return Table(
         name=table.fullname,
@@ -64,7 +66,7 @@ def declarative_to_intermediary(base):
     return metadata_to_intermediary(base.metadata)
 
 
-def name_for_scalar_relationship(base, local_cls, referred_cls, constraint):
+def name_for_scalar_relationship(base, local_cls, referred_cls, constraint) -> str:
     """Overriding naming schemes."""
     name = referred_cls.__name__.lower() + "_ref"
     return name

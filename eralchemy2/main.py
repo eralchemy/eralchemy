@@ -16,7 +16,7 @@ from .sqla import (database_to_intermediary, declarative_to_intermediary,
 from .version import version as __version__
 
 
-def cli():
+def cli() -> None:
     """Entry point for the application script"""
     parser = get_argparser()
 
@@ -36,7 +36,7 @@ def cli():
     )
 
 
-def get_argparser():
+def get_argparser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="eralchemy2")
     parser.add_argument("-i", nargs="?", help="Database URI to process.")
     parser.add_argument("-o", nargs="?", help="Name of the file to write.")

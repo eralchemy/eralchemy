@@ -1,13 +1,15 @@
 import sys
+from argparse import Namespace
+from typing import Any
 
 
 # from https://github.com/mitsuhiko/flask/blob/master/scripts/make-release.py L92
-def fail(message, *args):
+def fail(message: str, *args: Any) -> None:
     print("Error:", message % args, file=sys.stderr)
     sys.exit(1)
 
 
-def check_args(args):
+def check_args(args: Namespace) -> None:
     """Checks that the args are coherent."""
     check_args_has_attributes(args)
     if args.v:
@@ -22,7 +24,7 @@ def check_args(args):
         fail("Cannot draw ER diagram with no output file.")
 
 
-def check_args_has_attributes(args):
+def check_args_has_attributes(args: Namespace) -> None:
     check_args_has_attribute(args, "i")
     check_args_has_attribute(args, "o")
     check_args_has_attribute(args, "include_tables")
@@ -32,6 +34,6 @@ def check_args_has_attributes(args):
     check_args_has_attribute(args, "s")
 
 
-def check_args_has_attribute(args, name):
+def check_args_has_attribute(args: Namespace, name: str) -> None:
     if not hasattr(args, name):
         raise Exception("{} should be set".format(name))
