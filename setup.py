@@ -37,7 +37,7 @@ if __name__ == "__main__":
         ],
         keywords="sql relational databases ER diagram render",
         packages=["eralchemy2"],
-        extras_require={"dev": ["black==22.8.0", "isort==5.10.1"]},
+        extras_require={"dev": ["black", "isort"]},
         install_requires=["SQLAlchemy", "pygraphviz"],
         entry_points={
             "console_scripts": ["eralchemy2=eralchemy2.main:cli"],
