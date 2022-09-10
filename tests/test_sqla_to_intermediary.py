@@ -1,10 +1,12 @@
-
-from eralchemy2.sqla import column_to_intermediary, declarative_to_intermediary, database_to_intermediary, \
-    table_to_intermediary
-from tests.common import parent_id, parent_name, child_id, child_parent_id, Parent, Child, Base, \
-    child, parent, Relation, Table, relation, exclude_relation, \
-    check_intermediary_representation_simple_all_table
-from tests.common import check_intermediary_representation_simple_table, create_db
+from eralchemy2.sqla import (column_to_intermediary, database_to_intermediary,
+                             declarative_to_intermediary,
+                             table_to_intermediary)
+from tests.common import (Base, Child, Parent, Relation, Table,
+                          check_intermediary_representation_simple_all_table,
+                          check_intermediary_representation_simple_table,
+                          child, child_id, child_parent_id, create_db,
+                          exclude_relation, parent, parent_id, parent_name,
+                          relation)
 
 
 def check_column(column, column_intermediary):
@@ -15,27 +17,15 @@ def check_column(column, column_intermediary):
 
 
 def test_columns_parent():
-    check_column(
-        column=Parent.id,
-        column_intermediary=parent_id
-    )
+    check_column(column=Parent.id, column_intermediary=parent_id)
 
-    check_column(
-        column=Parent.name,
-        column_intermediary=parent_name
-    )
+    check_column(column=Parent.name, column_intermediary=parent_name)
 
 
 def test_columns_child():
-    check_column(
-        column=Child.id,
-        column_intermediary=child_id
-    )
+    check_column(column=Child.id, column_intermediary=child_id)
 
-    check_column(
-        column=Child.parent_id,
-        column_intermediary=child_parent_id
-    )
+    check_column(column=Child.parent_id, column_intermediary=child_parent_id)
 
 
 def test_declarative_to_intermediary():
@@ -64,7 +54,7 @@ def test_database_to_intermediary():
 
 def test_database_to_intermediary_with_schema():
     db_uri = create_db()
-    tables, relationships = database_to_intermediary(db_uri, schema='test')
+    tables, relationships = database_to_intermediary(db_uri, schema="test")
 
     assert len(tables) == 3
     assert len(relationships) == 2
@@ -76,12 +66,14 @@ def test_database_to_intermediary_with_schema():
 
 
 def test_flask_sqlalchemy():
-    from flask_sqlalchemy import SQLAlchemy
     from flask import Flask
+    from flask_sqlalchemy import SQLAlchemy
+
     from eralchemy2.main import all_to_intermediary
+
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////tmp/test.db"
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
     db = SQLAlchemy(app)
     model = db.Model
     model.metadata = Base.metadata

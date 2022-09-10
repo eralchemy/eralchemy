@@ -1,9 +1,10 @@
-from tests.common import parent_id, parent_name, child_id, child_parent_id, relation, child, parent
-from eralchemy2.main import _intermediary_to_markdown
-
 import re
 
-column_re = re.compile('(?P<key>\*?)(?P<name>[^*].+) \{label:\"(?P<type>.+)\"\}')
+from eralchemy2.main import _intermediary_to_markdown
+from tests.common import (child, child_id, child_parent_id, parent, parent_id,
+                          parent_name, relation)
+
+column_re = re.compile('(?P<key>\*?)(?P<name>[^*].+) \{label:"(?P<type>.+)"\}')
 
 
 def test_all_to_er():
@@ -17,9 +18,9 @@ def test_all_to_er():
 def assert_column_well_rendered_to_er(col):
     col_er = col.to_markdown().strip()
     col_parsed = column_re.match(col_er)
-    assert col_parsed.group('key') == ('*' if col.is_key else '')
-    assert col_parsed.group('name') == col.name
-    assert col_parsed.group('type') == col.type
+    assert col_parsed.group("key") == ("*" if col.is_key else "")
+    assert col_parsed.group("name") == col.name
+    assert col_parsed.group("type") == col.type
 
 
 def test_column_to_er():
@@ -30,11 +31,11 @@ def test_column_to_er():
 
 
 def test_relation():
-    assert relation.to_markdown() in ['parent ?--* child', 'child *--? parent']
+    assert relation.to_markdown() in ["parent ?--* child", "child *--? parent"]
 
 
 def assert_table_well_rendered_to_er(table):
-    assert table.header_markdown == '[' + table.name + ']'
+    assert table.header_markdown == "[" + table.name + "]"
     table_er = table.to_markdown()
     for col in table.columns:
         assert col.to_markdown() in table_er

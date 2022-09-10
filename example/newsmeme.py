@@ -1,7 +1,9 @@
-from sqlalchemy import Column, Integer, ForeignKey, UnicodeText, Text, Boolean, DateTime, Unicode, String, Table
-from sqlalchemy.orm import relation
-from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
+
+from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer, String,
+                        Table, Text, Unicode, UnicodeText)
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relation
 
 """
 Example of NewsMeme (open source forum like hacker news or Reddit).
@@ -9,14 +11,16 @@ Example of NewsMeme (open source forum like hacker news or Reddit).
 """
 Base = declarative_base()
 
-post_tags = Table("post_tags", Base.metadata,
-                  Column("post_id", Integer,
-                         ForeignKey('posts.id', ondelete='CASCADE'),
-                         primary_key=True),
-
-                  Column("tag_id", Integer,
-                         ForeignKey('tags.id', ondelete='CASCADE'),
-                         primary_key=True))
+post_tags = Table(
+    "post_tags",
+    Base.metadata,
+    Column(
+        "post_id", Integer, ForeignKey("posts.id", ondelete="CASCADE"), primary_key=True
+    ),
+    Column(
+        "tag_id", Integer, ForeignKey("tags.id", ondelete="CASCADE"), primary_key=True
+    ),
+)
 
 
 class User(Base):
@@ -54,9 +58,7 @@ class Post(Base):
 
     id = Column(Integer, primary_key=True)
 
-    author_id = Column(Integer,
-                       ForeignKey(User.id, ondelete='CASCADE'),
-                       nullable=False)
+    author_id = Column(Integer, ForeignKey(User.id, ondelete="CASCADE"), nullable=False)
 
     title = Column(Unicode(200))
     description = Column(UnicodeText)
@@ -79,16 +81,11 @@ class Comment(Base):
 
     id = Column(Integer, primary_key=True)
 
-    author_id = Column(Integer,
-                       ForeignKey(User.id, ondelete='CASCADE'),
-                       nullable=False)
+    author_id = Column(Integer, ForeignKey(User.id, ondelete="CASCADE"), nullable=False)
 
-    post_id = Column(Integer,
-                     ForeignKey(Post.id, ondelete='CASCADE'),
-                     nullable=False)
+    post_id = Column(Integer, ForeignKey(Post.id, ondelete="CASCADE"), nullable=False)
 
-    parent_id = Column(Integer,
-                       ForeignKey("comments.id", ondelete='CASCADE'))
+    parent_id = Column(Integer, ForeignKey("comments.id", ondelete="CASCADE"))
 
     comment = Column(UnicodeText)
     date_created = Column(DateTime, default=datetime.utcnow)
@@ -99,7 +96,7 @@ class Comment(Base):
 
     post = relation(Post, innerjoin=True, lazy="joined")
 
-    parent = relation('Comment', remote_side=[id])
+    parent = relation("Comment", remote_side=[id])
 
 
 class Tag(Base):
@@ -111,7 +108,7 @@ class Tag(Base):
     _name = Column("name", Unicode(80), unique=True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from eralchemy2 import render_er
 
-    render_er(Base, '../newsmeme.svg')
+    render_er(Base, "../newsmeme.svg")

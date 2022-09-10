@@ -1,19 +1,19 @@
-from .models import Table, Relation, Column
+from .models import Column, Relation, Table
 
 
 class ParsingException(Exception):
-    base_traceback = 'Error on line {line_nb}: {line}\n{error}'
+    base_traceback = "Error on line {line_nb}: {line}\n{error}"
     hint = None
 
     @property
     def traceback(self):
         rv = self.base_traceback.format(
-            line_nb=getattr(self, 'line_nb', '?'),
-            line=getattr(self, 'line', ''),
+            line_nb=getattr(self, "line_nb", "?"),
+            line=getattr(self, "line", ""),
             error=self.args[0],
         )
         if self.hint is not None:
-            rv += '\nHINT: {}'.format(self.hint)
+            rv += "\nHINT: {}".format(self.hint)
         return rv
 
 
@@ -26,24 +26,24 @@ class DuplicateColumnException(ParsingException):
 
 
 class RelationNoColException(ParsingException):
-    hint = 'Try to declare the tables before the relationships.'
+    hint = "Try to declare the tables before the relationships."
 
 
 class NoCurrentTableException(ParsingException):
-    hint = 'Try to declare the tables before the relationships and columns.'
+    hint = "Try to declare the tables before the relationships and columns."
 
 
 def remove_comments_from_line(line):
-    if '#' not in line:
+    if "#" not in line:
         return line.strip()
-    return line[:line.index('#')].strip()
+    return line[: line.index("#")].strip()
 
 
 def filter_lines_from_comments(lines):
-    """ Filter the lines from comments and non code lines. """
+    """Filter the lines from comments and non code lines."""
     for line_nb, raw_line in enumerate(lines):
         clean_line = remove_comments_from_line(raw_line)
-        if clean_line == '':
+        if clean_line == "":
             continue
         yield line_nb, clean_line, raw_line
 
@@ -58,14 +58,14 @@ def parse_line(line):
 
 
 def _check_no_current_table(new_obj, current_table):
-    """ Raises exception if we try to add a relation or a column
-    with no current table. """
+    """Raises exception if we try to add a relation or a column
+    with no current table."""
     if current_table is None:
-        msg = 'Cannot add {} before adding table'
+        msg = "Cannot add {} before adding table"
         if isinstance(new_obj, Relation):
-            raise NoCurrentTableException(msg.format('relation'))
+            raise NoCurrentTableException(msg.format("relation"))
         if isinstance(new_obj, Column):
-            raise NoCurrentTableException(msg.format('column'))
+            raise NoCurrentTableException(msg.format("column"))
 
 
 def _update_check_inputs(current_table, tables, relations):
@@ -84,19 +84,20 @@ def _check_colname_in_lst(column_name, columns_names):
 
 def _check_not_creating_duplicates(new_name, names, type, exc):
     if new_name in names:
-        msg = 'Cannot add {} named "{}" which is ' \
-              'already present in the schema.'
+        msg = 'Cannot add {} named "{}" which is ' "already present in the schema."
         raise exc(msg.format(type, new_name))
 
 
 def update_models(new_obj, current_table, tables, relations):
-    """ Update the state of the parsing. """
+    """Update the state of the parsing."""
     _update_check_inputs(current_table, tables, relations)
     _check_no_current_table(new_obj, current_table)
 
     if isinstance(new_obj, Table):
         tables_names = [t.name for t in tables]
-        _check_not_creating_duplicates(new_obj.name, tables_names, 'table', DuplicateTableException)
+        _check_not_creating_duplicates(
+            new_obj.name, tables_names, "table", DuplicateTableException
+        )
         return new_obj, tables + [new_obj], relations
 
     if isinstance(new_obj, Relation):
@@ -107,7 +108,9 @@ def update_models(new_obj, current_table, tables, relations):
 
     if isinstance(new_obj, Column):
         columns_names = [c.name for c in current_table.columns]
-        _check_not_creating_duplicates(new_obj.name, columns_names, 'column', DuplicateColumnException)
+        _check_not_creating_duplicates(
+            new_obj.name, columns_names, "column", DuplicateColumnException
+        )
         current_table.columns.append(new_obj)
         return current_table, tables, relations
 
@@ -116,14 +119,14 @@ def update_models(new_obj, current_table, tables, relations):
 
 
 def markdown_file_to_intermediary(filename):
-    """ Parse a file and return to intermediary syntax. """
+    """Parse a file and return to intermediary syntax."""
     with open(filename) as f:
         lines = f.readlines()
     return line_iterator_to_intermediary(lines)
 
 
 def line_iterator_to_intermediary(line_iterator):
-    """ Parse an iterator of str (one string per line) to the intermediary syntax"""
+    """Parse an iterator of str (one string per line) to the intermediary syntax"""
     current_table = None
     tables = []
     relations = []
@@ -131,12 +134,16 @@ def line_iterator_to_intermediary(line_iterator):
     for line_nb, line, raw_line in filter_lines_from_comments(line_iterator):
         try:
             new_obj = parse_line(line)
-            current_table, tables, relations = update_models(new_obj, current_table, tables, relations)
+            current_table, tables, relations = update_models(
+                new_obj, current_table, tables, relations
+            )
         except ParsingException as e:
             e.line_nb = line_nb
             e.line = raw_line
             errors.append(e)
     if len(errors) != 0:
-        msg = 'eralchemy2 couldn\'t complete the generation due the {} following errors'.format(len(errors))
-        raise ParsingException(msg + '\n\n'.join(e.traceback for e in errors))
+        msg = "eralchemy2 couldn't complete the generation due the {} following errors".format(
+            len(errors)
+        )
+        raise ParsingException(msg + "\n\n".join(e.traceback for e in errors))
     return tables, relations

@@ -1,15 +1,16 @@
 # from https://github.com/zzzeek/sqlalchemy/blob/master/examples/graphs/directed_graph.py
 """a directed graph example."""
-from eralchemy2 import render_er
-from sqlalchemy import Column, Integer, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, ForeignKey, Integer
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+
+from eralchemy2 import render_er
 
 Base = declarative_base()
 
 
 class Node(Base):
-    __tablename__ = 'node'
+    __tablename__ = "node"
 
     node_id = Column(Integer, primary_key=True)
 
@@ -29,22 +30,18 @@ class Node(Base):
 
 
 class Edge(Base):
-    __tablename__ = 'edge'
+    __tablename__ = "edge"
 
-    lower_id = Column(Integer,
-                      ForeignKey('node.node_id'),
-                      primary_key=True)
+    lower_id = Column(Integer, ForeignKey("node.node_id"), primary_key=True)
 
-    higher_id = Column(Integer,
-                       ForeignKey('node.node_id'),
-                       primary_key=True)
+    higher_id = Column(Integer, ForeignKey("node.node_id"), primary_key=True)
 
-    lower_node = relationship(Node,
-                              primaryjoin=lower_id == Node.node_id,
-                              backref='lower_edges')
-    higher_node = relationship(Node,
-                               primaryjoin=higher_id == Node.node_id,
-                               backref='higher_edges')
+    lower_node = relationship(
+        Node, primaryjoin=lower_id == Node.node_id, backref="lower_edges"
+    )
+    higher_node = relationship(
+        Node, primaryjoin=higher_id == Node.node_id, backref="higher_edges"
+    )
 
     # here we have lower.node_id <= higher.node_id
     def __init__(self, n1, n2):
@@ -56,7 +53,7 @@ class Edge(Base):
             self.higher_node = n1
 
 
-if __name__ == '__main__':
-    render_er(Base, 'graph.png')
-    render_er(Base, 'graph.dot')
-    render_er(Base, 'graph.pdf')
+if __name__ == "__main__":
+    render_er(Base, "graph.png")
+    render_er(Base, "graph.dot")
+    render_er(Base, "graph.pdf")
