@@ -2,7 +2,7 @@ from setuptools import setup
 
 
 def read_long_description() -> str:
-    with open("README.rst") as f:
+    with open("README.md") as f:
         return f.read()
 
 
@@ -37,7 +37,9 @@ if __name__ == "__main__":
         ],
         keywords="sql relational databases ER diagram render",
         packages=["eralchemy2"],
-        extras_require={"dev": ["black", "isort"]},
+        extras_require={
+            "dev": ["black", "isort", "tox", "Flask-SQLAlchemy", "psycopg2"]
+        },
         install_requires=["SQLAlchemy", "pygraphviz"],
         entry_points={
             "console_scripts": ["eralchemy2=eralchemy2.main:cli"],
