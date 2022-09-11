@@ -175,14 +175,12 @@ def test_update_models_add_column():
 
 
 def test_integration_parser():
-    # broken as is_null not written to .md
     tables, relations = line_iterator_to_intermediary(c.markdown.split("\n"))
     c.assert_lst_equal(tables, c.tables)
     c.assert_lst_equal(relations, [c.relation, c.exclude_relation])
 
 
 def test_generate_and_parse():
-    # broken as is_null not written to .md
     markdown = _intermediary_to_markdown(c.tables, [c.relation])
     tables, relations = line_iterator_to_intermediary(markdown.split("\n"))
     c.assert_lst_equal(tables, c.tables)

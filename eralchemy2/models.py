@@ -46,20 +46,25 @@ class Column(Drawable):
         return Column(
             name=match.group("name"),
             type=match.group("label"),
-            is_key="*" in match.group("primary"),  # TODO foreign key
+            is_key="*" in match.group("primary"),
+            is_null=not "*" in match.group("primary")
         )
 
-    def __init__(self, name, type=None, is_key=False, is_null=False):
+    def __init__(self, name, type=None, is_key=False, is_null=None):
         """
         :param name: (str) Name of the column
         :param type:
         :param is_key:
+        :param is_null:
         :return:
         """
         self.name = name
         self.type = type
         self.is_key = is_key
-        self.is_null = is_null
+        if is_null == None:
+            self.is_null = not is_key
+        else:
+            self.is_null = is_null
 
     def __lt__(self, other):
         if self.is_key > other.is_key:
