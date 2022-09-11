@@ -3,7 +3,7 @@
 
 # https://github.com/ymyzk/tox-gh-actions
 
-name: Python application
+name: CI Tests
 
 on:
   push:

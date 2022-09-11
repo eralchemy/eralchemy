@@ -1,19 +1,23 @@
+
+[![PyPI Version](https://img.shields.io/pypi/v/eralchemy2.svg)](
+https://pypi.org/project/eralchemy2/)
+[![PyPI Downloads](https://img.shields.io/pypi/dm/eralchemy2.svg)](
+https://pypi.org/project/eralchemy2/)
+![Github Actions](https://github.com/maurerle/eralchemy2/actions/workflows/python-app.yml/badge.svg)
+
+
 # Entity relation diagrams generator
 
 eralchemy2 generates Entity Relation (ER) diagram (like the one below) from databases or from SQLAlchemy models.
+Works with SQLAlchemy < 1.4 but also with versions greater than 1.4
 
 ## Example
 
-![Example for a graph](https://raw.githubusercontent.com/maurerle/eralchemy2/master/newsmeme.svg?raw=true "Example for NewsMeme")
+![Example for a graph](https://raw.githubusercontent.com/maurerle/eralchemy2/main/newsmeme.svg?raw=true "Example for NewsMeme")
 
 [Example for NewsMeme](https://bitbucket.org/danjac/newsmeme)
 
 ## Quick Start
-
-### Install on a mac
-The simplest way to install eralchemy on OSX is by using [Homebrew](http://brew.sh)
-
-    $ brew install eralchemy2
 
 ### Install
 To install eralchemy2, just do:
@@ -33,7 +37,7 @@ database url.
 
 #### From a markdown file.
 
-    $ curl 'https://raw.githubusercontent.com/maurerle/eralchemy2/master/example/newsmeme.er' > markdown_file.er
+    $ curl 'https://raw.githubusercontent.com/maurerle/eralchemy2/main/example/newsmeme.er' > markdown_file.er
     $ eralchemy2 -i 'markdown_file.er' -o erd_from_markdown_file.pdf
 
 #### From a Postgresql DB to a markdown file excluding tables named `temp` and `audit`
@@ -60,7 +64,7 @@ render_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
 ```
 
 ## Architecture
-![Architecture schema](https://raw.githubusercontent.com/maurerle/eralchemy2/master/eralchemy_architecture.png?raw=true "Architecture schema")
+![Architecture schema](https://raw.githubusercontent.com/maurerle/eralchemy2/main/eralchemy_architecture.png?raw=true "Architecture schema")
 
 Thanks to it's modular architecture, it can be connected to other ORMs/ODMs/OGMs/O*Ms.
 
@@ -68,9 +72,10 @@ Thanks to it's modular architecture, it can be connected to other ORMs/ODMs/OGMs
 
 Every feedback is welcome on the [GitHub issues](https://github.com/maurerle/eralchemy2/issues).
 
-To run the tests, use : `$ py.test`.
+To run the tests, use : `$ py.test` or `$ tox`.
 Some tests require a local postgres database with a schema named test in a database
-named test all owned by a user named postgres with a password of postgres.
+named test all owned by a user named eralchemy with a password of eralchemy.
+This can be easily set up using docker-compose with: `docker-compose up -d`.
 
 All tested PR are welcome.
 

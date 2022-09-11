@@ -32,6 +32,8 @@ if __name__ == "__main__":
             "Programming Language :: Python :: 3.8",
             "Programming Language :: Python :: 3.9",
             "Programming Language :: Python :: 3.10",
+            "License :: OSI Approved :: Apache Software License"
+            "Operating System :: OS Independent",
             "Topic :: Scientific/Engineering :: Visualization",
             "Topic :: Software Development :: Libraries :: Python Modules",
             "Topic :: Database",
@@ -45,4 +47,5 @@ if __name__ == "__main__":
         entry_points={
             "console_scripts": ["eralchemy2=eralchemy2.main:cli"],
         },
+        python_requires='>=3',
     )
