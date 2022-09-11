@@ -19,6 +19,22 @@ jobs:
       matrix:
         python-version: ["3.7", "3.8", "3.9", "3.10"]
 
+    services:
+      eralchemy-db:
+        image: postgres:alpine
+        env:
+          POSTGRES_DB: eralchemy
+          POSTGRES_PASSWORD: eralchemy
+          POSTGRES_PORT: 5432
+          POSTGRES_USER: eralchemy
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Clone this repository
         uses: actions/checkout@v3
@@ -27,22 +43,21 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
+              
+      - name: Set up pg-client
+        run: |
+          sudo apt-get update
+          sudo apt-get -qq install graphviz python-dev libgraphviz-dev pkg-config postgresql-client
 
-      - name: Set up pg
-        run: |
-          # stop the build if there are Python syntax errors or undefined names
-          sudo apt-get install postgresql postgresql-contrib
-          
-      - name: Launch pg 
-        run: |
-          sudo pg_ctlcluster 14 main start
-          sudo apt-get -qq install graphviz python-dev libgraphviz-dev pkg-config
-          sudo -u postgres psql -p 5433 -U postgres -c "CREATE DATABASE test ENCODING 'UTF8';"
-          sudo -u postgres psql -p 5433 -U postgres test -c "CREATE SCHEMA test;" 
+      - name: Setup database
+        run: psql -h localhost -U eralchemy -c 'CREATE SCHEMA test;'
+        env:
+          PGPASSWORD: eralchemy
+        
       - name: Install python dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install tox tox-gh-actions pytest black
+          python -m pip install tox tox-gh-actions pytest black pygraphviz
 
   #     - name: Lint with flake8
   #       run: |
