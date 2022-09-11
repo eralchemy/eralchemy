@@ -20,6 +20,7 @@ if __name__ == "__main__":
         version=read_version(),
         description="Simple entity relation (ER) diagrams generation",
         long_description=read_long_description(),
+        long_description_content_type='text/markdown',
         url="https://github.com/maurerle/eralchemy2",
         author="Florian Maurer",
         author_email="fmaurer+github@disroot.org",
