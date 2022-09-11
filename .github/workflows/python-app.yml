@@ -57,7 +57,7 @@ jobs:
       - name: Install python dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install tox tox-gh-actions pytest black pygraphviz
+          python -m pip install tox tox-gh-actions
 
   #     - name: Lint with flake8
   #       run: |
