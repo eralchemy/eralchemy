@@ -45,11 +45,12 @@ def column_to_intermediary(col: sa.Column, type_formatter=format_type):
 
 def table_to_intermediary(table: sa.Table) -> Table:
     """Transform an SQLAlchemy Table object to it's intermediary representation."""
-    table_columns = getattr(table.c,"_colset",getattr(table.c,"_data",{}))
+    table_columns = getattr(table.c, "_colset", getattr(table.c, "_data", {}))
     return Table(
         name=table.fullname,
         columns=[column_to_intermediary(col) for col in table_columns.values()],
     )
+
 
 def metadata_to_intermediary(metadata: sa.MetaData):
     """Transforms SQLAlchemy metadata to the intermediary representation."""

@@ -47,7 +47,7 @@ class Column(Drawable):
             name=match.group("name"),
             type=match.group("label"),
             is_key="*" in match.group("primary"),
-            is_null=not "*" in match.group("primary")
+            is_null=not "*" in match.group("primary"),
         )
 
     def __init__(self, name, type=None, is_key=False, is_null=None):
