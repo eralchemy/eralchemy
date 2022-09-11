@@ -5,11 +5,12 @@ This class allow to transform SQLAlchemy metadata to the intermediary syntax.
 from typing import Any
 
 from sqlalchemy.exc import CompileError
+import sqlalchemy as sa
 
 from .models import Column, Relation, Table
 
 
-def relation_to_intermediary(fk) -> Relation:
+def relation_to_intermediary(fk: sa.ForeignKey) -> Relation:
     """Transform an SQLAlchemy ForeignKey object to it's intermediary representation."""
     return Relation(
         right_col=format_name(fk.parent.table.fullname),
@@ -32,7 +33,7 @@ def format_name(name: Any) -> str:
     return str(name)
 
 
-def column_to_intermediary(col, type_formatter=format_type):
+def column_to_intermediary(col: sa.Column, type_formatter=format_type):
     """Transform an SQLAlchemy Column object to it's intermediary representation."""
     return Column(
         name=col.name,
@@ -42,15 +43,15 @@ def column_to_intermediary(col, type_formatter=format_type):
     )
 
 
-def table_to_intermediary(table) -> Table:
+def table_to_intermediary(table: sa.Table) -> Table:
     """Transform an SQLAlchemy Table object to it's intermediary representation."""
+    table_columns = getattr(table.c,"_colset",getattr(table.c,"_data",{}))
     return Table(
         name=table.fullname,
-        columns=[column_to_intermediary(col) for col in table.c._colset],
+        columns=[column_to_intermediary(col) for col in table_columns.values()],
     )
 
-
-def metadata_to_intermediary(metadata):
+def metadata_to_intermediary(metadata: sa.MetaData):
     """Transforms SQLAlchemy metadata to the intermediary representation."""
     tables = [table_to_intermediary(table) for table in metadata.tables.values()]
     relationships = [
@@ -72,7 +73,7 @@ def name_for_scalar_relationship(base, local_cls, referred_cls, constraint) -> s
     return name
 
 
-def database_to_intermediary(database_uri, schema=None):
+def database_to_intermediary(database_uri: str, schema=None):
     """Introspect from the database (given the database_uri) to create the intermediary representation."""
     from sqlalchemy import create_engine
     from sqlalchemy.ext.automap import automap_base
