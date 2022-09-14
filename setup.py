@@ -8,7 +8,7 @@ def read_long_description() -> str:
 
 def read_version() -> str:
     with open("eralchemy2/version.py") as f:
-        code = f.readlines()[0]
+        code = f.readlines()[2]
     exec(code)
     assert "version" in locals()
     return locals()["version"]
