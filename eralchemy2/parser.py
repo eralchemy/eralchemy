@@ -98,7 +98,9 @@ def _check_not_creating_duplicates(
         raise exc(msg.format(type, new_name))
 
 
-def update_models(new_obj, current_table: Table | None, tables, relations):
+def update_models(
+    new_obj, current_table: Table | None, tables: list[Table], relations: list[Relation]
+):
     """Update the state of the parsing."""
     _update_check_inputs(current_table, tables, relations)
     _check_no_current_table(new_obj, current_table)
