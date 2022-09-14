@@ -2,10 +2,12 @@
 This class allow to transform SQLAlchemy metadata to the intermediary syntax.
 """
 
+from __future__ import annotations
+
 from typing import Any
 
-from sqlalchemy.exc import CompileError
 import sqlalchemy as sa
+from sqlalchemy.exc import CompileError
 
 from .models import Column, Relation, Table
 
@@ -52,7 +54,9 @@ def table_to_intermediary(table: sa.Table) -> Table:
     )
 
 
-def metadata_to_intermediary(metadata: sa.MetaData):
+def metadata_to_intermediary(
+    metadata: sa.MetaData,
+) -> tuple[list[Table], list[Relation]]:
     """Transforms SQLAlchemy metadata to the intermediary representation."""
     tables = [table_to_intermediary(table) for table in metadata.tables.values()]
     relationships = [
@@ -63,18 +67,19 @@ def metadata_to_intermediary(metadata: sa.MetaData):
     return tables, relationships
 
 
-def declarative_to_intermediary(base):
+def declarative_to_intermediary(base) -> tuple[list[Table], list[Relation]]:
     """Transform an SQLAlchemy Declarative Base to the intermediary representation."""
     return metadata_to_intermediary(base.metadata)
 
 
 def name_for_scalar_relationship(base, local_cls, referred_cls, constraint) -> str:
     """Overriding naming schemes."""
-    name = referred_cls.__name__.lower() + "_ref"
-    return name
+    return referred_cls.__name__.lower() + "_ref"
 
 
-def database_to_intermediary(database_uri: str, schema=None):
+def database_to_intermediary(
+    database_uri: str, schema: str | None = None
+) -> tuple[list[Table], list[Relation]]:
     """Introspect from the database (given the database_uri) to create the intermediary representation."""
     from sqlalchemy import create_engine
     from sqlalchemy.ext.automap import automap_base

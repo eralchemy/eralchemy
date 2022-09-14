@@ -20,7 +20,7 @@ if __name__ == "__main__":
         version=read_version(),
         description="Simple entity relation (ER) diagrams generation",
         long_description=read_long_description(),
-        long_description_content_type='text/markdown',
+        long_description_content_type="text/markdown",
         url="https://github.com/maurerle/eralchemy2",
         author="Florian Maurer",
         author_email="fmaurer+github@disroot.org",
@@ -41,11 +41,19 @@ if __name__ == "__main__":
         keywords="sql relational databases ER diagram render",
         packages=["eralchemy2"],
         extras_require={
-            "dev": ["black", "isort", "tox", "Flask-SQLAlchemy", "psycopg2"]
+            "dev": [
+                "black",
+                "isort",
+                "tox",
+                "Flask-SQLAlchemy",
+                "psycopg2",
+                "mypy",
+                "types-sqlalchemy",
+            ]
         },
         install_requires=["SQLAlchemy", "pygraphviz"],
         entry_points={
             "console_scripts": ["eralchemy2=eralchemy2.main:cli"],
         },
-        python_requires='>=3',
+        python_requires=">=3.7",
     )
