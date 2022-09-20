@@ -23,16 +23,19 @@ classifiers=[
 
 [tool.poetry.dependencies]
 python = "^3.7"
-SQLAlchemy = "^1.4.41"
+SQLAlchemy = ">=1.3.19"
 pygraphviz = "^1.7"
+Flask-SQLAlchemy = {version = "^2.5.1", optional = true}
+psycopg2 = {version = "^2.9.3", optional = true}
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.8.0"
 tox = "^3.26.0"
-Flask-SQLAlchemy = "^2.5.1"
-psycopg2 = "^2.9.3"
 isort = "^5.10.1"
 towncrier = "^22.8.0"
+
+[tool.poetry.extras]
+    ci = ["Flask-SQLAlchemy", "psycopg2"]
 
 [tool.poetry.scripts]
 eralchemy2 = "eralchemy2.main:cli"
@@ -54,6 +57,12 @@ legacy_tox_ini = """
 isolated_build = True
 envlist = py37, py38, py39, py310, py310-SA13
 
+[tox:.package]
+# note tox will use the same python version as under what tox is installed to package
+# so unless this is python 3 you can require a given python version for the packaging
+# environment via the basepython key
+basepython = python3
+
 [gh-actions]
 python =
     3.7: py37
@@ -62,11 +71,12 @@ python =
     3.10: py310, py310-SA13
 
 [testenv]
-commands = py.test
-extras = dev
+extras = ci
 deps =
   pytest
   py310-SA13: SQLAlchemy<1.4
+commands = 
+  pytest
 """
 
 [tool.pytest]

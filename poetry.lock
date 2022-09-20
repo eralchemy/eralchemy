@@ -25,7 +25,7 @@ uvloop = ["uvloop (>=0.15.2)"]
 name = "click"
 version = "8.1.3"
 description = "Composable command line interface toolkit"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -48,7 +48,7 @@ click = "*"
 name = "colorama"
 version = "0.4.5"
 description = "Cross-platform colored terminal text."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
@@ -76,8 +76,8 @@ testing = ["covdefaults (>=2.2)", "coverage (>=6.4.2)", "pytest (>=7.1.2)", "pyt
 name = "Flask"
 version = "2.2.2"
 description = "A simple framework for building complex web applications."
-category = "dev"
-optional = false
+category = "main"
+optional = true
 python-versions = ">=3.7"
 
 [package.dependencies]
@@ -95,8 +95,8 @@ dotenv = ["python-dotenv"]
 name = "Flask-SQLAlchemy"
 version = "2.5.1"
 description = "Adds SQLAlchemy support to your Flask application."
-category = "dev"
-optional = false
+category = "main"
+optional = true
 python-versions = ">= 2.7, != 3.0.*, != 3.1.*, != 3.2.*, != 3.3.*"
 
 [package.dependencies]
@@ -160,15 +160,15 @@ requirements_deprecated_finder = ["pip-api", "pipreqs"]
 name = "itsdangerous"
 version = "2.1.2"
 description = "Safely pass data to untrusted environments and back."
-category = "dev"
-optional = false
+category = "main"
+optional = true
 python-versions = ">=3.7"
 
 [[package]]
 name = "Jinja2"
 version = "3.1.2"
 description = "A very fast and expressive template engine."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -182,7 +182,7 @@ i18n = ["Babel (>=2.7)"]
 name = "MarkupSafe"
 version = "2.1.1"
 description = "Safely add untrusted strings to HTML/XML markup."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -244,8 +244,8 @@ testing = ["pytest", "pytest-benchmark"]
 name = "psycopg2"
 version = "2.9.3"
 description = "psycopg2 - Python-PostgreSQL Database Adapter"
-category = "dev"
-optional = false
+category = "main"
+optional = true
 python-versions = ">=3.6"
 
 [[package]]
@@ -417,8 +417,8 @@ testing = ["coverage (>=6.2)", "coverage-enable-subprocess (>=1)", "flaky (>=3.7
 name = "Werkzeug"
 version = "2.2.2"
 description = "The comprehensive WSGI web application library."
-category = "dev"
-optional = false
+category = "main"
+optional = true
 python-versions = ">=3.7"
 
 [package.dependencies]
@@ -439,10 +439,13 @@ python-versions = ">=3.7"
 docs = ["jaraco.packaging (>=9)", "jaraco.tidelift (>=1.4)", "rst.linker (>=1.9)", "sphinx"]
 testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=0.3.7)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=1.3)", "pytest-flake8", "pytest-mypy (>=0.9.1)"]
 
+[extras]
+ci = ["Flask-SQLAlchemy", "psycopg2"]
+
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "2fc3d82b50adeed426d5fedec534a6420b2e0831a3652561281c33465e39bd20"
+content-hash = "ee712bc1d615938741628f94a5d6b630672403a0e901ec1be9665891fb61d8f7"
 
 [metadata.files]
 black = [

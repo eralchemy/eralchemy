@@ -111,8 +111,8 @@ def main():
     if next_version_str in tags:
         fail('Version "%s" is already tagged', next_version_str)
 
-    #if not git_is_clean():
-    #    fail("You have uncommitted changes in git")
+    if not git_is_clean():
+        fail("You have uncommitted changes in git")
 
     Popen(["poetry", "version", next_version_str]).wait()
     make_git_commit("Bump version number to %s", next_version_str)
