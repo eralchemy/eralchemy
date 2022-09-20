@@ -27,16 +27,12 @@ def build_and_upload():
     rm("eralchemy2.egg-info")
     rm("build")
     rm("dist")
-    Popen(
-        [sys.executable, "setup.py", "bdist_wheel", "--universal"], stdout=PIPE
-    ).wait()
-    Popen([sys.executable, "setup.py", "sdist"], stdout=PIPE).wait()
+    Popen(["poetry", "build"]).wait()
     pypi_pwd = getpass(prompt="Pypi Password: ")
-    Popen(["twine", "upload", "dist/*", "-u", "maurerle", "-p", pypi_pwd]).wait()
-    Popen(["open", "https://pypi.python.org/pypi/eralchemy2"])
+    Popen(["poetry", "publish", "-u", "maurerle", "-p", pypi_pwd]).wait()
+    Popen(["open", "https://pypi.org/project/eralchemy2/"])
     Popen(["git", "tag"], stdout=PIPE).communicate()[0].splitlines()
     Popen(["git", "push", "--tags"]).wait()
-
 
 def fail(message, *args):
     print("Error:", message % args, file=sys.stderr)

@@ -4,8 +4,8 @@ This class allow to transform SQLAlchemy metadata to the intermediary syntax.
 
 from typing import Any
 
-from sqlalchemy.exc import CompileError
 import sqlalchemy as sa
+from sqlalchemy.exc import CompileError
 
 from .models import Column, Relation, Table
 
