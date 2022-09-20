@@ -69,7 +69,7 @@ def test_database_to_intermediary():
 
 def test_database_to_intermediary_with_schema():
     db_uri = create_db()
-    tables, relationships = database_to_intermediary(db_uri, schema="test")
+    tables, relationships = database_to_intermediary(db_uri, schema="eralchemy_test")
 
     assert len(tables) == 3
     assert len(relationships) == 2

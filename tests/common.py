@@ -30,25 +30,25 @@ class Exclude(Base):
 
 class ParentWithSchema(Base):
     __tablename__ = "parent"
-    __table_args__ = {"schema": "test"}
+    __table_args__ = {"schema": "eralchemy_test"}
     id = Column(Integer, primary_key=True)
     name = Column(String(255))
 
 
 class ChildWithSchema(Base):
     __tablename__ = "child"
-    __table_args__ = {"schema": "test"}
+    __table_args__ = {"schema": "eralchemy_test"}
     id = Column(Integer, primary_key=True)
-    parent_id = Column(ForeignKey("test.parent.id"))
-    parent = relationship("ParentWithSchema", backref="test.children")
+    parent_id = Column(ForeignKey("eralchemy_test.parent.id"))
+    parent = relationship("ParentWithSchema", backref="eralchemy_test.children")
 
 
 class ExcludeWithSchema(Base):
     __tablename__ = "exclude"
-    __table_args__ = {"schema": "test"}
+    __table_args__ = {"schema": "eralchemy_test"}
     id = Column(Integer, primary_key=True)
-    parent_id = Column(ForeignKey("test.parent.id"))
-    parent = relationship("ParentWithSchema", backref="test.excludes")
+    parent_id = Column(ForeignKey("eralchemy_test.parent.id"))
+    parent = relationship("ParentWithSchema", backref="eralchemy_test.excludes")
 
 
 parent_id = ERColumn(name="id", type="INTEGER", is_key=True)
