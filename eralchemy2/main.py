@@ -19,7 +19,14 @@ from .sqla import (
     declarative_to_intermediary,
     metadata_to_intermediary,
 )
-from importlib.metadata import version
+
+try:
+    # python >=3.8
+    from importlib.metadata import version
+except ImportError:
+    # python <3.8
+    # importlib.metadata not available for python 3.7
+    from importlib_metadata import version
 
 __version__ = version(__package__)
 

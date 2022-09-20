@@ -445,7 +445,7 @@ ci = ["Flask-SQLAlchemy", "psycopg2"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "ee712bc1d615938741628f94a5d6b630672403a0e901ec1be9665891fb61d8f7"
+content-hash = "e3d4f5ccae383f22e00c629ca8a22c0b52ad2ac290925d67c9c1295c4a62eed8"
 
 [metadata.files]
 black = [
