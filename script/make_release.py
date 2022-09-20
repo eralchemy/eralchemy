@@ -6,7 +6,7 @@ from shutil import rmtree
 from subprocess import PIPE, Popen
 
 # inspired by https://github.com/mitsuhiko/flask/blob/master/scripts/make-release.py
-
+from poetry.poetry import Poetry
 
 def set_filename_version(filename, version_number):
     with open(filename, "w+") as f:
@@ -81,11 +81,8 @@ def parse_args():
 
 
 def get_current_version():
-    with open("eralchemy2/version.py") as f:
-        lines = f.readlines()
-        namespace = {}
-        exec(lines[0], namespace)
-        return version_str_to_lst(namespace["version"])
+    from importlib.metadata import version
+    return version_str_to_lst(version("eralchemy2"))
 
 
 def get_git_tags():
@@ -104,6 +101,7 @@ def get_next_version(major, minor, fix, current_version):
 
 def main():
     os.chdir(os.path.join(os.path.dirname(__file__), ".."))
+    Popen(["poetry", "install"]).wait()
     current_version = get_current_version()
     major, minor, fix = parse_args()
     next_version = get_next_version(major, minor, fix, current_version)
@@ -113,10 +111,10 @@ def main():
     if next_version_str in tags:
         fail('Version "%s" is already tagged', next_version_str)
 
-    if not git_is_clean():
-        fail("You have uncommitted changes in git")
+    #if not git_is_clean():
+    #    fail("You have uncommitted changes in git")
 
-    set_init_version(next_version_str)
+    Popen(["poetry", "version", next_version_str]).wait()
     make_git_commit("Bump version number to %s", next_version_str)
     make_git_tag("v" + next_version_str)
     build_and_upload()

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "eralchemy2"
-version = "1.3.3"
+version = "1.3.4"
 description = "Simple entity relation (ER) diagrams generation"
 authors = ["Florian Maurer <fmaurer@disroot.org>"]
 license = "Apache License 2.0"
