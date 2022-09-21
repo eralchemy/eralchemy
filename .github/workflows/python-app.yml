@@ -43,7 +43,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-              
+
       - name: Set up pg-client
         run: |
           sudo apt-get update
@@ -53,7 +53,7 @@ jobs:
         run: psql -h localhost -U eralchemy -c 'CREATE SCHEMA eralchemy_test;'
         env:
           PGPASSWORD: eralchemy
-        
+
       - name: Install python dependencies
         run: |
           python -m pip install --upgrade pip
@@ -65,3 +65,12 @@ jobs:
   #         flake8 .
       - name: Test with pytest
         run: tox
+
+      - name: Run isort check
+        run: isort --check eralchemy2
+
+      - name: Run black check
+        run: black --check eralchemy2
+
+      - name: Run mypy
+        run: mypy eralchemy2
