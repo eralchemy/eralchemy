@@ -8,11 +8,9 @@ from __future__ import annotations
 import operator
 import re
 from abc import ABC, abstractmethod
-from typing import Any, ClassVar, TypeVar
+from typing import Any, ClassVar
 
 from .cst import FONT_TAGS, ROW_TAGS, TABLE
-
-T = TypeVar("T")
 
 
 class Drawable(ABC):
@@ -31,9 +29,9 @@ class Drawable(ABC):
     def __eq__(self, other) -> bool:
         return self.__dict__ == other.__dict__
 
-    @classmethod
+    @staticmethod
     @abstractmethod
-    def make_from_match(cls: type[T], match: re.Match) -> T:
+    def make_from_match(match: re.Match) -> Drawable:
         """Used in the parsing of files. Transforms a regex match to a Drawable object."""
 
     def __str__(self) -> str:
@@ -41,14 +39,14 @@ class Drawable(ABC):
 
 
 class Column(Drawable):
-    """Represents a Column in the intermediate syntax"""
+    """Represents a Column in the intermediaty syntax"""
 
     RE = re.compile(
         '(?P<primary>\*?)(?P<name>[^\s]+)\s*(\{label:\s*"(?P<label>[^"]+)"\})?'
     )
 
-    @classmethod
-    def make_from_match(cls, match: re.Match) -> Column:
+    @staticmethod
+    def make_from_match(match: re.Match) -> Column:
         return Column(
             name=match.group("name"),
             type=match.group("label"),
@@ -123,8 +121,8 @@ class Relation(Drawable):
         "+": "1..n",
     }
 
-    @classmethod
-    def make_from_match(cls, match: re.Match) -> Relation:
+    @staticmethod
+    def make_from_match(match: re.Match) -> Relation:
         return Relation(
             right_col=match.group("right_name"),
             left_col=match.group("left_name"),
@@ -197,7 +195,7 @@ class Relation(Drawable):
 
 
 class Table(Drawable):
-    """Represents a Table in the intermediate syntax"""
+    """Represents a Table in the intermediaty syntax"""
 
     RE = re.compile("\[(?P<name>[^]]+)\]")
 
@@ -205,8 +203,8 @@ class Table(Drawable):
         self.name = name
         self.columns = columns
 
-    @classmethod
-    def make_from_match(cls, match: re.Match) -> Table:
+    @staticmethod
+    def make_from_match(match: re.Match) -> Table:
         return Table(name=match.group("name"), columns=[])
 
     @property
