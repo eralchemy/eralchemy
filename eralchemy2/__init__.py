@@ -1,3 +1,5 @@
-# flake8: noqa: F401
-from .main import render_er, __version__
+from __future__ import annotations
+
+from .main import __version__, render_er
+
 __all__ = ("render_er", "__version__")

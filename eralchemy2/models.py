@@ -1,36 +1,40 @@
-import operator
-import re
-
-from .cst import FONT_TAGS, ROW_TAGS, TABLE
-
 """
 All the intermediary syntax.
 We can several kinds of models can be translated to this syntax.
 """
 
+from __future__ import annotations
 
-class Drawable:
+import operator
+import re
+from abc import ABC, abstractmethod
+from typing import Any, ClassVar
+
+from .cst import FONT_TAGS, ROW_TAGS, TABLE
+
+
+class Drawable(ABC):
     """Abstract class to represent all the objects which are drawable."""
 
-    RE = None
+    RE: ClassVar[re.Pattern[str]]
 
-    def to_markdown(self):
+    def to_markdown(self) -> str:
         """Transforms the intermediary object to it's syntax in the er markup."""
-        raise NotImplemented()
+        raise NotImplementedError()
 
-    def to_dot(self):
+    def to_dot(self) -> str:
         """Transforms the intermediary object to it's syntax in the dot format."""
-        raise NotImplemented()
+        raise NotImplementedError()
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return self.__dict__ == other.__dict__
 
     @staticmethod
-    def make_from_match(self):
+    @abstractmethod
+    def make_from_match(match: re.Match) -> Drawable:
         """Used in the parsing of files. Transforms a regex match to a Drawable object."""
-        raise NotImplemented()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.to_markdown()
 
 
@@ -42,7 +46,7 @@ class Column(Drawable):
     )
 
     @staticmethod
-    def make_from_match(match):
+    def make_from_match(match: re.Match) -> Column:
         return Column(
             name=match.group("name"),
             type=match.group("label"),
@@ -50,7 +54,7 @@ class Column(Drawable):
             is_null=not "*" in match.group("primary"),
         )
 
-    def __init__(self, name, type=None, is_key=False, is_null=None):
+    def __init__(self, name: str, type=None, is_key: bool = False, is_null=None):
         """
         :param name: (str) Name of the column
         :param type:
@@ -66,7 +70,7 @@ class Column(Drawable):
         else:
             self.is_null = is_null
 
-    def __lt__(self, other):
+    def __lt__(self, other: Column) -> bool:
         if self.is_key > other.is_key:
             return True
         elif self.is_key < other.is_key:
@@ -75,13 +79,13 @@ class Column(Drawable):
             return self.name < other.name
 
     @property
-    def key_symbol(self):
+    def key_symbol(self) -> str:
         return "*" if self.is_key else ""
 
-    def to_markdown(self):
+    def to_markdown(self) -> str:
         return '    {}{} {{label:"{}"}}'.format(self.key_symbol, self.name, self.type)
 
-    def to_mermaid(self):
+    def to_mermaid(self) -> str:
         return " {}{} {}{}".format(
             self.key_symbol,
             self.type.replace("(", "<").replace(")", ">"),
@@ -89,7 +93,7 @@ class Column(Drawable):
             " NOT NULL" if not self.is_null else "",
         )
 
-    def to_dot(self):
+    def to_dot(self) -> str:
         base = ROW_TAGS.format(
             ' ALIGN="LEFT"', "{key_opening}{col_name}{key_closing}{type}{null}"
         )
@@ -118,7 +122,7 @@ class Relation(Drawable):
     }
 
     @staticmethod
-    def make_from_match(match):
+    def make_from_match(match: re.Match) -> Relation:
         return Relation(
             right_col=match.group("right_name"),
             left_col=match.group("left_name"),
@@ -141,7 +145,7 @@ class Relation(Drawable):
         self.right_cardinality = right_cardinality
         self.left_cardinality = left_cardinality
 
-    def to_markdown(self):
+    def to_markdown(self) -> str:
         return "{} {}--{} {}".format(
             self.left_col,
             self.left_cardinality,
@@ -149,7 +153,7 @@ class Relation(Drawable):
             self.right_col,
         )
 
-    def to_mermaid(self):
+    def to_mermaid(self) -> str:
         normalized = (
             Relation.cardinalities_mermaid.get(k, k)
             for k in (
@@ -161,12 +165,12 @@ class Relation(Drawable):
         )
         return '{} "{}" -- "{}" {}'.format(*normalized)
 
-    def graphviz_cardinalities(self, card):
+    def graphviz_cardinalities(self, card) -> str:
         if card == "":
             return ""
         return "label=<<FONT>{}</FONT>>".format(self.cardinalities[card])
 
-    def to_dot(self):
+    def to_dot(self) -> str:
         if self.right_cardinality == self.left_cardinality == "":
             return ""
         cards = []
@@ -178,7 +182,7 @@ class Relation(Drawable):
             self.left_col, self.right_col, ",".join(cards)
         )
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any) -> bool:
         if super().__eq__(other):
             return True
         other_inversed = Relation(
@@ -195,32 +199,30 @@ class Table(Drawable):
 
     RE = re.compile("\[(?P<name>[^]]+)\]")
 
-    def __init__(self, name, columns):
+    def __init__(self, name: str, columns: list[Column]) -> None:
         self.name = name
         self.columns = columns
 
     @staticmethod
-    def make_from_match(match):
-        return Table(
-            name=match.group("name"),
-            columns=[],
-        )
+    def make_from_match(match: re.Match) -> Table:
+        return Table(name=match.group("name"), columns=[])
 
     @property
-    def header_markdown(self):
+    def header_markdown(self) -> str:
         return "[{}]".format(self.name)
 
-    def to_markdown(self):
+    def to_markdown(self) -> str:
         return (
             self.header_markdown
             + "\n"
             + "\n".join(c.to_markdown() for c in self.columns)
         )
 
-    def to_mermaid(self):
+    def to_mermaid(self) -> str:
+        columns = [c.to_mermaid() for c in self.columns]
         return (
             "class {}{{\n  ".format(self.name)
-            + "\n  ".format(self.name).join(c.to_mermaid() for c in self.columns)
+            + "\n  ".format(self.name).join(columns)  # type:ignore
             + "\n}"
         )
 
@@ -229,19 +231,19 @@ class Table(Drawable):
         return sorted(self.columns, key=operator.attrgetter("name"))
 
     @property
-    def header_dot(self):
+    def header_dot(self) -> str:
         return ROW_TAGS.format("", '<B><FONT POINT-SIZE="16">{}</FONT></B>').format(
             self.name
         )
 
-    def to_dot(self):
+    def to_dot(self) -> str:
         body = "".join(c.to_dot() for c in self.columns)
         return TABLE.format(self.name, self.header_dot, body)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.header_markdown
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any) -> bool:
         if not isinstance(other, Table):
             return False
         if other.name != self.name:

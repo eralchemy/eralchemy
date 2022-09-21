@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import argparse
 import base64
 import copy
@@ -20,11 +22,9 @@ from .sqla import (
     metadata_to_intermediary,
 )
 
-try:
-    # python >=3.8
+if sys.version_info >= (3, 8):
     from importlib.metadata import version
-except ImportError:
-    # python <3.8
+else:
     # importlib.metadata not available for python 3.7
     from importlib_metadata import version
 
