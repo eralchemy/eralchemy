@@ -50,7 +50,7 @@ jobs:
           sudo apt-get -qq install graphviz python-dev libgraphviz-dev pkg-config postgresql-client
 
       - name: Setup database
-        run: psql -h localhost -U eralchemy -c 'CREATE SCHEMA test;'
+        run: psql -h localhost -U eralchemy -c 'CREATE SCHEMA eralchemy_test;'
         env:
           PGPASSWORD: eralchemy
         
