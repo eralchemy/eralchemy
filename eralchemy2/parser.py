@@ -91,7 +91,7 @@ def _check_colname_in_lst(column_name: str, columns_names: list[str]) -> None:
 
 
 def _check_not_creating_duplicates(
-    new_name: str, names: list[str], type, exc: type[Exception]
+    new_name: str, names: list[str], type: str, exc: type[Exception]
 ) -> None:
     if new_name in names:
         msg = 'Cannot add {} named "{}" which is ' "already present in the schema."
@@ -100,7 +100,7 @@ def _check_not_creating_duplicates(
 
 def update_models(
     new_obj, current_table: Table | None, tables: list[Table], relations: list[Relation]
-):
+) -> tuple[Table | None, list[Table], list[Relation]]:
     """Update the state of the parsing."""
     _update_check_inputs(current_table, tables, relations)
     _check_no_current_table(new_obj, current_table)
@@ -119,6 +119,7 @@ def update_models(
         return current_table, tables, relations + [new_obj]
 
     if isinstance(new_obj, Column):
+        assert current_table
         columns_names = [c.name for c in current_table.columns]
         _check_not_creating_duplicates(
             new_obj.name, columns_names, "column", DuplicateColumnException
@@ -130,7 +131,7 @@ def update_models(
     raise ValueError(msg.format(new_obj.__class__.__name__))
 
 
-def markdown_file_to_intermediary(filename: str):
+def markdown_file_to_intermediary(filename: str) -> tuple[list[Table], list[Relation]]:
     """Parse a file and return to intermediary syntax."""
     with open(filename) as f:
         lines = f.readlines()
