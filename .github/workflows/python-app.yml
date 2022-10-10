@@ -75,5 +75,5 @@ jobs:
       - name: Run black check
         run: black --check eralchemy2
 
-      #- name: Run mypy
-      #  run: mypy eralchemy2
+      - name: Run mypy
+        run: mypy eralchemy2

@@ -24,7 +24,7 @@ def relation_to_intermediary(fk: sa.ForeignKey) -> Relation:
     """Transform an SQLAlchemy ForeignKey object to it's intermediary representation."""
     return Relation(
         right_col=format_name(fk.parent.table.fullname),
-        left_col=format_name(fk._column_tokens[1]),  # type:ignore
+        left_col=format_name(fk._column_tokens[1]),
         right_cardinality="*",
         left_cardinality="?",
     )
