@@ -185,8 +185,11 @@ def all_to_intermediary(filename_or_input, schema=None):
             return line_iterator_to_intermediary(filename_or_input)
 
     # try to read DB URI might raise ArgumentError.
-    make_url(filename_or_input)
-    return database_to_intermediary(filename_or_input, schema=schema)
+    try:
+        make_url(filename_or_input)
+        return database_to_intermediary(filename_or_input, schema=schema)
+    except ArgumentError:
+        raise ValueError("Cannot process filename_or_input {}".format(input_class_name))
 
 
 def get_output_mode(output, mode):
