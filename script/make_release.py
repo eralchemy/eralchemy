@@ -100,10 +100,11 @@ def get_next_version(major, minor, fix, current_version):
 
 
 def main():
+    major, minor, fix = parse_args()
     os.chdir(os.path.join(os.path.dirname(__file__), ".."))
     Popen(["poetry", "install"]).wait()
     current_version = get_current_version()
-    major, minor, fix = parse_args()
+    
     next_version = get_next_version(major, minor, fix, current_version)
     next_version_str = version_lst_to_str(next_version)
     tags = get_git_tags()
