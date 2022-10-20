@@ -25,8 +25,8 @@ def relation_to_intermediary(fk: sa.ForeignKey) -> Relation:
     return Relation(
         right_col=format_name(fk.parent.table.fullname),
         left_col=format_name(fk._column_tokens[1]),
-        right_cardinality="*",
-        left_cardinality="?",
+        right_cardinality="1" if fk.parent.primary_key or fk.parent.unique else "*",
+        left_cardinality="?" if fk.parent.nullable else "1",
     )
 
 
