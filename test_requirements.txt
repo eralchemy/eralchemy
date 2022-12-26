@@ -13,4 +13,4 @@ SQLAlchemy==1.0.13
 tox==2.3.1
 virtualenv==15.0.2
 Werkzeug===0.14
-wheel==0.29.0
+wheel==0.38.1
