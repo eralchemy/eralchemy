@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "eralchemy2"
-version = "1.3.6"
+version = "1.3.7"
 description = "Simple entity relation (ER) diagrams generation"
 authors = ["Florian Maurer <fmaurer@disroot.org>"]
 license = "Apache License 2.0"
@@ -23,21 +23,21 @@ classifiers=[
 
 [tool.poetry.dependencies]
 python = "^3.7"
-SQLAlchemy = ">=1.3.19"
+sqlalchemy = ">=1.3.19"
 pygraphviz = "^1.7,!=1.8"
-Flask-SQLAlchemy = {version = "^2.5.1", optional = true}
+flask-sqlalchemy = {version = "^2.5.1", optional = true}
 psycopg2 = {version = "^2.9.3", optional = true}
 importlib_metadata = { version = ">=4.0.0", markers = "python_version < '3.8'" }
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.8.0"
-tox = "^3.26.0"
+tox = "^4.4.6"
 isort = "^5.10.1"
 towncrier = "^22.8.0"
 mypy  = "^0.971"
 
 [tool.poetry.extras]
-    ci = ["Flask-SQLAlchemy", "psycopg2"]
+    ci = ["flask-sqlalchemy", "psycopg2"]
 
 [tool.poetry.scripts]
 eralchemy2 = "eralchemy2.main:cli"
@@ -58,7 +58,7 @@ add_imports = ["from __future__ import annotations"]
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py37, py38, py39, py310, py310-SA13
+envlist = py37, py38, py39, py310, py310-SA13, py310-SA14, py311, py311-SA13, py311-SA14
 
 [tox:.package]
 # note tox will use the same python version as under what tox is installed to package
@@ -71,13 +71,17 @@ python =
     3.7: py37
     3.8: py38
     3.9: py39
-    3.10: py310, py310-SA13
+    3.10: py310, py310-SA13, py310-SA14
+    3.11: py311, py311-SA13, py311-SA14
 
 [testenv]
 extras = ci
 deps =
   pytest
-  py310-SA13: SQLAlchemy<1.4
+  py310-SA13: sqlalchemy<1.4
+  py311-SA13: sqlalchemy<1.4
+  py310-SA14: sqlalchemy~=1.4
+  py311-SA14: sqlalchemy~=1.4
 commands =
   pytest
 """
