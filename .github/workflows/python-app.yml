@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10"]
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
 
     services:
       eralchemy-db:
@@ -47,7 +47,7 @@ jobs:
       - name: Set up pg-client
         run: |
           sudo apt-get update
-          sudo apt-get -qq install graphviz python-dev libgraphviz-dev pkg-config postgresql-client
+          sudo apt-get -qq install graphviz python3-dev libgraphviz-dev pkg-config postgresql-client
 
       - name: Setup database
         run: psql -h localhost -U eralchemy -c 'CREATE SCHEMA eralchemy_test;'
