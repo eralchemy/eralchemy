@@ -4,7 +4,7 @@ from multiprocessing import Process
 
 from pygraphviz import AGraph
 
-from eralchemy2.cst import GRAPH_BEGINNING
+from eralchemy2.cst import DOT_GRAPH_BEGINNING
 from eralchemy2.main import _intermediary_to_dot
 from tests.common import (
     child,
@@ -16,7 +16,7 @@ from tests.common import (
     relation,
 )
 
-GRAPH_LAYOUT = GRAPH_BEGINNING + "%s }"
+GRAPH_LAYOUT = DOT_GRAPH_BEGINNING + "%s }"
 column_re = re.compile(
     '\\<TR\\>\\<TD\\ ALIGN\\=\\"LEFT\\"\\>(.*)\\<\\/TD\\>\\<\\/TR\\>'
 )

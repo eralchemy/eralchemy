@@ -8,7 +8,7 @@ from pygraphviz.agraph import AGraph
 from sqlalchemy.engine.url import make_url
 from sqlalchemy.exc import ArgumentError
 
-from .cst import GRAPH_BEGINNING
+from .cst import DOT_GRAPH_BEGINNING, ER_FORMAT_TITLE
 from .helpers import check_args
 from .parser import (
     ParsingException,
@@ -75,11 +75,15 @@ def get_argparser() -> argparse.ArgumentParser:
     return parser
 
 
-def intermediary_to_markdown(tables, relationships, output):
+def intermediary_to_markdown(tables, relationships, output, title):
     """Saves the intermediary representation to markdown."""
     er_markup = _intermediary_to_markdown(tables, relationships)
+    if title:
+        er_markup_with_config = f"{ER_FORMAT_TITLE.format(title)}\n{er_markup}"
+    else:
+        er_markup_with_config = er_markup
     with open(output, "w") as file_out:
-        file_out.write(er_markup)
+        file_out.write(er_markup_with_config)
 
 
 def intermediary_to_mermaid(tables, relationships, output):
@@ -102,16 +106,16 @@ def intermediary_to_mermaid_er(tables, relationships, output):
         file_out.write(md_markup)
 
 
-def intermediary_to_dot(tables, relationships, output):
+def intermediary_to_dot(tables, relationships, output, title):
     """Save the intermediary representation to dot format."""
-    dot_file = _intermediary_to_dot(tables, relationships)
+    dot_file = _intermediary_to_dot(tables, relationships, title)
     with open(output, "w") as file_out:
         file_out.write(dot_file)
 
 
-def intermediary_to_schema(tables, relationships, output):
+def intermediary_to_schema(tables, relationships, output, title):
     """Transforms and save the intermediary representation to the file chosen."""
-    dot_file = _intermediary_to_dot(tables, relationships)
+    dot_file = _intermediary_to_dot(tables, relationships, title)
     graph = AGraph()
     graph = graph.from_string(dot_file)
     extension = output.split(".")[-1]
@@ -139,11 +143,19 @@ def _intermediary_to_mermaid_er(tables, relationships):
     return "erDiagram\n{}\n{}".format(t, r)
 
 
-def _intermediary_to_dot(tables, relationships):
+def _intermediary_to_dot(tables, relationships, title):
     """Returns the dot source representing the database in a string."""
     t = "\n".join(t.to_dot() for t in tables)
     r = "\n".join(r.to_dot() for r in relationships)
-    return "{}\n{}\n{}\n}}".format(GRAPH_BEGINNING, t, r)
+
+    graph_config = (
+        f"""{DOT_GRAPH_BEGINNING}
+         label="{title}"
+         labelloc=t\n"""
+        if title
+        else DOT_GRAPH_BEGINNING
+    )
+    return f"{graph_config}\n{t}\n{r}\n}}"
 
 
 # Routes from the class name to the function transforming this class in
@@ -288,6 +300,7 @@ def render_er(
     exclude_tables=None,
     exclude_columns=None,
     schema=None,
+    title=None,
 ):
     """
     Transform the metadata into a representation.
@@ -311,6 +324,7 @@ def render_er(
     :param exclude_tables: lst of str, table names to exclude, None means exclude nothing
     :param exclude_columns: lst of str, field names to exclude, None means exclude nothing
     :param schema: name of the schema
+    :param title: title of the graph, only for .er, .dot, .png, .jpg outputs
     """
     try:
         tables, relationships = all_to_intermediary(input, schema=schema)
@@ -322,7 +336,7 @@ def render_er(
             exclude_tables=exclude_tables,
             exclude_columns=exclude_columns,
         )
-        intermediary_to_output = get_output_mode(output, mode)
+        intermediary_to_output = get_output_mode(output, mode, title)
         intermediary_to_output(tables, relationships, output)
     except ImportError as e:
         module_name = e.message.split()[-1]
