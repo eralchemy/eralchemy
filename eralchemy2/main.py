@@ -37,6 +37,7 @@ def cli() -> None:
         args.i,
         args.o,
         args.m or "auto",
+        title=args.title,
         include_tables=args.include_tables,
         include_columns=args.include_columns,
         exclude_tables=args.exclude_tables,
@@ -50,6 +51,7 @@ def get_argparser() -> argparse.ArgumentParser:
     parser.add_argument("-i", nargs="?", help="Database URI to process.")
     parser.add_argument("-o", nargs="?", help="Name of the file to write.")
     parser.add_argument("-s", nargs="?", help="Name of the schema.")
+    parser.add_argument("--title", nargs="?", help="Add a title to the output graph")
     parser.add_argument(
         "-m",
         nargs="?",
