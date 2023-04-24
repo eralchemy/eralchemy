@@ -20,12 +20,37 @@ if TYPE_CHECKING:
         metadata: sa.MetaData
 
 
+def check_all_compound_same_parent(fk: sa.ForeignKey):
+    """Checks if all other ForeignKey Constraints of our table are on the same parent table as the current one"""
+    table = fk.column.table.fullname
+    for col in fk.constraint.table.columns:
+        if not col.foreign_keys:
+            return False
+        for foreign_column in col.foreign_keys:
+            if table != foreign_column.column.table.fullname:
+                return False
+    return True
+
+
 def relation_to_intermediary(fk: sa.ForeignKey) -> Relation:
     """Transform an SQLAlchemy ForeignKey object to its intermediary representation."""
+
+    primkey_count = sum([1 for x in fk.constraint.table.columns if x.primary_key])
+    # when there is only a single primary key column of the current key
+    if (primkey_count == 1 and fk.parent.primary_key) or fk.parent.unique:
+        right_cardinality = "1"
+    else:
+        # check if the other primkeys have a foreign key onto the same table
+        # if this is the case, we are not optional and must be unique
+        if check_all_compound_same_parent(fk):
+            right_cardinality = "1"
+        else:
+            right_cardinality = "*"
+
     return Relation(
         right_col=format_name(fk.parent.table.fullname),
         left_col=format_name(fk.column.table.fullname),
-        right_cardinality="1" if fk.parent.primary_key or fk.parent.unique else "*",
+        right_cardinality=right_cardinality,
         left_cardinality="?" if fk.parent.nullable else "1",
     )
 
