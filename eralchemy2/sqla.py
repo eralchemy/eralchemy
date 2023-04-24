@@ -105,6 +105,7 @@ def database_to_intermediary(
 
     # reflect the tables
     Base.prepare(
-        engine, reflect=True, name_for_scalar_relationship=name_for_scalar_relationship
+        engine,
+        name_for_scalar_relationship=name_for_scalar_relationship,
     )
     return declarative_to_intermediary(Base)

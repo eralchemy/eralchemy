@@ -12,8 +12,7 @@ from sqlalchemy import (
     Unicode,
     UnicodeText,
 )
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relation
+from sqlalchemy.orm import relation, declarative_base
 
 """
 Example of NewsMeme (open source forum like hacker news or Reddit).

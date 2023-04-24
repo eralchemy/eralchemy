@@ -23,7 +23,7 @@ classifiers=[
 
 [tool.poetry.dependencies]
 python = "^3.7"
-sqlalchemy = ">=1.3.19"
+sqlalchemy = ">=1.4"
 pygraphviz = "^1.7,!=1.8"
 flask-sqlalchemy = {version = ">=2.5.1", optional = true}
 psycopg2 = {version = "^2.9.3", optional = true}
@@ -58,7 +58,7 @@ add_imports = ["from __future__ import annotations"]
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py37, py38, py39, py310, py310-SA13, py310-SA14, py311, py311-SA13, py311-SA14
+envlist = py37, py38, py39, py310, py310-SA14, py310-SA20, py311, py311-SA14, py311-SA20
 
 [tox:.package]
 # note tox will use the same python version as under what tox is installed to package
@@ -71,17 +71,17 @@ python =
     3.7: py37
     3.8: py38
     3.9: py39
-    3.10: py310, py310-SA13, py310-SA14
-    3.11: py311, py311-SA13, py311-SA14
+    3.10: py310, py310-SA14, py310-SA20
+    3.11: py311, py311-SA14, py311-SA20
 
 [testenv]
 extras = ci
 deps =
   pytest
-  py310-SA13: sqlalchemy<1.4
-  py311-SA13: sqlalchemy<1.4
   py310-SA14: sqlalchemy~=1.4
   py311-SA14: sqlalchemy~=1.4
+  py310-SA20: sqlalchemy~=2.0.4
+  py311-SA20: sqlalchemy~=2.0.4
 commands =
   pytest
 """

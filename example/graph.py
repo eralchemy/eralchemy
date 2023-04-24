@@ -1,8 +1,7 @@
 # from https://github.com/zzzeek/sqlalchemy/blob/master/examples/graphs/directed_graph.py
 """a directed graph example."""
 from sqlalchemy import Column, ForeignKey, Integer
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, declarative_base
 
 from eralchemy2 import render_er
 
