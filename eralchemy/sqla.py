@@ -47,7 +47,10 @@ def table_to_intermediary(table):
     """Transform an SQLAlchemy Table object to it's intermediary representation. """
     return Table(
         name=table.fullname,
-        columns=[column_to_intermediary(col) for col in table.c._data.values()]
+        if hasattr(table, 'columns'):
+            columns=[column_to_intermediary(col) for col in table.columns]
+        else:
+            columns=[column_to_intermediary(col) for col in table.c._data.values()]
     )
 
 
