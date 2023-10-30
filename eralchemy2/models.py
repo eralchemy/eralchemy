@@ -42,7 +42,7 @@ class Column(Drawable):
     """Represents a Column in the intermediaty syntax"""
 
     RE = re.compile(
-        '(?P<primary>\*?)(?P<name>[^\s]+)\s*(\{label:\s*"(?P<label>[^"]+)"\})?'
+        '(?P<primary>\*?)(?P<name>\w+(\s*\w+)*)\s*(\{label:\s*"(?P<label>[^"]+)"\})?'
     )
 
     @staticmethod
@@ -112,7 +112,7 @@ class Relation(Drawable):
     """Represents a Relation in the intermediaty syntax"""
 
     RE = re.compile(
-        "(?P<left_name>[^\s]+)\s*(?P<left_cardinality>[*?+1])--(?P<right_cardinality>[*?+1])\s*(?P<right_name>[^\s]+)"
+        "(?P<left_name>\S+(\s*\S+)?)\s+(?P<left_cardinality>[*?+1])--(?P<right_cardinality>[*?+1])\s*(?P<right_name>\S+(\s*\S+)?)"
     )  # noqa: E501
     cardinalities = {"*": "0..N", "?": "{0,1}", "+": "1..N", "1": "1", "": None}
     cardinalities_mermaid = {

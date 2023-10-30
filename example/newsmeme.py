@@ -12,13 +12,13 @@ from sqlalchemy import (
     Unicode,
     UnicodeText,
 )
-from sqlalchemy.orm import relation, declarative_base
-
+from sqlalchemy.orm import Relationship, DeclarativeBase
 """
 Example of NewsMeme (open source forum like hacker news or Reddit).
 # Adapted from https://bitbucket.org/danjac/newsmeme (newsmeme / newsmeme / models)
 """
-Base = declarative_base()
+class Base(DeclarativeBase):
+    pass
 
 post_tags = Table(
     "post_tags",
@@ -80,7 +80,7 @@ class Post(Base):
 
     _tags = Column("tags", UnicodeText)
 
-    author = relation(User, innerjoin=True, lazy="joined")
+    author = Relationship(User, innerjoin=True, lazy="joined")
 
 
 class Comment(Base):
@@ -101,11 +101,11 @@ class Comment(Base):
     score = Column(Integer, default=1)
     votes = Column(Text)
 
-    author = relation(User, innerjoin=True, lazy="joined")
+    author = Relationship(User, innerjoin=True, lazy="joined")
 
-    post = relation(Post, innerjoin=True, lazy="joined")
+    post = Relationship(Post, innerjoin=True, lazy="joined")
 
-    parent = relation("Comment", remote_side=[id])
+    parent = Relationship("Comment", remote_side=[id])
 
 
 class Tag(Base):
@@ -121,3 +121,4 @@ if __name__ == "__main__":
     from eralchemy2 import render_er
 
     render_er(Base, "../newsmeme.svg")
+    render_er(Base, "../newsmeme.er")
