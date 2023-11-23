@@ -12,13 +12,17 @@ from sqlalchemy import (
     Unicode,
     UnicodeText,
 )
-from sqlalchemy.orm import Relationship, DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, Relationship
+
 """
 Example of NewsMeme (open source forum like hacker news or Reddit).
 # Adapted from https://bitbucket.org/danjac/newsmeme (newsmeme / newsmeme / models)
 """
+
+
 class Base(DeclarativeBase):
     pass
+
 
 post_tags = Table(
     "post_tags",

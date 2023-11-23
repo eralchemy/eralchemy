@@ -1,9 +1,8 @@
-from __future__ import annotations
-
 import argparse
 import base64
 import copy
 import sys
+from importlib.metadata import version
 
 from pygraphviz.agraph import AGraph
 from sqlalchemy.engine.url import make_url
@@ -21,8 +20,6 @@ from .sqla import (
     declarative_to_intermediary,
     metadata_to_intermediary,
 )
-
-from importlib.metadata import version
 
 __version__ = version(__package__)
 
