@@ -65,7 +65,7 @@ jobs:
   #         flake8 .
       - name: Test with pytest
         run: tox
-      
+
       - name: Install python dependencies
         run: python -m pip install isort black mypy
 

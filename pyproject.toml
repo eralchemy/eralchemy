@@ -52,13 +52,12 @@ max-line-length = 120
 
 [tool.isort]
 profile = "black"
-add_imports = ["from __future__ import annotations"]
 
 [tool.tox]
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py37, py38, py39, py310, py310-SA20, py311, py311-SA20, py312
+envlist = py38, py39, py310, py310-SA20, py311, py311-SA20, py312
 
 [tox:.package]
 # note tox will use the same python version as under what tox is installed to package
@@ -68,7 +67,6 @@ basepython = python3
 
 [gh-actions]
 python =
-    3.7: py37
     3.8: py38
     3.9: py39
     3.10: py310, py310-SA14, py310-SA20
