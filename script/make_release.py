@@ -8,6 +8,7 @@ from subprocess import PIPE, Popen
 # inspired by https://github.com/mitsuhiko/flask/blob/master/scripts/make-release.py
 from poetry.poetry import Poetry
 
+
 def set_filename_version(filename, version_number):
     with open(filename, "w+") as f:
         f.write("version = '{}'\n".format(version_number))
@@ -33,6 +34,7 @@ def build_and_upload():
     Popen(["open", "https://pypi.org/project/eralchemy2/"])
     Popen(["git", "tag"], stdout=PIPE).communicate()[0].splitlines()
     Popen(["git", "push", "--tags"]).wait()
+
 
 def fail(message, *args):
     print("Error:", message % args, file=sys.stderr)
@@ -82,6 +84,7 @@ def parse_args():
 
 def get_current_version():
     from importlib.metadata import version
+
     return version_str_to_lst(version("eralchemy2"))
 
 
@@ -104,7 +107,7 @@ def main():
     os.chdir(os.path.join(os.path.dirname(__file__), ".."))
     Popen(["poetry", "install"]).wait()
     current_version = get_current_version()
-    
+
     next_version = get_next_version(major, minor, fix, current_version)
     next_version_str = version_lst_to_str(next_version)
     tags = get_git_tags()
