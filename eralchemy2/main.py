@@ -22,11 +22,7 @@ from .sqla import (
     metadata_to_intermediary,
 )
 
-if sys.version_info >= (3, 8):
-    from importlib.metadata import version
-else:
-    # importlib.metadata not available for python 3.7
-    from importlib_metadata import version
+from importlib.metadata import version
 
 __version__ = version(__package__)
 

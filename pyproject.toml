@@ -22,22 +22,22 @@ classifiers=[
 ]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 sqlalchemy = ">=1.4"
 pygraphviz = "^1.7,!=1.8"
 flask-sqlalchemy = {version = ">=2.5.1", optional = true}
 psycopg2 = {version = "^2.9.3", optional = true}
-importlib_metadata = { version = ">=4.0.0", markers = "python_version < '3.8'" }
+pytest = {version = "^7.4.3", optional = true}
 
 [tool.poetry.group.dev.dependencies]
-black = "^22.8.0"
-tox = "^4.4.6"
-isort = "^5.10.1"
-towncrier = "^22.8.0"
-mypy  = "^0.971"
+black = "^23.11.0"
+tox = "^4.11.3"
+isort = "^5.12.0"
+towncrier = "^23.11.0"
+mypy  = "^1.7.0"
 
 [tool.poetry.extras]
-    ci = ["flask-sqlalchemy", "psycopg2"]
+    ci = ["flask-sqlalchemy", "psycopg2", "pytest"]
 
 [tool.poetry.scripts]
 eralchemy2 = "eralchemy2.main:cli"
@@ -78,7 +78,6 @@ python =
 [testenv]
 extras = ci
 deps =
-  pytest
   py310-SA20: sqlalchemy~=2.0.4
   py311-SA20: sqlalchemy~=2.0.4
 commands =
