@@ -54,9 +54,17 @@ def test_filter_no_include_no_exclude():
     check_filter(actual_tables, actual_relationships)
 
 
-def test_filter_include_tables():
+@pytest.mark.parametrize(
+    "include_tables",
+    (
+        ["parent", "child"],
+        ["parent", "^ch.*"],
+        ["par.*", "child"],
+    ),
+)
+def test_filter_include_tables(include_tables):
     actual_tables, actual_relationships = filter_resources(
-        tables, relationships, include_tables=["parent", "child"]
+        tables, relationships, include_tables=include_tables
     )
     check_tables_relationships(actual_tables, actual_relationships)
 
