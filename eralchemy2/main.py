@@ -36,6 +36,7 @@ def cli() -> None:
     render_er(
         args.i,
         args.o,
+        args.m or "auto",
         include_tables=args.include_tables,
         include_columns=args.include_columns,
         exclude_tables=args.exclude_tables,
@@ -49,6 +50,11 @@ def get_argparser() -> argparse.ArgumentParser:
     parser.add_argument("-i", nargs="?", help="Database URI to process.")
     parser.add_argument("-o", nargs="?", help="Name of the file to write.")
     parser.add_argument("-s", nargs="?", help="Name of the schema.")
+    parser.add_argument(
+        "-m",
+        nargs="?",
+        help="Output mode to write format, default: auto",
+    )
     parser.add_argument(
         "--exclude-tables", "-x", nargs="+", help="Name of tables not to be displayed."
     )

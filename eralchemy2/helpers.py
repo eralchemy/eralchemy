@@ -16,8 +16,8 @@ def check_args(args: Namespace) -> None:
     check_args_has_attributes(args)
     if args.v:
         non_version_attrs = [v for k, v in args.__dict__.items() if k != "v"]
-        print("non_version_attrs", non_version_attrs)
         if len([v for v in non_version_attrs if v is not None]) != 0:
+            print("non_version_attrs", non_version_attrs)
             fail("Cannot show the version number with another command.")
         return
     if args.i is None:
