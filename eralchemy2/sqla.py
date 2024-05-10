@@ -21,10 +21,10 @@ if TYPE_CHECKING:
 
 
 def relation_to_intermediary(fk: sa.ForeignKey) -> Relation:
-    """Transform an SQLAlchemy ForeignKey object to it's intermediary representation."""
+    """Transform an SQLAlchemy ForeignKey object to its intermediary representation."""
     return Relation(
         right_col=format_name(fk.parent.table.fullname),
-        left_col=format_name(fk._column_tokens[1]),
+        left_col=format_name(fk.column.table.fullname),
         right_cardinality="1" if fk.parent.primary_key or fk.parent.unique else "*",
         left_cardinality="?" if fk.parent.nullable else "1",
     )
