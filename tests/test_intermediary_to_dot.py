@@ -26,7 +26,7 @@ header_re = re.compile(
 )
 column_inside = re.compile(
     "(?P<key_opening>.*)\\<FONT\\>(?P<name>.*)\\<\\/FONT\\>"
-    "(?P<key_closing>.*)\\<FONT\\>\\ \\[(?P<type>.*)\\]\\<\\/FONT\\>"
+    "(?P<key_closing>.*)\\ <FONT\\>\\ \\[(?P<type>.*)\\]\\<\\/FONT\\>"
 )
 
 

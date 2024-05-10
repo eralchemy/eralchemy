@@ -95,7 +95,7 @@ class Column(Drawable):
 
     def to_dot(self) -> str:
         base = ROW_TAGS.format(
-            ' ALIGN="LEFT"', "{key_opening}{col_name}{key_closing}{type}{null}"
+            ' ALIGN="LEFT"', "{key_opening}{col_name}{key_closing} {type}{null}"
         )
         return base.format(
             key_opening="<u>" if self.is_key else "",
