@@ -92,6 +92,16 @@ def intermediary_to_mermaid(tables, relationships, output):
         file_out.write(md_markup)
 
 
+def intermediary_to_mermaid_er(tables, relationships, output):
+    """Saves the intermediary representation to markdown."""
+    markup = _intermediary_to_mermaid_er(tables, relationships)
+    md_markup = "<!--\n\n{}\n\n-->\n".format(markup)
+    markup_b64 = base64.urlsafe_b64encode(markup.encode("utf8")).decode("ascii")
+    md_markup += "![](https://mermaid.ink/img/{})\n".format(markup_b64)
+    with open(output, "w") as file_out:
+        file_out.write(md_markup)
+
+
 def intermediary_to_dot(tables, relationships, output):
     """Save the intermediary representation to dot format."""
     dot_file = _intermediary_to_dot(tables, relationships)
@@ -122,6 +132,13 @@ def _intermediary_to_mermaid(tables, relationships):
     return "classDiagram\n{}\n{}".format(t, r)
 
 
+def _intermediary_to_mermaid_er(tables, relationships):
+    """Returns the er markup source in a string."""
+    t = "\n".join(t.to_mermaid_er() for t in tables)
+    r = "\n".join(r.to_mermaid_er() for r in relationships)
+    return "erDiagram\n{}\n{}".format(t, r)
+
+
 def _intermediary_to_dot(tables, relationships):
     """Returns the dot source representing the database in a string."""
     t = "\n".join(t.to_dot() for t in tables)
@@ -146,6 +163,7 @@ switch_input_class_to_method = {
 switch_output_mode_auto = {
     "er": intermediary_to_markdown,
     "mermaid": intermediary_to_mermaid,
+    "mermaid_er": intermediary_to_mermaid_er,
     "graph": intermediary_to_schema,
     "dot": intermediary_to_dot,
 }
@@ -281,6 +299,7 @@ def render_er(
         'er': writes to a file the markup to generate an ER style diagram.
         'graph': writes the image of the ER diagram.
         'mermaid': writes to a file the markup to generate an Mermaid-JS style diagram
+        'mermaid_er': writes the markup to generate an Mermaid-JS ER diagram
         'dot': write to file the diagram in dot format.
         'auto': choose from the filename:
             '*.er': writes to a file the markup to generate an ER style diagram.

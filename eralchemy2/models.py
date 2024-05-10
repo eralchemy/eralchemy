@@ -93,6 +93,10 @@ class Column(Drawable):
             " NOT NULL" if not self.is_null else "",
         )
 
+    def to_mermaid_er(self) -> str:
+        type_str = self.type.replace(" ", "_")
+        return f" {type_str} {self.name} {'PK' if self.is_key else ''}"
+
     def to_dot(self) -> str:
         base = ROW_TAGS.format(
             ' ALIGN="LEFT"', "{key_opening}{col_name}{key_closing} {type}{null}"
@@ -121,6 +125,11 @@ class Relation(Drawable):
         "*": "0..n",
         "?": "0..1",
         "+": "1..n",
+    }
+    cardinalities_crowfoot = {
+        "*": "0+",
+        "?": "one or zero",
+        "+": "1+",
     }
 
     @staticmethod
@@ -166,6 +175,15 @@ class Relation(Drawable):
             )
         )
         return '{} "{}" -- "{}" {}'.format(*normalized)
+
+    def to_mermaid_er(self) -> str:
+        left = Relation.cardinalities_crowfoot.get(
+            self.left_cardinality, self.left_cardinality
+        )
+        right = Relation.cardinalities_crowfoot.get(
+            self.right_cardinality, self.right_cardinality
+        )
+        return f"{self.left_col} {left}--{right} {self.right_col} : has"
 
     def graphviz_cardinalities(self, card) -> str:
         if card == "":
@@ -224,7 +242,15 @@ class Table(Drawable):
         columns = [c.to_mermaid() for c in self.columns]
         return (
             "class {}{{\n  ".format(self.name)
-            + "\n  ".format(self.name).join(columns)  # type:ignore
+            + "\n  ".join(columns)  # type:ignore
+            + "\n}"
+        )
+
+    def to_mermaid_er(self) -> str:
+        columns = [c.to_mermaid_er() for c in self.columns]
+        return (
+            f"{self.name} {{"
+            + "\n  ".join(columns)  # type:ignore
             + "\n}"
         )
 
