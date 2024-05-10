@@ -168,10 +168,10 @@ class Relation(Drawable):
         normalized = (
             Relation.cardinalities_mermaid.get(k, k)
             for k in (
-                self.left_col,
+                self.left_col.replace(".", "_"),
                 self.left_cardinality,
                 self.right_cardinality,
-                self.right_col,
+                self.right_col.replace(".", "_"),
             )
         )
         return '{} "{}" -- "{}" {}'.format(*normalized)
@@ -183,7 +183,9 @@ class Relation(Drawable):
         right = Relation.cardinalities_crowfoot.get(
             self.right_cardinality, self.right_cardinality
         )
-        return f"{self.left_col} {left}--{right} {self.right_col} : has"
+        left_col = self.left_col.replace(".", "_")
+        right_col = self.right_col.replace(".", "_")
+        return f"{left_col} {left}--{right} {right_col} : has"
 
     def graphviz_cardinalities(self, card) -> str:
         if card == "":
@@ -240,19 +242,13 @@ class Table(Drawable):
 
     def to_mermaid(self) -> str:
         columns = [c.to_mermaid() for c in self.columns]
-        return (
-            "class {}{{\n  ".format(self.name)
-            + "\n  ".join(columns)  # type:ignore
-            + "\n}"
-        )
+        name = self.name.replace(".", "_")
+        return f"class {name}{{\n" + "\n  ".join(columns) + "\n}"
 
     def to_mermaid_er(self) -> str:
         columns = [c.to_mermaid_er() for c in self.columns]
-        return (
-            f"{self.name} {{"
-            + "\n  ".join(columns)  # type:ignore
-            + "\n}"
-        )
+        name = self.name.replace(".", "_")
+        return f"{name} {{\n" + "\n  ".join(columns) + "\n}"
 
     @property
     def columns_sorted(self):
