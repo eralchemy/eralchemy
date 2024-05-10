@@ -126,11 +126,20 @@ def database_to_intermediary(
     Base = automap_base()
     engine = create_engine(database_uri)
     if schema is not None:
-        Base.metadata.schema = schema
+        schemas = schema.split(",")
+        for schema in schemas:
+            schema = schema.strip()
+            # reflect the tables
+            Base.metadata.schema = schema
+            Base.prepare(
+                engine,
+                name_for_scalar_relationship=name_for_scalar_relationship,
+            )
+    else:
+        # reflect the tables
+        Base.prepare(
+            engine,
+            name_for_scalar_relationship=name_for_scalar_relationship,
+        )
 
-    # reflect the tables
-    Base.prepare(
-        engine,
-        name_for_scalar_relationship=name_for_scalar_relationship,
-    )
     return declarative_to_intermediary(Base)
