@@ -66,10 +66,10 @@ jobs:
         run: python -m pip install ruff mypy
 
       - name: Run ruff check
-        run: ruff check eralchemy2
+        run: ruff check
 
       - name: Run ruff check format
-        run: ruff format --check eralchemy2
+        run: ruff format --check
 
       - name: Run mypy
         run: mypy eralchemy2

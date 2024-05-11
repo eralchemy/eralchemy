@@ -1,3 +1,23 @@
+eralchemy2 1.4.0 (2024-05-11)
+=============================
+
+Features
+--------
+
+- Add pre commit hook with trailing space removal, ruff and isort by @maurerle in https://github.com/maurerle/eralchemy2/pull/24
+- make it possible to change the output mode through cli by @maurerle in https://github.com/maurerle/eralchemy2/pull/32
+- apply fix to reference full table name correctly in output by @maurerle in https://github.com/maurerle/eralchemy2/pull/33
+- set right_cardinality for relationships with compound primary_keys by @maurerle in https://github.com/maurerle/eralchemy2/pull/34
+- add proper spacing before key type when rendering svg with inkscape by @maurerle in https://github.com/maurerle/eralchemy2/pull/35
+- Add mermaid ER diagram by @maurerle in https://github.com/maurerle/eralchemy2/pull/36
+- Add possibility to retrieve information from multiple schemas at once by @maurerle in https://github.com/maurerle/eralchemy2/pull/37
+
+Deprecations and Removals
+-------------------------
+- drop support for python 3.7 in https://github.com/maurerle/eralchemy2/pull/26
+
+
+
 eralchemy2 1.3.8 (2023-10-30)
 =============================
 
