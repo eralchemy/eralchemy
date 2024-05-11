@@ -26,13 +26,25 @@ To install eralchemy2, just do:
 
 `eralchemy2` requires [GraphViz](http://www.graphviz.org/download) to generate the graphs and Python. Both are available for Windows, Mac and Linux.
 
+For Debian based systems, run:
+
+    $ apt install graphviz libgraphviz-dev
+
+before installing eralchemy2.
+
+### Install using conda
+
+There is also a packaged version in conda-forge, which directly installs the dependencies:
+
+    $ conda install -c conda-forge eralchemy2
+
 ### Usage from Command Line
 
 #### From a database
 
     $ eralchemy2 -i sqlite:///relative/path/to/db.db -o erd_from_sqlite.pdf
 
-The database is specified as a [SQLAlchemy](http://docs.sqlalchemy.org/en/rel_1_0/core/engines.html#database-urls)
+The database is specified as a [SQLAlchemy](https://docs.sqlalchemy.org/en/20/core/engines.html#database-urls)
 database url.
 
 #### From a markdown file.
@@ -48,9 +60,13 @@ database url.
 
     $ eralchemy2 -i 'postgresql+psycopg2://username:password@hostname:5432/databasename' -o filtered.er --exclude-columns created_at updated_at
 
-#### From a Postgresql DB to a markdown file for the schema `schema`
+#### From a Postgresql DB to a markdown file for the schemas `schema1` and `schema2`
 
-    $ eralchemy2 -i 'postgresql+psycopg2://username:password@hostname:5432/databasename' -s schema
+    $ eralchemy2 -i 'postgresql+psycopg2://username:password@hostname:5432/databasename' -s "schema1, schema2"
+
+#### Specify Output Mode
+
+    $ eralchemy2 -i 'markdown_file.er' -o erd_from_markdown_file.md -m mermaid_er
 
 ### Usage from Python
 
@@ -79,6 +95,10 @@ This can be easily set up using docker-compose with: `docker-compose up -d`.
 
 All tested PR are welcome.
 
+## Publishing a release
+
+    $ rm -r dist && python -m build && python3 -m twine upload --repository pypi dist/*
+
 ## Notes
 
 eralchemy2 is a fork of its predecessor [ERAlchemy](https://github.com/Alexis-benoist/eralchemy) by @Alexis-benoist, which is not maintained anymore and does not work with SQLAlchemy > 1.4.
@@ -89,4 +109,4 @@ from the database and not just only from the `ER` markup language.
 
 Released under an Apache License 2.0
 
-Initial Creator: Alexis Benoist [Alexis_Benoist](https://twitter.com/Alexis_Benoist)
+Initial Creator: Alexis Benoist [Alexis_Benoist](https://github.com/Alexis-benoist)
