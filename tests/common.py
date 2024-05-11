@@ -178,7 +178,8 @@ def check_filter(actual_tables, actual_relationships):
 
 
 def create_db(
-    db_uri="postgresql://eralchemy:eralchemy@localhost:5432/eralchemy", use_sqlite=False
+    db_uri="postgresql://eralchemy:eralchemy@localhost:5432/eralchemy",
+    use_sqlite=False,
 ):
     engine = create_engine(db_uri)
     tables = (use_sqlite and [m.__table__ for m in (Parent, Child, Exclude)]) or None

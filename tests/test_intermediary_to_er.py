@@ -11,7 +11,7 @@ from tests.common import (
     relation,
 )
 
-column_re = re.compile('(?P<key>\*?)(?P<name>[^*].+) \{label:"(?P<type>.+)"\}')
+column_re = re.compile(r'(?P<key>\*?)(?P<name>[^*].+) \{label:"(?P<type>.+)"\}')
 
 
 def test_all_to_er():

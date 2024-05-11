@@ -8,7 +8,7 @@ from __future__ import annotations
 import operator
 import re
 from abc import ABC, abstractmethod
-from typing import Any, ClassVar
+from typing import ClassVar
 
 from .cst import FONT_TAGS, ROW_TAGS, TABLE
 
@@ -20,6 +20,7 @@ class Drawable(ABC):
 
     def to_markdown(self) -> str:
         """Transforms the intermediary object to it's syntax in the er markup."""
+
         raise NotImplementedError()
 
     def to_dot(self) -> str:
@@ -42,7 +43,7 @@ class Column(Drawable):
     """Represents a Column in the intermediaty syntax"""
 
     RE = re.compile(
-        '(?P<primary>\*?)(?P<name>\w+(\s*\w+)*)\s*(\{label:\s*"(?P<label>[^"]+)"\})?'
+        r'(?P<primary>\*?)(?P<name>\w+(\s*\w+)*)\s*(\{label:\s*"(?P<label>[^"]+)"\})?',
     )
 
     @staticmethod
@@ -51,7 +52,7 @@ class Column(Drawable):
             name=match.group("name"),
             type=match.group("label"),
             is_key="*" in match.group("primary"),
-            is_null=not "*" in match.group("primary"),
+            is_null="*" not in match.group("primary"),
         )
 
     def __init__(self, name: str, type=None, is_key: bool = False, is_null=None):
@@ -65,7 +66,7 @@ class Column(Drawable):
         self.name = name
         self.type = type
         self.is_key = is_key
-        if is_null == None:
+        if is_null is None:
             self.is_null = not is_key
         else:
             self.is_null = is_null
@@ -83,7 +84,7 @@ class Column(Drawable):
         return "*" if self.is_key else ""
 
     def to_markdown(self) -> str:
-        return '    {}{} {{label:"{}"}}'.format(self.key_symbol, self.name, self.type)
+        return f'    {self.key_symbol}{self.name} {{label:"{self.type}"}}'
 
     def to_mermaid(self) -> str:
         return " {}{} {}{}".format(
@@ -118,8 +119,8 @@ class Relation(Drawable):
     """Represents a Relation in the intermediaty syntax"""
 
     RE = re.compile(
-        "(?P<left_name>\S+(\s*\S+)?)\s+(?P<left_cardinality>[*?+1])--(?P<right_cardinality>[*?+1])\s*(?P<right_name>\S+(\s*\S+)?)"
-    )  # noqa: E501
+        r"(?P<left_name>\S+(\s*\S+)?)\s+(?P<left_cardinality>[*?+1])--(?P<right_cardinality>[*?+1])\s*(?P<right_name>\S+(\s*\S+)?)",
+    )
     cardinalities = {"*": "0..N", "?": "{0,1}", "+": "1..N", "1": "1", "": None}
     cardinalities_mermaid = {
         "*": "0..n",
@@ -157,12 +158,7 @@ class Relation(Drawable):
         self.left_cardinality = left_cardinality
 
     def to_markdown(self) -> str:
-        return "{} {}--{} {}".format(
-            self.left_col,
-            self.left_cardinality,
-            self.right_cardinality,
-            self.right_col,
-        )
+        return f"{self.left_col} {self.left_cardinality}--{self.right_cardinality} {self.right_col}"
 
     def to_mermaid(self) -> str:
         normalized = (
@@ -178,10 +174,12 @@ class Relation(Drawable):
 
     def to_mermaid_er(self) -> str:
         left = Relation.cardinalities_crowfoot.get(
-            self.left_cardinality, self.left_cardinality
+            self.left_cardinality,
+            self.left_cardinality,
         )
         right = Relation.cardinalities_crowfoot.get(
-            self.right_cardinality, self.right_cardinality
+            self.right_cardinality,
+            self.right_cardinality,
         )
         left_col = self.left_col.replace(".", "_")
         right_col = self.right_col.replace(".", "_")
@@ -190,7 +188,7 @@ class Relation(Drawable):
     def graphviz_cardinalities(self, card) -> str:
         if card == "":
             return ""
-        return "label=<<FONT>{}</FONT>>".format(self.cardinalities[card])
+        return f"label=<<FONT>{self.cardinalities[card]}</FONT>>"
 
     def to_dot(self) -> str:
         if self.right_cardinality == self.left_cardinality == "":
@@ -204,7 +202,7 @@ class Relation(Drawable):
             self.left_col, self.right_col, ",".join(cards)
         )
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         if super().__eq__(other):
             return True
         other_inversed = Relation(
@@ -219,7 +217,7 @@ class Relation(Drawable):
 class Table(Drawable):
     """Represents a Table in the intermediaty syntax"""
 
-    RE = re.compile("\[(?P<name>[^]]+)\]")
+    RE = re.compile(r"\[(?P<name>[^]]+)\]")
 
     def __init__(self, name: str, columns: list[Column]) -> None:
         self.name = name
@@ -231,7 +229,7 @@ class Table(Drawable):
 
     @property
     def header_markdown(self) -> str:
-        return "[{}]".format(self.name)
+        return f"[{self.name}]"
 
     def to_markdown(self) -> str:
         return (
@@ -256,9 +254,7 @@ class Table(Drawable):
 
     @property
     def header_dot(self) -> str:
-        return ROW_TAGS.format("", '<B><FONT POINT-SIZE="16">{}</FONT></B>').format(
-            self.name
-        )
+        return ROW_TAGS.format("", f'<B><FONT POINT-SIZE="16">{self.name}</FONT></B>')
 
     def to_dot(self) -> str:
         body = "".join(c.to_dot() for c in self.columns)
@@ -267,7 +263,7 @@ class Table(Drawable):
     def __str__(self) -> str:
         return self.header_markdown
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, Table):
             return False
         if other.name != self.name:

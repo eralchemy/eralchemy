@@ -19,7 +19,7 @@ class ParsingException(Exception):
             error=self.args[0],
         )
         if self.hint is not None:
-            rv += "\nHINT: {}".format(self.hint)
+            rv += f"\nHINT: {self.hint}"
         return rv
 
 
@@ -94,8 +94,8 @@ def _check_not_creating_duplicates(
     new_name: str, names: list[str], type: str, exc: type[Exception]
 ) -> None:
     if new_name in names:
-        msg = 'Cannot add {} named "{}" which is ' "already present in the schema."
-        raise exc(msg.format(type, new_name))
+        msg = f'Cannot add {type} named "{new_name}" which is already present in the schema.'
+        raise exc(msg)
 
 
 def update_models(
@@ -157,8 +157,6 @@ def line_iterator_to_intermediary(
             e.line = raw_line  # type:ignore
             errors.append(e)
     if len(errors) != 0:
-        msg = "eralchemy2 couldn't complete the generation due the {} following errors".format(
-            len(errors)
-        )
+        msg = f"eralchemy2 couldn't complete the generation due the {len(errors)} following errors"
         raise ParsingException(msg + "\n\n".join(e.traceback for e in errors))
     return tables, relations

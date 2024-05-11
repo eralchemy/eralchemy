@@ -49,16 +49,16 @@ def test_remove_from_lines():
     r = remove_comments_from_line
     for code in elements_lst:
         assert r(code) == code
-        assert r("{} ## some comment".format(code)) == code
-        assert r("   {}".format(code)) == code
-        assert r("{}   ".format(code)) == code
-        assert r("{} ## some comment".format(code)) == code
-        assert r("{} #  # some comment".format(code)) == code
-        assert r("   {} #  # some comment".format(code)) == code
-        assert r("{}".format(code)) == code
-        assert r("#{} #  # some comment".format(code)) == ""
-        assert r("# #{} #  # some comment".format(code)) == ""
-        assert r("##{}".format(code)) == ""
+        assert r(f"{code} ## some comment") == code
+        assert r(f"   {code}") == code
+        assert r(f"{code}   ") == code
+        assert r(f"{code} ## some comment") == code
+        assert r(f"{code} #  # some comment") == code
+        assert r(f"   {code} #  # some comment") == code
+        assert r(f"{code}") == code
+        assert r(f"#{code} #  # some comment") == ""
+        assert r(f"# #{code} #  # some comment") == ""
+        assert r(f"##{code}") == ""
 
 
 def test_parse_line_type():

@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
 
     services:
       eralchemy-db:
@@ -37,43 +37,39 @@ jobs:
 
     steps:
       - name: Clone this repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Set up pg-client
+      - name: Set up pg-client and graphviz
         run: |
           sudo apt-get update
           sudo apt-get -qq install graphviz python3-dev libgraphviz-dev pkg-config postgresql-client
 
-      - name: Setup database
+      - name: Setup database schema
         run: psql -h localhost -U eralchemy -c 'CREATE SCHEMA eralchemy_test;'
         env:
           PGPASSWORD: eralchemy
 
-      - name: Install python dependencies
+      - name: Install python test dependencies
         run: |
           python -m pip install --upgrade pip
           python -m pip install tox tox-gh-actions
 
-  #     - name: Lint with flake8
-  #       run: |
-  #         # stop the build if there are Python syntax errors or undefined names
-  #         flake8 .
-      - name: Test with pytest
+      - name: Test with pytest and tox
         run: tox
 
-      - name: Install python dependencies
-        run: python -m pip install isort black mypy
+      - name: Install python lint dependencies
+        run: python -m pip install ruff mypy
 
-      - name: Run isort check
-        run: isort --check eralchemy2
+      - name: Run ruff check
+        run: ruff check eralchemy2
 
-      - name: Run black check
-        run: black --check eralchemy2
+      - name: Run ruff check format
+        run: ruff format --check eralchemy2
 
       - name: Run mypy
         run: mypy eralchemy2
