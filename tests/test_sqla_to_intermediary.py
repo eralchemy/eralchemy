@@ -80,6 +80,21 @@ def test_database_to_intermediary_with_schema():
     assert exclude_relation not in relationships
 
 
+def test_database_to_intermediary_with_multiple_schemas():
+    db_uri = create_db()
+    tables, relationships = database_to_intermediary(
+        db_uri, schema="public, eralchemy_test"
+    )
+
+    assert len(tables) == 6
+    assert len(relationships) == 4
+    assert all(isinstance(t, Table) for t in tables)
+    assert all(isinstance(r, Relation) for r in relationships)
+    # Not in because different schema.
+    assert relation not in relationships
+    assert exclude_relation not in relationships
+
+
 def test_flask_sqlalchemy():
     from flask import Flask
     from flask_sqlalchemy import SQLAlchemy
