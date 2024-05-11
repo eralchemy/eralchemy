@@ -77,7 +77,7 @@ def get_argparser() -> argparse.ArgumentParser:
     return parser
 
 
-def intermediary_to_markdown(tables, relationships, output, title):
+def intermediary_to_markdown(tables, relationships, output, title=""):
     """Saves the intermediary representation to markdown."""
     er_markup = _intermediary_to_markdown(tables, relationships)
     if title:
@@ -88,9 +88,15 @@ def intermediary_to_markdown(tables, relationships, output, title):
         file_out.write(er_markup_with_config)
 
 
-def intermediary_to_mermaid(tables, relationships, output):
+def intermediary_to_mermaid(tables, relationships, output, title=""):
     """Saves the intermediary representation to markdown."""
     markup = _intermediary_to_mermaid(tables, relationships)
+    if title:
+        markup = f"""---
+title: {title}
+---
+{markup}
+"""
     md_markup = "<!--\n\n{}\n\n-->\n".format(markup)
     markup_b64 = base64.urlsafe_b64encode(markup.encode("utf8")).decode("ascii")
     md_markup += "![](https://mermaid.ink/img/{})\n".format(markup_b64)
@@ -98,9 +104,15 @@ def intermediary_to_mermaid(tables, relationships, output):
         file_out.write(md_markup)
 
 
-def intermediary_to_mermaid_er(tables, relationships, output):
+def intermediary_to_mermaid_er(tables, relationships, output, title=""):
     """Saves the intermediary representation to markdown."""
     markup = _intermediary_to_mermaid_er(tables, relationships)
+    if title:
+        markup = f"""---
+title: {title}
+---
+{markup}
+"""
     md_markup = "<!--\n\n{}\n\n-->\n".format(markup)
     markup_b64 = base64.urlsafe_b64encode(markup.encode("utf8")).decode("ascii")
     md_markup += "![](https://mermaid.ink/img/{})\n".format(markup_b64)
@@ -108,14 +120,14 @@ def intermediary_to_mermaid_er(tables, relationships, output):
         file_out.write(md_markup)
 
 
-def intermediary_to_dot(tables, relationships, output, title):
+def intermediary_to_dot(tables, relationships, output, title=""):
     """Save the intermediary representation to dot format."""
     dot_file = _intermediary_to_dot(tables, relationships, title)
     with open(output, "w") as file_out:
         file_out.write(dot_file)
 
 
-def intermediary_to_schema(tables, relationships, output, title):
+def intermediary_to_schema(tables, relationships, output, title=""):
     """Transforms and save the intermediary representation to the file chosen."""
     dot_file = _intermediary_to_dot(tables, relationships, title)
     graph = AGraph()
@@ -145,7 +157,7 @@ def _intermediary_to_mermaid_er(tables, relationships):
     return "erDiagram\n{}\n{}".format(t, r)
 
 
-def _intermediary_to_dot(tables, relationships, title):
+def _intermediary_to_dot(tables, relationships, title=""):
     """Returns the dot source representing the database in a string."""
     t = "\n".join(t.to_dot() for t in tables)
     r = "\n".join(r.to_dot() for r in relationships)
@@ -338,8 +350,8 @@ def render_er(
             exclude_tables=exclude_tables,
             exclude_columns=exclude_columns,
         )
-        intermediary_to_output = get_output_mode(output, mode, title)
-        intermediary_to_output(tables, relationships, output)
+        intermediary_to_output = get_output_mode(output, mode)
+        intermediary_to_output(tables, relationships, output, title)
     except ImportError as e:
         module_name = e.message.split()[-1]
         print('Please install {0} using "pip install {0}".'.format(module_name))
