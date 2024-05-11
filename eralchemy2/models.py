@@ -205,6 +205,8 @@ class Relation(Drawable):
     def __eq__(self, other: object) -> bool:
         if super().__eq__(other):
             return True
+        if not isinstance(other, Relation):
+            return False
         other_inversed = Relation(
             right_col=other.left_col,
             left_col=other.right_col,
