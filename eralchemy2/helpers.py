@@ -38,4 +38,4 @@ def check_args_has_attributes(args: Namespace) -> None:
 
 def check_args_has_attribute(args: Namespace, name: str) -> None:
     if not hasattr(args, name):
-        raise Exception("{} should be set".format(name))
+        raise Exception(f"{name} should be set")

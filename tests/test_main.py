@@ -6,6 +6,8 @@ from eralchemy2.main import (
     get_output_mode,
     intermediary_to_dot,
     intermediary_to_markdown,
+    intermediary_to_mermaid,
+    intermediary_to_mermaid_er,
     intermediary_to_schema,
 )
 from tests.common import (
@@ -119,10 +121,13 @@ def test_get_output_mode():
     assert get_output_mode("hello.png", "auto") == intermediary_to_schema
     assert get_output_mode("hello.er", "auto") == intermediary_to_markdown
     assert get_output_mode("hello.dot", "auto") == intermediary_to_dot
+    assert get_output_mode("hello.md", "auto") == intermediary_to_mermaid
 
     assert get_output_mode("anything", "graph") == intermediary_to_schema
     assert get_output_mode("anything", "dot") == intermediary_to_dot
     assert get_output_mode("anything", "er") == intermediary_to_markdown
+    assert get_output_mode("anything", "mermaid") == intermediary_to_mermaid
+    assert get_output_mode("anything", "mermaid_er") == intermediary_to_mermaid_er
 
     with pytest.raises(ValueError):
         get_output_mode("anything", "mode")

@@ -32,7 +32,7 @@ def cli() -> None:
     args = parser.parse_args()
     check_args(args)
     if args.v:
-        print("eralchemy2 version {}.".format(__version__))
+        print(f"eralchemy2 version {__version__}.")
         exit(0)
     render_er(
         args.i,
@@ -98,9 +98,9 @@ title: {title}
 ---
 {markup}
 """
-    md_markup = "<!--\n\n{}\n\n-->\n".format(markup)
+    md_markup = f"<!--\n\n{markup}\n\n-->\n"
     markup_b64 = base64.urlsafe_b64encode(markup.encode("utf8")).decode("ascii")
-    md_markup += "![](https://mermaid.ink/img/{})\n".format(markup_b64)
+    md_markup += f"![](https://mermaid.ink/img/{markup_b64})\n"
     with open(output, "w") as file_out:
         file_out.write(md_markup)
 
@@ -114,9 +114,9 @@ title: {title}
 ---
 {markup}
 """
-    md_markup = "<!--\n\n{}\n\n-->\n".format(markup)
+    md_markup = f"<!--\n\n{markup}\n\n-->\n"
     markup_b64 = base64.urlsafe_b64encode(markup.encode("utf8")).decode("ascii")
-    md_markup += "![](https://mermaid.ink/img/{})\n".format(markup_b64)
+    md_markup += f"![](https://mermaid.ink/img/{markup_b64})\n"
     with open(output, "w") as file_out:
         file_out.write(md_markup)
 
@@ -141,21 +141,21 @@ def _intermediary_to_markdown(tables, relationships):
     """Returns the er markup source in a string."""
     t = "\n".join(t.to_markdown() for t in tables)
     r = "\n".join(r.to_markdown() for r in relationships)
-    return "{}\n{}".format(t, r)
+    return f"{t}\n{r}"
 
 
 def _intermediary_to_mermaid(tables, relationships):
     """Returns the er markup source in a string."""
     t = "\n".join(t.to_mermaid() for t in tables)
     r = "\n".join(r.to_mermaid() for r in relationships)
-    return "classDiagram\n{}\n{}".format(t, r)
+    return f"classDiagram\n{t}\n{r}"
 
 
 def _intermediary_to_mermaid_er(tables, relationships):
     """Returns the er markup source in a string."""
     t = "\n".join(t.to_mermaid_er() for t in tables)
     r = "\n".join(r.to_mermaid_er() for r in relationships)
-    return "erDiagram\n{}\n{}".format(t, r)
+    return f"erDiagram\n{t}\n{r}"
 
 
 def _intermediary_to_dot(tables, relationships, title=""):
@@ -206,7 +206,7 @@ switch_output_mode = {
 
 def all_to_intermediary(filename_or_input, schema=None):
     """Dispatch the filename_or_input to the different function to produce the intermediary syntax.
-    All the supported classes names are in `swich_input_class_to_method`.
+    All the supported classes names are in `switch_input_class_to_method`.
     The input can also be a list of strings in markdown format or a filename finishing by '.er' containing markdown
     format.
     """
@@ -234,7 +234,7 @@ def all_to_intermediary(filename_or_input, schema=None):
         make_url(filename_or_input)
         return database_to_intermediary(filename_or_input, schema=schema)
     except ArgumentError:
-        raise ValueError("Cannot process filename_or_input {}".format(input_class_name))
+        raise ValueError(f"Cannot process filename_or_input {input_class_name}")
 
 
 def get_output_mode(output, mode):
@@ -246,7 +246,7 @@ def get_output_mode(output, mode):
         try:
             return switch_output_mode_auto[mode]
         except KeyError:
-            raise ValueError('Mode "{}" is not supported.')
+            raise ValueError(f'Mode "{mode}" is not supported.')
 
     extension = output.split(".")[-1]
     try:
@@ -370,7 +370,7 @@ def render_er(
         intermediary_to_output(tables, relationships, output, title)
     except ImportError as e:
         module_name = e.message.split()[-1]
-        print('Please install {0} using "pip install {0}".'.format(module_name))
+        print(f'Please install {module_name} using "pip install {module_name}".')
     except ParsingException as e:
         sys.stderr.write(e.message)
 

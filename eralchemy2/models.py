@@ -149,9 +149,7 @@ class Relation(Drawable):
             right_cardinality not in self.cardinalities.keys()
             or left_cardinality not in self.cardinalities.keys()
         ):
-            raise ValueError(
-                'Cardinality should be in {}"'.format(self.cardinalities.keys())
-            )
+            raise ValueError(f"Cardinality should be in {self.cardinalities.keys()}")
         self.right_col = right_col
         self.left_col = left_col
         self.right_cardinality = right_cardinality
