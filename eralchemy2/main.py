@@ -59,7 +59,10 @@ def get_argparser() -> argparse.ArgumentParser:
         help="Output mode to write format, default: auto",
     )
     parser.add_argument(
-        "--exclude-tables", "-x", nargs="+", help="Name of tables not to be displayed."
+        "--exclude-tables",
+        "-x",
+        nargs="+",
+        help="Name of tables not to be displayed.",
     )
     parser.add_argument(
         "--exclude-columns",
@@ -67,7 +70,9 @@ def get_argparser() -> argparse.ArgumentParser:
         help="Name of columns not to be displayed (for all tables).",
     )
     parser.add_argument(
-        "--include-tables", nargs="+", help="Name of tables to be displayed alone."
+        "--include-tables",
+        nargs="+",
+        help="Name of tables to be displayed alone.",
     )
     parser.add_argument(
         "--include-columns",
@@ -278,7 +283,7 @@ def filter_resources(
     _relationships = copy.deepcopy(relationships)
 
     include_tables_re = re.compile(
-        "|".join(f"({name})" for name in (include_tables or [t.name for t in _tables]))
+        "|".join(f"({name})" for name in (include_tables or [t.name for t in _tables])),
     )
     include_columns_re = re.compile(
         "|".join(
@@ -286,18 +291,18 @@ def filter_resources(
             for name in (
                 include_columns or [c.name for t in _tables for c in t.columns]
             )
-        )
+        ),
     )
     exclude_tables_re = re.compile(
-        "|".join(f"({name})" for name in (exclude_tables or []))
+        "|".join(f"({name})" for name in (exclude_tables or [])),
     )
     exclude_columns_re = re.compile(
-        "|".join(f"({name})" for name in (exclude_columns or []))
+        "|".join(f"({name})" for name in (exclude_columns or [])),
     )
 
     def check_table(name):
         return not exclude_tables_re.fullmatch(name) and include_tables_re.fullmatch(
-            name
+            name,
         )
 
     _tables = [t for t in _tables if check_table(t.name)]
@@ -312,7 +317,7 @@ def filter_resources(
 
     def check_column(name):
         return not exclude_columns_re.fullmatch(name) and include_columns_re.fullmatch(
-            name
+            name,
         )
 
     for t in _tables:

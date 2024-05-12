@@ -68,7 +68,9 @@ def test_filter_no_include_no_exclude():
 )
 def test_filter_include_tables(include_tables):
     actual_tables, actual_relationships = filter_resources(
-        tables, relationships, include_tables=include_tables
+        tables,
+        relationships,
+        include_tables=include_tables,
     )
     check_tables_relationships(actual_tables, actual_relationships)
 
@@ -84,7 +86,9 @@ def test_filter_include_tables(include_tables):
 )
 def test_filter_exclude_tables(exclude_tables):
     actual_tables, actual_relationships = filter_resources(
-        tables, relationships, exclude_tables=exclude_tables
+        tables,
+        relationships,
+        exclude_tables=exclude_tables,
     )
     check_tables_relationships(actual_tables, actual_relationships)
 
@@ -98,7 +102,9 @@ def test_filter_exclude_tables(exclude_tables):
 )
 def test_filter_include_columns(include_columns):
     actual_tables, actual_relationships = filter_resources(
-        tables, relationships, include_columns=include_columns
+        tables,
+        relationships,
+        include_columns=include_columns,
     )
     check_tables_columns(actual_tables, id_is_included=True)
 
@@ -112,7 +118,9 @@ def test_filter_include_columns(include_columns):
 )
 def test_filter_exclude_columns(exclude_columns):
     actual_tables, actual_relationships = filter_resources(
-        tables, relationships, exclude_columns=exclude_columns
+        tables,
+        relationships,
+        exclude_columns=exclude_columns,
     )
     check_tables_columns(actual_tables, id_is_included=False)
 

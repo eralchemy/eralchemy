@@ -105,7 +105,7 @@ ignore_missing_imports = true
 include = ["eralchemy2/**/*.py", "tests/**/*.py"]
 
 [tool.ruff.lint]
-select = ["E", "F", "I"]
+select = ["E", "F", "I", "UP", "COM"]
 ignore = ["E501"]
 
 [tool.ruff.lint.per-file-ignores]

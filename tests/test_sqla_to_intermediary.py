@@ -83,7 +83,8 @@ def test_database_to_intermediary_with_schema():
 def test_database_to_intermediary_with_multiple_schemas():
     db_uri = create_db()
     tables, relationships = database_to_intermediary(
-        db_uri, schema="public, eralchemy_test"
+        db_uri,
+        schema="public, eralchemy_test",
     )
 
     assert len(tables) == 6

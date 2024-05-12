@@ -75,7 +75,9 @@ def _check_no_current_table(new_obj: Drawable, current_table: Table | None) -> N
 
 
 def _update_check_inputs(
-    current_table: Table | None, tables: list[Table], relations: list[Relation]
+    current_table: Table | None,
+    tables: list[Table],
+    relations: list[Relation],
 ) -> None:
     assert current_table is None or isinstance(current_table, Table)
     assert isinstance(tables, list)
@@ -91,7 +93,10 @@ def _check_colname_in_lst(column_name: str, columns_names: list[str]) -> None:
 
 
 def _check_not_creating_duplicates(
-    new_name: str, names: list[str], type: str, exc: type[Exception]
+    new_name: str,
+    names: list[str],
+    type: str,
+    exc: type[Exception],
 ) -> None:
     if new_name in names:
         msg = f'Cannot add {type} named "{new_name}" which is already present in the schema.'
@@ -99,7 +104,10 @@ def _check_not_creating_duplicates(
 
 
 def update_models(
-    new_obj, current_table: Table | None, tables: list[Table], relations: list[Relation]
+    new_obj,
+    current_table: Table | None,
+    tables: list[Table],
+    relations: list[Relation],
 ) -> tuple[Table | None, list[Table], list[Relation]]:
     """Update the state of the parsing."""
     _update_check_inputs(current_table, tables, relations)
@@ -108,7 +116,10 @@ def update_models(
     if isinstance(new_obj, Table):
         tables_names = [t.name for t in tables]
         _check_not_creating_duplicates(
-            new_obj.name, tables_names, "table", DuplicateTableException
+            new_obj.name,
+            tables_names,
+            "table",
+            DuplicateTableException,
         )
         return new_obj, tables + [new_obj], relations
 
@@ -122,7 +133,10 @@ def update_models(
         assert current_table
         columns_names = [c.name for c in current_table.columns]
         _check_not_creating_duplicates(
-            new_obj.name, columns_names, "column", DuplicateColumnException
+            new_obj.name,
+            columns_names,
+            "column",
+            DuplicateColumnException,
         )
         current_table.columns.append(new_obj)
         return current_table, tables, relations
@@ -150,7 +164,10 @@ def line_iterator_to_intermediary(
         try:
             new_obj = parse_line(line)
             current_table, tables, relations = update_models(
-                new_obj, current_table, tables, relations
+                new_obj,
+                current_table,
+                tables,
+                relations,
             )
         except ParsingException as e:
             e.line_nb = line_nb  # type:ignore

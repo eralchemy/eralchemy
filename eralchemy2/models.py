@@ -100,7 +100,8 @@ class Column(Drawable):
 
     def to_dot(self) -> str:
         base = ROW_TAGS.format(
-            ' ALIGN="LEFT"', "{key_opening}{col_name}{key_closing} {type}{null}"
+            ' ALIGN="LEFT"',
+            "{key_opening}{col_name}{key_closing} {type}{null}",
         )
         return base.format(
             key_opening="<u>" if self.is_key else "",
@@ -143,7 +144,11 @@ class Relation(Drawable):
         )
 
     def __init__(
-        self, right_col, left_col, right_cardinality=None, left_cardinality=None
+        self,
+        right_col,
+        left_col,
+        right_cardinality=None,
+        left_cardinality=None,
     ):
         if (
             right_cardinality not in self.cardinalities.keys()
@@ -197,7 +202,9 @@ class Relation(Drawable):
         if self.right_cardinality != "":
             cards.append("head" + self.graphviz_cardinalities(self.right_cardinality))
         return '"{}" -- "{}" [{}];'.format(
-            self.left_col, self.right_col, ",".join(cards)
+            self.left_col,
+            self.right_col,
+            ",".join(cards),
         )
 
     def __eq__(self, other: object) -> bool:

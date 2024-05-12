@@ -40,7 +40,7 @@ def relation_to_intermediary(fk: sa.ForeignKey) -> Relation:
     primkey_count = 0
     if fk.constraint:
         primkey_count = sum(
-            [True for x in fk.constraint.table.columns if x.primary_key]
+            [True for x in fk.constraint.table.columns if x.primary_key],
         )
     # when there is only a single primary key column of the current key
     if (primkey_count == 1 and fk.parent.primary_key) or fk.parent.unique:
@@ -71,7 +71,8 @@ def format_name(name: Any) -> str:
 
 
 def column_to_intermediary(
-    col: sa.Column, type_formatter: Callable[[Any], str] = format_type
+    col: sa.Column,
+    type_formatter: Callable[[Any], str] = format_type,
 ) -> Column:
     """Transform an SQLAlchemy Column object to it's intermediary representation."""
     return Column(
@@ -122,7 +123,8 @@ def name_for_scalar_relationship(
 
 
 def database_to_intermediary(
-    database_uri: str, schema: str | None = None
+    database_uri: str,
+    schema: str | None = None,
 ) -> tuple[list[Table], list[Relation]]:
     """Introspect from the database (given the database_uri) to create the intermediary representation."""
     Base = automap_base()

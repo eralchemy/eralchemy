@@ -19,15 +19,15 @@ from tests.common import (
 
 GRAPH_LAYOUT = DOT_GRAPH_BEGINNING + "%s }"
 column_re = re.compile(
-    '\\<TR\\>\\<TD\\ ALIGN\\=\\"LEFT\\"\\>(.*)\\<\\/TD\\>\\<\\/TR\\>'
+    '\\<TR\\>\\<TD\\ ALIGN\\=\\"LEFT\\"\\>(.*)\\<\\/TD\\>\\<\\/TR\\>',
 )
 header_re = re.compile(
     '\\<TR\\>\\<TD\\>\\<B\\>\\<FONT\\ POINT\\-SIZE\\=\\"16\\"\\>(.*)'
-    "\\<\\/FONT\\>\\<\\/B\\>\\<\\/TD\\>\\<\\/TR\\>"
+    "\\<\\/FONT\\>\\<\\/B\\>\\<\\/TD\\>\\<\\/TR\\>",
 )
 column_inside = re.compile(
     "(?P<key_opening>.*)\\<FONT\\>(?P<name>.*)\\<\\/FONT\\>"
-    "(?P<key_closing>.*)\\ <FONT\\>\\ \\[(?P<type>.*)\\]\\<\\/FONT\\>"
+    "(?P<key_closing>.*)\\ <FONT\\>\\ \\[(?P<type>.*)\\]\\<\\/FONT\\>",
 )
 
 
@@ -93,7 +93,7 @@ def test_relation():
     relation_re = re.compile(
         '\\"(?P<l_name>.+)\\"\\ \\-\\-\\ \\"(?P<r_name>.+)\\"\\ '
         "\\[taillabel\\=\\<\\<FONT\\>(?P<l_card>.+)\\<\\/FONT\\>\\>"
-        "\\,headlabel\\=\\<\\<FONT\\>(?P<r_card>.+)\\<\\/FONT\\>\\>\\]\\;"
+        "\\,headlabel\\=\\<\\<FONT\\>(?P<r_card>.+)\\<\\/FONT\\>\\>\\]\\;",
     )
     dot = relation.to_dot()
     r = relation_re.match(dot)
