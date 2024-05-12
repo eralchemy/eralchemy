@@ -239,15 +239,15 @@ def filter_resources(
     _tables = [
         t
         for t in _tables
-        if not exclude_tables.search(t.name) and include_tables.search(t.name)
+        if not exclude_tables.fullmatch(t.name) and include_tables.fullmatch(t.name)
     ]
     _relationships = [
         r
         for r in _relationships
-        if not exclude_tables.search(r.right_col)
-        and not exclude_tables.search(r.left_col)
-        and include_tables.search(r.right_col)
-        and include_tables.search(r.left_col)
+        if not exclude_tables.fullmatch(r.right_col)
+        and not exclude_tables.fullmatch(r.left_col)
+        and include_tables.fullmatch(r.right_col)
+        and include_tables.fullmatch(r.left_col)
     ]
 
     for t in _tables:

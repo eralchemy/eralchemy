@@ -57,6 +57,8 @@ def test_filter_no_include_no_exclude():
 @pytest.mark.parametrize(
     "include_tables",
     (
+        ["parent", "child", "excl"],
+        ["^(?!exc)\w+$"],  # all not starting with excl
         ["parent", "child"],
         ["parent", "^ch.*"],
         ["par.*", "child"],
@@ -69,9 +71,18 @@ def test_filter_include_tables(include_tables):
     check_tables_relationships(actual_tables, actual_relationships)
 
 
-def test_filter_exclude_tables():
+@pytest.mark.parametrize(
+    "exclude_tables",
+    (
+        ["ent", "ld", ".*lude"],
+        ["par", "ch", "^exclude"],
+        ["ar.*", "hild", "exc.*"],
+        ["exclude"],
+    ),
+)
+def test_filter_exclude_tables(exclude_tables):
     actual_tables, actual_relationships = filter_resources(
-        tables, relationships, exclude_tables=["exclude"]
+        tables, relationships, exclude_tables=exclude_tables
     )
     check_tables_relationships(actual_tables, actual_relationships)
 
