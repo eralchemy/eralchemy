@@ -2,6 +2,7 @@ import re
 import sys
 from multiprocessing import Process
 
+import pytest
 from pygraphviz import AGraph
 
 from eralchemy2.cst import DOT_GRAPH_BEGINNING
@@ -53,6 +54,19 @@ def test_all_to_dot():
     tables = [child, parent]
     relations = [relation]
     output = _intermediary_to_dot(tables, relations)
+    assert_is_dot_format(output)
+    for element in relations + tables:
+        assert element.to_dot() in output
+
+
+@pytest.mark.parametrize(
+    "title",
+    ("Test Title", "häßlicher Titel!", "<div> -not.parsed_ </div>"),
+)
+def test_all_to_dot_with_title(title):
+    tables = [child, parent]
+    relations = [relation]
+    output = _intermediary_to_dot(tables, relations, title=title)
     assert_is_dot_format(output)
     for element in relations + tables:
         assert element.to_dot() in output
