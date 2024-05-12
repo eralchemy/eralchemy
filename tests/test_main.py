@@ -87,16 +87,30 @@ def test_filter_exclude_tables(exclude_tables):
     check_tables_relationships(actual_tables, actual_relationships)
 
 
-def test_filter_include_columns():
+@pytest.mark.parametrize(
+    "include_columns",
+    (
+        ["id"],
+        ["id.*", "not_match"],
+    ),
+)
+def test_filter_include_columns(include_columns):
     actual_tables, actual_relationships = filter_resources(
-        tables, relationships, include_columns=["id"]
+        tables, relationships, include_columns=include_columns
     )
     check_tables_columns(actual_tables, id_is_included=True)
 
 
-def test_filter_exclude_columns():
+@pytest.mark.parametrize(
+    "exclude_columns",
+    (
+        ["id"],
+        ["i."],
+    ),
+)
+def test_filter_exclude_columns(exclude_columns):
     actual_tables, actual_relationships = filter_resources(
-        tables, relationships, exclude_columns=["id"]
+        tables, relationships, exclude_columns=exclude_columns
     )
     check_tables_columns(actual_tables, id_is_included=False)
 

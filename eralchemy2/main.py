@@ -227,37 +227,46 @@ def filter_resources(
     _tables = copy.deepcopy(tables)
     _relationships = copy.deepcopy(relationships)
 
-    include_tables = re.compile(
+    include_tables_re = re.compile(
         "|".join(f"({name})" for name in (include_tables or [t.name for t in _tables]))
     )
-    include_columns = include_columns or [c.name for t in _tables for c in t.columns]
-    exclude_tables = re.compile(
-        "|".join(f"({name})" for name in (exclude_tables or [r"\?\?\?"]))
+    include_columns_re = re.compile(
+        "|".join(
+            f"({name})"
+            for name in (
+                include_columns or [c.name for t in _tables for c in t.columns]
+            )
+        )
     )
-    exclude_columns = exclude_columns or list()
+    exclude_tables_re = re.compile(
+        "|".join(f"({name})" for name in (exclude_tables or []))
+    )
+    exclude_columns_re = re.compile(
+        "|".join(f"({name})" for name in (exclude_columns or []))
+    )
 
-    _tables = [
-        t
-        for t in _tables
-        if not exclude_tables.fullmatch(t.name) and include_tables.fullmatch(t.name)
-    ]
+    def check_table(name):
+        return not exclude_tables_re.fullmatch(name) and include_tables_re.fullmatch(
+            name
+        )
+
+    _tables = [t for t in _tables if check_table(t.name)]
     _relationships = [
         r
         for r in _relationships
-        if not exclude_tables.fullmatch(r.right_col)
-        and not exclude_tables.fullmatch(r.left_col)
-        and include_tables.fullmatch(r.right_col)
-        and include_tables.fullmatch(r.left_col)
+        if not exclude_tables_re.fullmatch(r.right_col)
+        and not exclude_tables_re.fullmatch(r.left_col)
+        and include_tables_re.fullmatch(r.right_col)
+        and include_tables_re.fullmatch(r.left_col)
     ]
 
-    for t in _tables:
-        t.columns = sorted(
-            [
-                c
-                for c in t.columns
-                if c.name not in exclude_columns and c.name in include_columns
-            ]
+    def check_column(name):
+        return not exclude_columns_re.fullmatch(name) and include_columns_re.fullmatch(
+            name
         )
+
+    for t in _tables:
+        t.columns = sorted([c for c in t.columns if check_column(c.name)])
 
     return _tables, _relationships
 
