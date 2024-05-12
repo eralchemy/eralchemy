@@ -54,30 +54,63 @@ def test_filter_no_include_no_exclude():
     check_filter(actual_tables, actual_relationships)
 
 
-def test_filter_include_tables():
+@pytest.mark.parametrize(
+    "include_tables",
+    (
+        ["parent", "child", "excl"],
+        ["^(?!exc)\w+$"],  # all not starting with excl
+        ["parent", "child"],
+        ["parent", "^ch.*"],
+        ["par.*", "child"],
+    ),
+)
+def test_filter_include_tables(include_tables):
     actual_tables, actual_relationships = filter_resources(
-        tables, relationships, include_tables=["parent", "child"]
+        tables, relationships, include_tables=include_tables
     )
     check_tables_relationships(actual_tables, actual_relationships)
 
 
-def test_filter_exclude_tables():
+@pytest.mark.parametrize(
+    "exclude_tables",
+    (
+        ["ent", "ld", ".*lude"],
+        ["par", "ch", "^exclude"],
+        ["ar.*", "hild", "exc.*"],
+        ["exclude"],
+    ),
+)
+def test_filter_exclude_tables(exclude_tables):
     actual_tables, actual_relationships = filter_resources(
-        tables, relationships, exclude_tables=["exclude"]
+        tables, relationships, exclude_tables=exclude_tables
     )
     check_tables_relationships(actual_tables, actual_relationships)
 
 
-def test_filter_include_columns():
+@pytest.mark.parametrize(
+    "include_columns",
+    (
+        ["id"],
+        ["id.*", "not_match"],
+    ),
+)
+def test_filter_include_columns(include_columns):
     actual_tables, actual_relationships = filter_resources(
-        tables, relationships, include_columns=["id"]
+        tables, relationships, include_columns=include_columns
     )
     check_tables_columns(actual_tables, id_is_included=True)
 
 
-def test_filter_exclude_columns():
+@pytest.mark.parametrize(
+    "exclude_columns",
+    (
+        ["id"],
+        ["i."],
+    ),
+)
+def test_filter_exclude_columns(exclude_columns):
     actual_tables, actual_relationships = filter_resources(
-        tables, relationships, exclude_columns=["id"]
+        tables, relationships, exclude_columns=exclude_columns
     )
     check_tables_columns(actual_tables, id_is_included=False)
 
