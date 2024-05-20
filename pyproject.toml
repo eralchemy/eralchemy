@@ -37,9 +37,10 @@ ci = [
   "psycopg2 >= 2.9.3",
   "pytest >= 7.4.3",
 ]
-test = [
-  "isort>=5.12",
+dev = [
+  "ruff>=0.4.1",
   "mypy>=1.7.0",
+  "pre-commit>=3.0.1"
 ]
 
 [project.scripts]
@@ -77,11 +78,8 @@ commands =
 [tool.pytest]
 testpaths = "tests"
 
-[tool.towncrier]
-name = "eralchemy2"
-package = "eralchemy2"
-directory = "changes"
-filename = "NEWS.rst"
+[tool.pytest.ini_options]
+markers = ["external_db"]
 
 [tool.mypy]
 warn_unused_configs = true

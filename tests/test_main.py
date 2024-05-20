@@ -35,6 +35,7 @@ def test_all_to_intermediary_db_sqlite():
     check_intermediary_representation_simple_table(tables, relationships)
 
 
+@pytest.mark.external_db
 def test_all_to_intermediary_db():
     db_uri = create_db()
     tables, relationships = all_to_intermediary(db_uri)

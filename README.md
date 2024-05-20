@@ -88,12 +88,29 @@ Thanks to it's modular architecture, it can be connected to other ORMs/ODMs/OGMs
 
 Every feedback is welcome on the [GitHub issues](https://github.com/maurerle/eralchemy2/issues).
 
-To run the tests, use : `$ py.test` or `$ tox`.
-Some tests require a local postgres database with a schema named test in a database
-named test all owned by a user named eralchemy with a password of eralchemy.
-This can be easily set up using docker-compose with: `docker-compose up -d`.
+### Development
+
+Install the development dependencies using
+
+    $ pip instal -e .[dev]
+
+Make sure to run the pre-commit to fix formatting
+
+    $ pre-commit run --all
 
 All tested PR are welcome.
+
+## Running tests
+
+This project uses the pytest test suite.
+To run the tests, use : `$ pytest` or `$ tox`.
+
+Some tests require having a local PostgreSQL database with a schema named test in a database
+named test all owned by a user named eralchemy with a password of eralchemy.
+If docker compose is available, one can use `docker compose up -d` for this purpose.
+You can deselct the tests which require a PostgreSQL database using:
+
+    $ pytest -m "not external_db"
 
 ## Publishing a release
 

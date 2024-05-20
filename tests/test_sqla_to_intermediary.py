@@ -1,3 +1,5 @@
+import pytest
+
 from eralchemy2.sqla import (
     column_to_intermediary,
     database_to_intermediary,
@@ -61,12 +63,14 @@ def test_tables():
     table_equals_helper(Parent, parent)
 
 
+@pytest.mark.external_db
 def test_database_to_intermediary():
     db_uri = create_db()
     tables, relationships = database_to_intermediary(db_uri)
     check_intermediary_representation_simple_table(tables, relationships)
 
 
+@pytest.mark.external_db
 def test_database_to_intermediary_with_schema():
     db_uri = create_db()
     tables, relationships = database_to_intermediary(db_uri, schema="eralchemy_test")
@@ -80,6 +84,7 @@ def test_database_to_intermediary_with_schema():
     assert exclude_relation not in relationships
 
 
+@pytest.mark.external_db
 def test_database_to_intermediary_with_multiple_schemas():
     db_uri = create_db()
     tables, relationships = database_to_intermediary(
