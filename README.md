@@ -92,7 +92,7 @@ Every feedback is welcome on the [GitHub issues](https://github.com/maurerle/era
 
 Install the development dependencies using
 
-    $ pip instal -e .[dev]
+    $ pip install -e .[ci,dev]
 
 Make sure to run the pre-commit to fix formatting
 
