@@ -39,6 +39,17 @@ class Drawable(ABC):
         return self.to_markdown()
 
 
+def sanitize_mermaid(text: str, *, is_er: bool = False):
+    RE = re.compile("[^0-9a-zA-Z_-]+")
+    """Mermaid does not allow special characters in column names"""
+    if not text:
+        return text
+    if is_er and (text[0].isdigit() or text[0] == "-"):
+        # mermaid ER does not allow leading dash or digits in column names
+        text = "_" + text
+    return re.sub(RE, "_", text)
+
+
 class Column(Drawable):
     """Represents a Column in the intermediaty syntax"""
 
@@ -84,7 +95,8 @@ class Column(Drawable):
         return "*" if self.is_key else ""
 
     def to_markdown(self) -> str:
-        return f'    {self.key_symbol}{self.name} {{label:"{self.type}"}}'
+        name = sanitize_mermaid(self.name)
+        return f'    {self.key_symbol}{name} {{label:"{self.type}"}}'
 
     def to_mermaid(self) -> str:
         return " {}{} {}{}".format(
@@ -96,7 +108,8 @@ class Column(Drawable):
 
     def to_mermaid_er(self) -> str:
         type_str = self.type.replace(" ", "_")
-        return f" {type_str} {self.name} {'PK' if self.is_key else ''}"
+        name = sanitize_mermaid(self.name, is_er=True)
+        return f" {type_str} {name} {'PK' if self.is_key else ''}"
 
     def to_dot(self) -> str:
         base = ROW_TAGS.format(
@@ -167,10 +180,10 @@ class Relation(Drawable):
         normalized = (
             Relation.cardinalities_mermaid.get(k, k)
             for k in (
-                self.left_col.replace(".", "_"),
+                sanitize_mermaid(self.left_col),
                 self.left_cardinality,
                 self.right_cardinality,
-                self.right_col.replace(".", "_"),
+                sanitize_mermaid(self.right_col),
             )
         )
         return '{} "{}" -- "{}" {}'.format(*normalized)
@@ -184,8 +197,9 @@ class Relation(Drawable):
             self.right_cardinality,
             self.right_cardinality,
         )
-        left_col = self.left_col.replace(".", "_")
-        right_col = self.right_col.replace(".", "_")
+
+        left_col = sanitize_mermaid(self.left_col, is_er=True)
+        right_col = sanitize_mermaid(self.right_col, is_er=True)
         return f"{left_col} {left}--{right} {right_col} : has"
 
     def graphviz_cardinalities(self, card) -> str:
@@ -247,12 +261,12 @@ class Table(Drawable):
 
     def to_mermaid(self) -> str:
         columns = [c.to_mermaid() for c in self.columns]
-        name = self.name.replace(".", "_")
+        name = sanitize_mermaid(self.name)
         return f"class {name}{{\n" + "\n  ".join(columns) + "\n}"
 
     def to_mermaid_er(self) -> str:
         columns = [c.to_mermaid_er() for c in self.columns]
-        name = self.name.replace(".", "_")
+        name = sanitize_mermaid(self.name, is_er=True)
         return f"{name} {{\n" + "\n  ".join(columns) + "\n}"
 
     @property
