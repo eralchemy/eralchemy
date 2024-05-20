@@ -3,7 +3,7 @@ import base64
 import copy
 import re
 import sys
-from importlib.metadata import version
+from importlib.metadata import PackageNotFoundError, version
 
 from pygraphviz.agraph import AGraph
 from sqlalchemy.engine.url import make_url
@@ -22,7 +22,10 @@ from .sqla import (
     metadata_to_intermediary,
 )
 
-__version__ = version(__package__)
+try:
+    __version__ = version(__package__)
+except PackageNotFoundError:
+    __version__ = "na"
 
 
 def cli() -> None:
