@@ -1,3 +1,20 @@
+eralchemy2 1.4.1 (2024-05-20)
+=============================
+
+Features
+--------
+
+- Add graph titles by @haffi96 in https://github.com/maurerle/eralchemy2/pull/20
+- Add regex option for the include_tables and exclude_tables params by @dukkee in https://github.com/maurerle/eralchemy2/pull/31
+- Update contribution instructions in README
+
+Bugfixes
+--------
+
+- Sanitize mermaid strings in https://github.com/maurerle/eralchemy2/pull/42
+- Use F-Strings and trailing commas in https://github.com/maurerle/eralchemy2/pull/40
+
+
 eralchemy2 1.4.0 (2024-05-11)
 =============================
 
@@ -15,7 +32,6 @@ Features
 Deprecations and Removals
 -------------------------
 - drop support for python 3.7 in https://github.com/maurerle/eralchemy2/pull/26
-
 
 
 eralchemy2 1.3.8 (2023-10-30)
