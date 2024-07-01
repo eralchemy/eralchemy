@@ -1,0 +1,117 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "eralchemy2"
+version = "1.4.1"
+description = "Simple entity relation (ER) diagrams generation"
+authors = [{ name = "Florian Maurer", email = "fmaurer@disroot.org"}]
+license = {text = "Apache-2.0"}
+readme = "README.md"
+
+keywords = ["sql", "ORM", "relational databases", "ER diagram", "render"]
+
+classifiers=[
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Database",
+]
+requires-python = ">=3.8"
+dependencies = [
+  "sqlalchemy >= 1.4",
+  "pygraphviz >= 1.9",
+]
+
+[project.urls]
+homepage = "https://github.com/maurerle/eralchemy2"
+repository = "https://github.com/maurerle/eralchemy2"
+
+[project.optional-dependencies]
+ci = [
+  "flask-sqlalchemy >= 2.5.1",
+  "psycopg2 >= 2.9.3",
+  "pytest >= 7.4.3",
+]
+dev = [
+  "ruff>=0.4.1",
+  "mypy>=1.7.0",
+  "pre-commit>=3.0.1"
+]
+
+[project.scripts]
+eralchemy2 = "eralchemy2.main:cli"
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+isolated_build = True
+envlist = py38, py39, py310, py310-SA20, py311, py311-SA20, py312
+
+[tox:.package]
+# note tox will use the same python version as under what tox is installed to package
+# so unless this is python 3 you can require a given python version for the packaging
+# environment via the basepython key
+basepython = python3
+
+[gh-actions]
+python =
+    3.8: py38
+    3.9: py39
+    3.10: py310, py310-SA14, py310-SA20
+    3.11: py311, py311-SA14, py311-SA20
+    3.12: py312
+
+[testenv]
+extras = ci
+deps =
+  py310-SA20: sqlalchemy~=2.0.4
+  py311-SA20: sqlalchemy~=2.0.4
+commands =
+  pytest
+"""
+
+[tool.pytest]
+testpaths = "tests"
+
+[tool.pytest.ini_options]
+markers = ["external_db"]
+
+[tool.mypy]
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+# output
+show_error_context = true
+show_column_numbers = true
+show_error_codes = true
+pretty = true
+
+[[tool.mypy.overrides]]
+module = ["pygraphviz.*", "sqlalchemy.*"]
+ignore_missing_imports = true
+
+
+[tool.ruff]
+include = ["eralchemy2/**/*.py", "tests/**/*.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "COM"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = [
+    "I001", # allow unsorted imports in __init__.py
+    "F401", # allow unused imports in __init__.py
+]
+"tests/*" = [
+    "S101", # allow assert statements for pytest
+    "ARG",  # allow unused arguments for pytest fixtures
+]

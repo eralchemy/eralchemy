@@ -1,124 +1,112 @@
-# -*- coding: utf-8 -*-
-from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
-from eralchemy.models import Column as ERColumn, Relation, Table
-from sqlalchemy import create_engine
+from sqlalchemy import Column, ForeignKey, Integer, String, create_engine
+from sqlalchemy.orm import declarative_base, relationship
+
+from eralchemy2.models import Column as ERColumn
+from eralchemy2.models import Relation, Table
 
 Base = declarative_base()
 
 
 class Parent(Base):
-    __tablename__ = 'parent'
+    __tablename__ = "parent"
     id = Column(Integer, primary_key=True)
     name = Column(String(255))
 
 
 class Child(Base):
-    __tablename__ = 'child'
+    __tablename__ = "child"
     id = Column(Integer, primary_key=True)
-    parent_id = Column(ForeignKey('parent.id'))
-    parent = relationship('Parent', backref='children')
+    parent_id = Column(ForeignKey("parent.id"))
+    parent = relationship("Parent", backref="children")
 
 
 class Exclude(Base):
-    __tablename__ = 'exclude'
+    __tablename__ = "exclude"
     id = Column(Integer, primary_key=True)
-    parent_id = Column(ForeignKey('parent.id'))
-    parent = relationship('Parent', backref='excludes')
+    parent_id = Column(ForeignKey("parent.id"))
+    parent = relationship("Parent", backref="excludes")
 
 
 class ParentWithSchema(Base):
-    __tablename__ = 'parent'
-    __table_args__ = {'schema': 'test'}
+    __tablename__ = "parent"
+    __table_args__ = {"schema": "eralchemy_test"}
     id = Column(Integer, primary_key=True)
     name = Column(String(255))
 
 
 class ChildWithSchema(Base):
-    __tablename__ = 'child'
-    __table_args__ = {'schema': 'test'}
+    __tablename__ = "child"
+    __table_args__ = {"schema": "eralchemy_test"}
     id = Column(Integer, primary_key=True)
-    parent_id = Column(ForeignKey('test.parent.id'))
-    parent = relationship('ParentWithSchema', backref='test.children')
+    parent_id = Column(ForeignKey("eralchemy_test.parent.id"))
+    parent = relationship("ParentWithSchema", backref="eralchemy_test.children")
 
 
 class ExcludeWithSchema(Base):
-    __tablename__ = 'exclude'
-    __table_args__ = {'schema': 'test'}
+    __tablename__ = "exclude"
+    __table_args__ = {"schema": "eralchemy_test"}
     id = Column(Integer, primary_key=True)
-    parent_id = Column(ForeignKey('test.parent.id'))
-    parent = relationship('ParentWithSchema', backref='test.excludes')
+    parent_id = Column(ForeignKey("eralchemy_test.parent.id"))
+    parent = relationship("ParentWithSchema", backref="eralchemy_test.excludes")
 
 
-parent_id = ERColumn(
-    name='id',
-    type=u'INTEGER',
-    is_key=True
-)
+parent_id = ERColumn(name="id", type="INTEGER", is_key=True)
 
 parent_name = ERColumn(
-    name='name',
-    type=u'VARCHAR(255)',
+    name="name",
+    type="VARCHAR(255)",
+    is_null=True,
 )
 
-child_id = ERColumn(
-    name='id',
-    type=u'INTEGER',
-    is_key=True
-)
+child_id = ERColumn(name="id", type="INTEGER", is_key=True)
 
 child_parent_id = ERColumn(
-    name='parent_id',
-    type=u'INTEGER',
+    name="parent_id",
+    type="INTEGER",
+    is_null=True,
 )
 
 relation = Relation(
-    right_col=u'parent',
-    left_col=u'child',
-    right_cardinality='*',
-    left_cardinality='?',
+    right_col="parent",
+    left_col="child",
+    right_cardinality="?",
+    left_cardinality="*",
 )
 
-exclude_id = ERColumn(
-    name='id',
-    type=u'INTEGER',
-    is_key=True
-)
+exclude_id = ERColumn(name="id", type="INTEGER", is_key=True)
 
 exclude_parent_id = ERColumn(
-    name='parent_id',
-    type=u'INTEGER',
+    name="parent_id",
+    type="INTEGER",
 )
 
 exclude_relation = Relation(
-    right_col=u'parent',
-    left_col=u'exclude',
-    right_cardinality='*',
-    left_cardinality='?',
+    right_col="parent",
+    left_col="exclude",
+    right_cardinality="?",
+    left_cardinality="*",
 )
 
 relationships = [relation, exclude_relation]
 
 parent = Table(
-    name='parent',
+    name="parent",
     columns=[parent_id, parent_name],
 )
 
 child = Table(
-    name='child',
+    name="child",
     columns=[child_id, child_parent_id],
 )
 
 exclude = Table(
-    name='exclude',
+    name="exclude",
     columns=[exclude_id, exclude_parent_id],
 )
 
 tables = [parent, child, exclude]
 
-markdown = \
-    """
+markdown = """
     [parent]
         *id {label:"INTEGER"}
         name {label:"VARCHAR(255)"}
@@ -128,8 +116,8 @@ markdown = \
     [exclude]
         *id {label:"INTEGER"}
         parent_id {label:"INTEGER"}
-    parent *--? child
-    parent *--? exclude
+    parent ?--* child
+    parent ?--* exclude
     """
 
 
@@ -140,7 +128,7 @@ def assert_lst_equal(lst_actual, lst_expected):
 
 
 def check_intermediary_representation_simple_table(tables, relationships):
-    """ Check that that the tables and relationships represents the model above. """
+    """Check that that the tables and relationships represents the model above."""
     assert len(tables) == 3
     assert len(relationships) == 2
     assert all(isinstance(t, Table) for t in tables)
@@ -179,7 +167,7 @@ def check_tables_columns(actual_tables, id_is_included=True):
     assert len(actual_tables) == 3
     for t in actual_tables:
         columns_ = [c.name for c in t.columns]
-        assert ('id' in columns_) == id_is_included
+        assert ("id" in columns_) == id_is_included
         assert len(t.columns) == 1
 
 
@@ -189,7 +177,10 @@ def check_filter(actual_tables, actual_relationships):
     assert [len(t.columns) for t in actual_tables] == [2, 2, 2]
 
 
-def create_db(db_uri="postgresql://postgres/test", use_sqlite=False):
+def create_db(
+    db_uri="postgresql://eralchemy:eralchemy@localhost:5432/eralchemy",
+    use_sqlite=False,
+):
     engine = create_engine(db_uri)
     tables = (use_sqlite and [m.__table__ for m in (Parent, Child, Exclude)]) or None
     Base.metadata.create_all(engine, tables=tables)

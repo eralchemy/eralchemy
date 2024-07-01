@@ -40,9 +40,9 @@
 [post_tags]
     *post_id {label:"INTEGER"}
     *tag_id {label:"INTEGER"}
-users *--? posts
-posts *--? comments
-users *--? comments
-comments *--? comments
-tags *--? post_tags
-posts *--? post_tags
+users ?--* posts
+posts ?--* comments
+users ?--* comments
+comments ?--* comments
+tags ?--* post_tags
+posts ?--* post_tags
