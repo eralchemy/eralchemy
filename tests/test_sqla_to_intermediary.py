@@ -1,6 +1,6 @@
 import pytest
 
-from eralchemy2.sqla import (
+from eralchemy.sqla import (
     column_to_intermediary,
     database_to_intermediary,
     declarative_to_intermediary,
@@ -105,7 +105,7 @@ def test_flask_sqlalchemy():
     from flask import Flask
     from flask_sqlalchemy import SQLAlchemy
 
-    from eralchemy2.main import all_to_intermediary
+    from eralchemy.main import all_to_intermediary
 
     app = Flask(__name__)
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////tmp/test.db"

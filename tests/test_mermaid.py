@@ -1,4 +1,4 @@
-from eralchemy2.models import sanitize_mermaid
+from eralchemy.models import sanitize_mermaid
 
 
 def test_mermaid_escape():
