@@ -1,5 +1,5 @@
-from eralchemy.helpers import check_args
-from eralchemy.main import get_argparser
+from eralchemy2.helpers import check_args
+from eralchemy2.main import get_argparser
 
 
 def parse_test(lst_arguments):
@@ -9,8 +9,8 @@ def parse_test(lst_arguments):
 
 
 def test_version():
-    parse_test(['-v'])
+    parse_test(["-v"])
 
 
 def test_normal():
-    parse_test('-i sqlite:///relative/path/to/db.db -o erd_from_sqlite.pdf'.split(' '))
+    parse_test("-i sqlite:///relative/path/to/db.db -o erd_from_sqlite.pdf".split(" "))

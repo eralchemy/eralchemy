@@ -1,3 +1,2 @@
 include LICENSE.md
-include readme.rst
-include readme.md
+include README.md

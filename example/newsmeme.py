@@ -1,23 +1,45 @@
-# -*- coding: utf-8 -*-
-from sqlalchemy import Column, Integer, ForeignKey, UnicodeText, Text, Boolean, DateTime, Unicode, String, Table
-from sqlalchemy.orm import relation
-from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
+
+from sqlalchemy import (
+    Boolean,
+    Column,
+    DateTime,
+    ForeignKey,
+    Integer,
+    String,
+    Table,
+    Text,
+    Unicode,
+    UnicodeText,
+)
+from sqlalchemy.orm import DeclarativeBase, Relationship
 
 """
 Example of NewsMeme (open source forum like hacker news or Reddit).
 # Adapted from https://bitbucket.org/danjac/newsmeme (newsmeme / newsmeme / models)
 """
-Base = declarative_base()
 
-post_tags = Table("post_tags", Base.metadata,
-                  Column("post_id", Integer,
-                         ForeignKey('posts.id', ondelete='CASCADE'),
-                         primary_key=True),
 
-                  Column("tag_id", Integer,
-                         ForeignKey('tags.id', ondelete='CASCADE'),
-                         primary_key=True))
+class Base(DeclarativeBase):
+    pass
+
+
+post_tags = Table(
+    "post_tags",
+    Base.metadata,
+    Column(
+        "post_id",
+        Integer,
+        ForeignKey("posts.id", ondelete="CASCADE"),
+        primary_key=True,
+    ),
+    Column(
+        "tag_id",
+        Integer,
+        ForeignKey("tags.id", ondelete="CASCADE"),
+        primary_key=True,
+    ),
+)
 
 
 class User(Base):
@@ -55,9 +77,7 @@ class Post(Base):
 
     id = Column(Integer, primary_key=True)
 
-    author_id = Column(Integer,
-                       ForeignKey(User.id, ondelete='CASCADE'),
-                       nullable=False)
+    author_id = Column(Integer, ForeignKey(User.id, ondelete="CASCADE"), nullable=False)
 
     title = Column(Unicode(200))
     description = Column(UnicodeText)
@@ -70,9 +90,7 @@ class Post(Base):
 
     _tags = Column("tags", UnicodeText)
 
-    author = relation(User, innerjoin=True, lazy="joined")
-
-    __mapper_args__ = {'order_by': id.desc()}
+    author = Relationship(User, innerjoin=True, lazy="joined")
 
 
 class Comment(Base):
@@ -82,27 +100,22 @@ class Comment(Base):
 
     id = Column(Integer, primary_key=True)
 
-    author_id = Column(Integer,
-                       ForeignKey(User.id, ondelete='CASCADE'),
-                       nullable=False)
+    author_id = Column(Integer, ForeignKey(User.id, ondelete="CASCADE"), nullable=False)
 
-    post_id = Column(Integer,
-                     ForeignKey(Post.id, ondelete='CASCADE'),
-                     nullable=False)
+    post_id = Column(Integer, ForeignKey(Post.id, ondelete="CASCADE"), nullable=False)
 
-    parent_id = Column(Integer,
-                       ForeignKey("comments.id", ondelete='CASCADE'))
+    parent_id = Column(Integer, ForeignKey("comments.id", ondelete="CASCADE"))
 
     comment = Column(UnicodeText)
     date_created = Column(DateTime, default=datetime.utcnow)
     score = Column(Integer, default=1)
     votes = Column(Text)
 
-    author = relation(User, innerjoin=True, lazy="joined")
+    author = Relationship(User, innerjoin=True, lazy="joined")
 
-    post = relation(Post, innerjoin=True, lazy="joined")
+    post = Relationship(Post, innerjoin=True, lazy="joined")
 
-    parent = relation('Comment', remote_side=[id])
+    parent = Relationship("Comment", remote_side=[id])
 
 
 class Tag(Base):
@@ -114,7 +127,8 @@ class Tag(Base):
     _name = Column("name", Unicode(80), unique=True)
 
 
-if __name__ == '__main__':
-    from eralchemy import render_er
+if __name__ == "__main__":
+    from eralchemy2 import render_er
 
-    render_er(Base, 'newsmeme.pdf')
+    render_er(Base, "../newsmeme.svg")
+    render_er(Base, "../newsmeme.er")
