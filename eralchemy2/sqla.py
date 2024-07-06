@@ -74,7 +74,7 @@ def column_to_intermediary(
     col: sa.Column,
     type_formatter: Callable[[Any], str] = format_type,
 ) -> Column:
-    """Transform an SQLAlchemy Column object to it's intermediary representation."""
+    """Transform an SQLAlchemy Column object to its intermediary representation."""
     return Column(
         name=col.name,
         type=type_formatter(col.type),
@@ -84,7 +84,7 @@ def column_to_intermediary(
 
 
 def table_to_intermediary(table: sa.Table) -> Table:
-    """Transform an SQLAlchemy Table object to it's intermediary representation."""
+    """Transform an SQLAlchemy Table object to its intermediary representation."""
     table_columns = getattr(table.c, "_colset", getattr(table.c, "_data", {}).values())
     return Table(
         name=table.fullname,

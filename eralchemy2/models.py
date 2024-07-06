@@ -19,12 +19,12 @@ class Drawable(ABC):
     RE: ClassVar[re.Pattern[str]]
 
     def to_markdown(self) -> str:
-        """Transforms the intermediary object to it's syntax in the er markup."""
+        """Transforms the intermediary object to its syntax in the er markup."""
 
         raise NotImplementedError()
 
     def to_dot(self) -> str:
-        """Transforms the intermediary object to it's syntax in the dot format."""
+        """Transforms the intermediary object to its syntax in the dot format."""
         raise NotImplementedError()
 
     def __eq__(self, other) -> bool:
