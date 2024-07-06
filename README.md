@@ -9,7 +9,7 @@ Works with SQLAlchemy < 1.4 but also with versions greater than 1.4
 
 ## Example
 
-![Example for a graph](https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/newsmeme.svg "Example for NewsMeme")
+![Example for a graph](https://raw.githubusercontent.com/eralchemy/eralchemy/main/docs/_static/newsmeme.svg "Example for NewsMeme")
 
 [Example for NewsMeme](https://bitbucket.org/danjac/newsmeme)
 
@@ -46,7 +46,7 @@ database url.
 
 #### From a markdown file.
 
-    $ curl 'https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/example/newsmeme.er' > markdown_file.er
+    $ curl 'https://raw.githubusercontent.com/eralchemy/eralchemy/main/example/newsmeme.er' > markdown_file.er
     $ eralchemy -i 'markdown_file.er' -o erd_from_markdown_file.pdf
 
 #### From a Postgresql DB to a markdown file excluding tables named `temp` and `audit`
@@ -78,13 +78,13 @@ render_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
 
 ## Architecture
 
-![Architecture schema](https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/eralchemy_architecture.png "Architecture schema")
+![Architecture schema](https://raw.githubusercontent.com/eralchemy/eralchemy/main/docs/_static/eralchemy_architecture.png "Architecture schema")
 
 Thanks to it's modular architecture, it can be connected to other ORMs/ODMs/OGMs/O\*Ms.
 
 ## Contribute
 
-Every feedback is welcome on the [GitHub issues](https://github.com/Alexis-benoist/eralchemy/issues).
+Every feedback is welcome on the [GitHub issues](https://github.com/eralchemy/eralchemy/issues).
 
 ### Development
 

@@ -1,0 +1,6 @@
+/* add dollar sign in console code-block */
+div.highlight-console pre span.go::before {
+  content: "$";
+  margin-right: 10px;
+  margin-left: 5px;
+}
