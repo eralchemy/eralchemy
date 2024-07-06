@@ -1,8 +1,6 @@
-
 [![PyPI Version](https://img.shields.io/pypi/v/eralchemy)](https://pypi.org/project/eralchemy/)
 [![PyPI Downloads](https://img.shields.io/pypi/dm/eralchemy)](https://pypi.org/project/eralchemy/)
 ![Github Actions](https://github.com/Alexis-benoist/eralchemy/actions/workflows/python-app.yml/badge.svg)
-
 
 # Entity relation diagrams generator
 
@@ -18,6 +16,7 @@ Works with SQLAlchemy < 1.4 but also with versions greater than 1.4
 ## Quick Start
 
 ### Install
+
 To install eralchemy, just do:
 
     $ pip install eralchemy
@@ -78,9 +77,10 @@ render_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
 ```
 
 ## Architecture
+
 ![Architecture schema](https://raw.githubusercontent.com/Alexis-benoist/eralchemy/master/eralchemy_architecture.png "Architecture schema")
 
-Thanks to it's modular architecture, it can be connected to other ORMs/ODMs/OGMs/O*Ms.
+Thanks to it's modular architecture, it can be connected to other ORMs/ODMs/OGMs/O\*Ms.
 
 ## Contribute
 
