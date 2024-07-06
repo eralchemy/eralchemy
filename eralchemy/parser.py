@@ -64,9 +64,7 @@ def parse_line(line: str) -> Drawable:
 
 
 def _check_no_current_table(new_obj: Drawable, current_table: Table | None) -> None:
-    """
-    Raises exception if we try to add a relation or a column with no current table.
-    """
+    """Raises exception if we try to add a relation or a column with no current table."""
     if current_table is None:
         msg = "Cannot add {} before adding table"
         if isinstance(new_obj, Relation):

@@ -112,7 +112,6 @@ ignore = [
   "D105",  # Missing docstring in magic method
   "D107",  # Missing docstring in `__init__`
   "D200",  # One-line docstring should fit on one line
-  "D212",  # Multi-line docstring summary should start at the first line
   "E501",  # line too long | Black take care of it
 
 ]

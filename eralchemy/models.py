@@ -1,5 +1,4 @@
-"""
-All the intermediary syntax.
+"""All the intermediary syntax.
 
 We can several kinds of models can be translated to this syntax.
 """
@@ -67,8 +66,7 @@ class Column(Drawable):
         )
 
     def __init__(self, name: str, type=None, is_key: bool = False, is_null=None):
-        """
-        Initialize the Column class.
+        """Initialize the Column class.
 
         :param name: (str) Name of the column
         :param type:

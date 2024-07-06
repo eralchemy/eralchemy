@@ -1,6 +1,4 @@
-"""
-This class allow to transform SQLAlchemy metadata to the intermediary syntax.
-"""
+"""This class allow to transform SQLAlchemy metadata to the intermediary syntax."""
 
 from __future__ import annotations
 
