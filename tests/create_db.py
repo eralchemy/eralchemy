@@ -1,6 +1,4 @@
-"""
-Script used to create an SQLite DB and test eralchemy in Homebrew.
-"""
+"""Script used to create an SQLite DB and test eralchemy in Homebrew."""
 
 import argparse
 

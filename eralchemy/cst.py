@@ -1,6 +1,4 @@
-"""
-All the constants used in the module.
-"""
+"""All the constants used in the module."""
 
 TABLE = (
     '"{}" [label=<<FONT FACE="Helvetica"><TABLE BORDER="0" CELLBORDER="1"'

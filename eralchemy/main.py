@@ -29,7 +29,7 @@ except PackageNotFoundError:
 
 
 def cli() -> None:
-    """Entry point for the application script"""
+    """Entry point for the application script."""
     parser = get_argparser()
 
     args = parser.parse_args()
@@ -214,6 +214,7 @@ switch_output_mode = {
 
 def all_to_intermediary(filename_or_input, schema=None):
     """Dispatch the filename_or_input to the different function to produce the intermediary syntax.
+
     All the supported classes names are in `switch_input_class_to_method`.
     The input can also be a list of strings in markdown format or a filename finishing by '.er' containing markdown
     format.
@@ -246,10 +247,7 @@ def all_to_intermediary(filename_or_input, schema=None):
 
 
 def get_output_mode(output, mode):
-    """
-    From the output name and the mode returns a the function that will transform the intermediary
-    representation to the output.
-    """
+    """From the output name and the mode returns a the function that will transform the intermediary representation to the output."""
     if mode != "auto":
         try:
             return switch_output_mode_auto[mode]
@@ -271,7 +269,8 @@ def filter_resources(
     exclude_tables=None,
     exclude_columns=None,
 ):
-    """
+    """Filter the resources.
+
     Include the following:
         1. Tables and relationships with tables present in the include_tables (lst of str, tables names)
         2. Columns (of whichever table) present in the include_columns (lst of str, columns names)
@@ -280,7 +279,7 @@ def filter_resources(
         2. Columns (of whichever table) present in the exclude_columns (lst of str, columns names)
     Disclosure note:
         All relationships are taken into consideration before ignoring columns.
-        In other words, if one excludes primary or foreign keys, it will still keep the relations display amongst tables
+        In other words, if one excludes primary or foreign keys, it will still keep the relations display amongst tables.
     """
     _tables = copy.deepcopy(tables)
     _relationships = copy.deepcopy(relationships)
@@ -338,8 +337,8 @@ def render_er(
     schema=None,
     title=None,
 ):
-    """
-    Transform the metadata into a representation.
+    """Transform the metadata into a representation.
+
     :param input: Possible inputs are instances of:
         MetaData: SQLAlchemy Metadata
         DeclarativeMeta: SQLAlchemy declarative Base
@@ -360,7 +359,7 @@ def render_er(
     :param exclude_tables: lst of str, table names to exclude, None means exclude nothing
     :param exclude_columns: lst of str, field names to exclude, None means exclude nothing
     :param schema: name of the schema
-    :param title: title of the graph, only for .er, .dot, .png, .jpg outputs
+    :param title: title of the graph, only for .er, .dot, .png, .jpg outputs.
     """
     try:
         tables, relationships = all_to_intermediary(input, schema=schema)

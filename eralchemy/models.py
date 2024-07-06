@@ -1,5 +1,5 @@
-"""
-All the intermediary syntax.
+"""All the intermediary syntax.
+
 We can several kinds of models can be translated to this syntax.
 """
 
@@ -20,7 +20,6 @@ class Drawable(ABC):
 
     def to_markdown(self) -> str:
         """Transforms the intermediary object to its syntax in the er markup."""
-
         raise NotImplementedError()
 
     def to_dot(self) -> str:
@@ -51,7 +50,7 @@ def sanitize_mermaid(text: str, *, is_er: bool = False):
 
 
 class Column(Drawable):
-    """Represents a Column in the intermediaty syntax"""
+    """Represents a Column in the intermediaty syntax."""
 
     RE = re.compile(
         r'(?P<primary>\*?)(?P<name>\w+(\s*\w+)*)\s*(\{label:\s*"(?P<label>[^"]+)"\})?',
@@ -67,7 +66,8 @@ class Column(Drawable):
         )
 
     def __init__(self, name: str, type=None, is_key: bool = False, is_null=None):
-        """
+        """Initialize the Column class.
+
         :param name: (str) Name of the column
         :param type:
         :param is_key:
@@ -126,7 +126,7 @@ class Column(Drawable):
 
 
 class Relation(Drawable):
-    """Represents a Relation in the intermediaty syntax"""
+    """Represents a Relation in the intermediaty syntax."""
 
     RE = re.compile(
         r"(?P<left_name>\S+(\s*\S+)?)\s+(?P<left_cardinality>[*?+1])--(?P<right_cardinality>[*?+1])\s*(?P<right_name>\S+(\s*\S+)?)",
@@ -232,7 +232,7 @@ class Relation(Drawable):
 
 
 class Table(Drawable):
-    """Represents a Table in the intermediaty syntax"""
+    """Represents a Table in the intermediaty syntax."""
 
     RE = re.compile(r"\[(?P<name>[^]]+)\]")
 

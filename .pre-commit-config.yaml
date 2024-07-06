@@ -19,3 +19,9 @@ repos:
         stages: [commit]
         additional_dependencies:
           - tomli
+
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: "v0.0.215"
+    hooks:
+      - id: ruff
+        stages: [commit]

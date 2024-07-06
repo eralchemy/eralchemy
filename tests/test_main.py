@@ -61,7 +61,7 @@ def test_filter_no_include_no_exclude():
     "include_tables",
     (
         ["parent", "child", "excl"],
-        ["^(?!exc)\w+$"],  # all not starting with excl
+        ["^(?!exc)\\w+$"],  # all not starting with excl
         ["parent", "child"],
         ["parent", "^ch.*"],
         ["par.*", "child"],

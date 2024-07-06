@@ -1,6 +1,4 @@
-"""
-This class allow to transform SQLAlchemy metadata to the intermediary syntax.
-"""
+"""This class allow to transform SQLAlchemy metadata to the intermediary syntax."""
 
 from __future__ import annotations
 
@@ -21,7 +19,7 @@ if TYPE_CHECKING:
 
 
 def check_all_compound_same_parent(fk: sa.ForeignKey):
-    """Checks if all other ForeignKey Constraints of our table are on the same parent table as the current one"""
+    """Checks if all other ForeignKey Constraints of our table are on the same parent table as the current one."""
     table = fk.column.table.fullname
     if not fk.constraint:
         return True
@@ -36,7 +34,6 @@ def check_all_compound_same_parent(fk: sa.ForeignKey):
 
 def relation_to_intermediary(fk: sa.ForeignKey) -> Relation:
     """Transform an SQLAlchemy ForeignKey object to its intermediary representation."""
-
     primkey_count = 0
     if fk.constraint:
         primkey_count = sum(
