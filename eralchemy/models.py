@@ -120,11 +120,7 @@ class Column(Drawable):
             key_opening="<u>" if self.is_key else "",
             key_closing="</u>" if self.is_key else "",
             col_name=FONT_TAGS.format(self.name),
-            type=(
-                FONT_TAGS.format(" [{}]").format(self.type)
-                if self.type is not None
-                else ""
-            ),
+            type=(FONT_TAGS.format(" [{}]").format(self.type) if self.type is not None else ""),
             null=" NOT NULL" if not self.is_null else "",
         )
 
@@ -253,11 +249,7 @@ class Table(Drawable):
         return f"[{self.name}]"
 
     def to_markdown(self) -> str:
-        return (
-            self.header_markdown
-            + "\n"
-            + "\n".join(c.to_markdown() for c in self.columns)
-        )
+        return self.header_markdown + "\n" + "\n".join(c.to_markdown() for c in self.columns)
 
     def to_mermaid(self) -> str:
         columns = [c.to_mermaid() for c in self.columns]

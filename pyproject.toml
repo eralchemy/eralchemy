@@ -115,3 +115,6 @@ ignore = ["E501"]
     "S101", # allow assert statements for pytest
     "ARG",  # allow unused arguments for pytest fixtures
 ]
+
+[tool.black]
+line-length = 100
