@@ -10,8 +10,8 @@ from datetime import datetime
 
 # -- Project information -------------------------------------------------------
 project = "eralchemy"
-author = "Pierrick Rambaud"
-copyright = f"2023-{datetime.now().year}, {author}"
+author = "Alexis Benoist"
+copyright = f"2015-{datetime.now().year}, {author}"
 release = "0.0.0"
 
 # -- General configuration -----------------------------------------------------
