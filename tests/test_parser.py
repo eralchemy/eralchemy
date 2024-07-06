@@ -1,8 +1,8 @@
 import pytest
 
-from eralchemy2.main import _intermediary_to_markdown
-from eralchemy2.models import Column, Relation, Table
-from eralchemy2.parser import (
+from eralchemy.main import _intermediary_to_markdown
+from eralchemy.models import Column, Relation, Table
+from eralchemy.parser import (
     DuplicateColumnException,
     DuplicateTableException,
     NoCurrentTableException,

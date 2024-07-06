@@ -5,8 +5,8 @@ from multiprocessing import Process
 import pytest
 from pygraphviz import AGraph
 
-from eralchemy2.cst import DOT_GRAPH_BEGINNING
-from eralchemy2.main import _intermediary_to_dot
+from eralchemy.cst import DOT_GRAPH_BEGINNING
+from eralchemy.main import _intermediary_to_dot
 from tests.common import (
     child,
     child_id,

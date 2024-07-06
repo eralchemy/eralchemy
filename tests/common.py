@@ -1,8 +1,8 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, create_engine
 from sqlalchemy.orm import declarative_base, relationship
 
-from eralchemy2.models import Column as ERColumn
-from eralchemy2.models import Relation, Table
+from eralchemy.models import Column as ERColumn
+from eralchemy.models import Relation, Table
 
 Base = declarative_base()
 

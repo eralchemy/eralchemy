@@ -1,6 +1,6 @@
 import re
 
-from eralchemy2.main import _intermediary_to_markdown
+from eralchemy.main import _intermediary_to_markdown
 from tests.common import (
     child,
     child_id,

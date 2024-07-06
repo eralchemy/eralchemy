@@ -128,7 +128,7 @@ class Tag(Base):
 
 
 if __name__ == "__main__":
-    from eralchemy2 import render_er
+    from eralchemy import render_er
 
     render_er(Base, "../newsmeme.svg")
     render_er(Base, "../newsmeme.er")

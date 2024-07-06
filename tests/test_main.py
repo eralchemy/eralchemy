@@ -1,6 +1,6 @@
 import pytest
 
-from eralchemy2.main import (
+from eralchemy.main import (
     all_to_intermediary,
     filter_resources,
     get_output_mode,
@@ -143,4 +143,4 @@ def test_get_output_mode():
 
 
 def test_import_render_er():
-    from eralchemy2 import render_er  # noqa: F401
+    from eralchemy import render_er  # noqa: F401

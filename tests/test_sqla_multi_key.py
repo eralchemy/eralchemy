@@ -1,8 +1,8 @@
 from sqlalchemy import Column, ForeignKey, String
 from sqlalchemy.orm import DeclarativeBase
 
-from eralchemy2.models import Relation, Table
-from eralchemy2.sqla import (
+from eralchemy.models import Relation, Table
+from eralchemy.sqla import (
     declarative_to_intermediary,
 )
 

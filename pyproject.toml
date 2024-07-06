@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 
 [project]
-name = "eralchemy2"
+name = "eralchemy"
 version = "1.4.1"
 description = "Simple entity relation (ER) diagrams generation"
 authors = [{ name = "Florian Maurer", email = "fmaurer@disroot.org"}]
@@ -28,8 +28,8 @@ dependencies = [
 ]
 
 [project.urls]
-homepage = "https://github.com/maurerle/eralchemy2"
-repository = "https://github.com/maurerle/eralchemy2"
+homepage = "https://github.com/Alexis-benoist/eralchemy"
+repository = "https://github.com/Alexis-benoist/eralchemy"
 
 [project.optional-dependencies]
 ci = [
@@ -44,7 +44,7 @@ dev = [
 ]
 
 [project.scripts]
-eralchemy2 = "eralchemy2.main:cli"
+eralchemy = "eralchemy.main:cli"
 
 [tool.tox]
 legacy_tox_ini = """
@@ -100,7 +100,7 @@ ignore_missing_imports = true
 
 
 [tool.ruff]
-include = ["eralchemy2/**/*.py", "tests/**/*.py"]
+include = ["eralchemy/**/*.py", "tests/**/*.py"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "COM"]
