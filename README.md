@@ -106,7 +106,7 @@ To run the tests, use : `$ pytest` or `$ tox`.
 Some tests require having a local PostgreSQL database with a schema named test in a database
 named test all owned by a user named eralchemy with a password of eralchemy.
 If docker compose is available, one can use `docker compose up -d` for this purpose.
-You can deselct the tests which require a PostgreSQL database using:
+You can deselect the tests which require a PostgreSQL database using:
 
     $ pytest -m "not external_db"
 
