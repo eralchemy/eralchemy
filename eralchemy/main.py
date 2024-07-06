@@ -291,9 +291,7 @@ def filter_resources(
     include_columns_re = re.compile(
         "|".join(
             f"({name})"
-            for name in (
-                include_columns or [c.name for t in _tables for c in t.columns]
-            )
+            for name in (include_columns or [c.name for t in _tables for c in t.columns])
         ),
     )
     exclude_tables_re = re.compile(
