@@ -7,7 +7,10 @@ build-backend = "setuptools.build_meta"
 name = "eralchemy"
 version = "1.4.1"
 description = "Simple entity relation (ER) diagrams generation"
-authors = [{ name = "Florian Maurer", email = "fmaurer@disroot.org"}]
+authors = [
+  { name = "Alexis Benoist", email = "Alexis-benoist@users.noreply.github.com"},
+  { name = "Florian Maurer", email = "fmaurer@disroot.org"},
+]
 license = {text = "Apache-2.0"}
 readme = "README.md"
 
@@ -38,9 +41,14 @@ ci = [
   "pytest >= 7.4.3",
 ]
 dev = [
-  "ruff>=0.4.1",
-  "mypy>=1.7.0",
-  "pre-commit>=3.0.1"
+  "nox",
+  "pre-commit"
+]
+docs = [
+  "sphinx>=6.2.1",
+  "pydata-sphinx-theme",
+  "sphinx-copybutton",
+  "sphinx-design",
 ]
 
 [project.scripts]
