@@ -61,7 +61,7 @@ def test_all_to_dot():
 
 @pytest.mark.parametrize(
     "title",
-    ("Test Title", "häßlicher Titel!", "<div> -not.parsed_ </div>"),
+    ("Test Title", "häßlicher Titel!", "<div> -not.parsed_ </div>"),  # codespell:ignore
 )
 def test_all_to_dot_with_title(title):
     tables = [child, parent]
@@ -104,9 +104,9 @@ def test_relation():
 
 
 def assert_table_well_rendered_to_dot(table):
-    matchs = header_re.match(table.header_dot).groups()
-    assert len(matchs) == 1
-    assert matchs[0] == table.name
+    matches = header_re.match(table.header_dot).groups()
+    assert len(matches) == 1
+    assert matches[0] == table.name
     table_dot = table.to_dot()
     for col in table.columns:
         assert col.to_dot() in table_dot

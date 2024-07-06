@@ -11,3 +11,11 @@ repos:
       - id: prettier
         stages: [commit]
         exclude: tests\/test_.+\.
+
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.3.0
+    hooks:
+      - id: codespell
+        stages: [commit]
+        additional_dependencies:
+          - tomli
