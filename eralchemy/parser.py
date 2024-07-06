@@ -65,7 +65,8 @@ def parse_line(line: str) -> Drawable:
 
 def _check_no_current_table(new_obj: Drawable, current_table: Table | None) -> None:
     """Raises exception if we try to add a relation or a column
-    with no current table."""
+    with no current table.
+    """
     if current_table is None:
         msg = "Cannot add {} before adding table"
         if isinstance(new_obj, Relation):
@@ -155,7 +156,7 @@ def markdown_file_to_intermediary(filename: str) -> tuple[list[Table], list[Rela
 def line_iterator_to_intermediary(
     line_iterator: list[str],
 ) -> tuple[list[Table], list[Relation]]:
-    """Parse an iterator of str (one string per line) to the intermediary syntax"""
+    """Parse an iterator of str (one string per line) to the intermediary syntax."""
     current_table = None
     tables: list[Table] = []
     relations: list[Relation] = []

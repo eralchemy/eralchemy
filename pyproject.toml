@@ -100,21 +100,29 @@ ignore_missing_imports = true
 
 
 [tool.ruff]
-include = ["eralchemy/**/*.py", "tests/**/*.py"]
+ignore-init-module-imports = true
+fix = true
+select = ["E", "F", "W", "I", "D", "RUF"]
+ignore = [
+  "D100",  # Missing docstring in public module
+  "D101",  # Missing docstring in public class
+  "D102",  # Missing docstring in public method
+  "D103",  # Missing docstring in public function
+  "D104",  # Missing docstring in public package
+  "D105",  # Missing docstring in magic method
+  "D107",  # Missing docstring in `__init__`
+  "D200",  # One-line docstring should fit on one line
+  "D205",  # 1 blank line required between summary line and description
+  "D212",  # Multi-line docstring summary should start at the first line
+  "E501",  # line too long | Black take care of it
 
-[tool.ruff.lint]
-select = ["E", "F", "I", "UP", "COM"]
-ignore = ["E501"]
+]
 
-[tool.ruff.lint.per-file-ignores]
-"__init__.py" = [
-    "I001", # allow unsorted imports in __init__.py
-    "F401", # allow unused imports in __init__.py
-]
-"tests/*" = [
-    "S101", # allow assert statements for pytest
-    "ARG",  # allow unused arguments for pytest fixtures
-]
+[tool.ruff.flake8-quotes]
+docstring-quotes = "double"
+
+[tool.ruff.pydocstyle]
+convention = "google"
 
 [tool.black]
 line-length = 100

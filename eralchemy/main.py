@@ -29,7 +29,7 @@ except PackageNotFoundError:
 
 
 def cli() -> None:
-    """Entry point for the application script"""
+    """Entry point for the application script."""
     parser = get_argparser()
 
     args = parser.parse_args()
@@ -280,7 +280,7 @@ def filter_resources(
         2. Columns (of whichever table) present in the exclude_columns (lst of str, columns names)
     Disclosure note:
         All relationships are taken into consideration before ignoring columns.
-        In other words, if one excludes primary or foreign keys, it will still keep the relations display amongst tables
+        In other words, if one excludes primary or foreign keys, it will still keep the relations display amongst tables.
     """
     _tables = copy.deepcopy(tables)
     _relationships = copy.deepcopy(relationships)
@@ -360,7 +360,7 @@ def render_er(
     :param exclude_tables: lst of str, table names to exclude, None means exclude nothing
     :param exclude_columns: lst of str, field names to exclude, None means exclude nothing
     :param schema: name of the schema
-    :param title: title of the graph, only for .er, .dot, .png, .jpg outputs
+    :param title: title of the graph, only for .er, .dot, .png, .jpg outputs.
     """
     try:
         tables, relationships = all_to_intermediary(input, schema=schema)
