@@ -242,8 +242,8 @@ def all_to_intermediary(filename_or_input, schema=None):
     try:
         make_url(filename_or_input)
         return database_to_intermediary(filename_or_input, schema=schema)
-    except ArgumentError:
-        raise ValueError(f"Cannot process filename_or_input {input_class_name}")
+    except ArgumentError as e:
+        raise ValueError(f"Cannot process filename_or_input {input_class_name}: {e}")
 
 
 def get_output_mode(output, mode):
@@ -376,6 +376,8 @@ def render_er(
     except ImportError as e:
         module_name = e.message.split()[-1]
         print(f'Please install {module_name} using "pip install {module_name}".')
+    except (FileNotFoundError, ValueError) as e:
+        print(f"{e}")
     except ParsingException as e:
         sys.stderr.write(e.message)
 
