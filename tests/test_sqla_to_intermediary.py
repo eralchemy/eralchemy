@@ -19,7 +19,6 @@ from tests.common import (
     child,
     child_id,
     child_parent_id,
-    create_db,
     exclude_relation,
     parent,
     parent_id,
@@ -66,16 +65,14 @@ def test_tables():
 
 
 @pytest.mark.external_db
-def test_database_to_intermediary():
-    db_uri = create_db()
-    tables, relationships = database_to_intermediary(db_uri)
+def test_database_to_intermediary(pg_db_uri):
+    tables, relationships = database_to_intermediary(pg_db_uri)
     check_intermediary_representation_simple_table(tables, relationships)
 
 
 @pytest.mark.external_db
-def test_database_to_intermediary_with_schema():
-    db_uri = create_db()
-    tables, relationships = database_to_intermediary(db_uri, schema="eralchemy_test")
+def test_database_to_intermediary_with_schema(pg_db_uri):
+    tables, relationships = database_to_intermediary(pg_db_uri, schema="eralchemy_test")
 
     assert len(tables) == 3
     assert len(relationships) == 2
@@ -87,10 +84,9 @@ def test_database_to_intermediary_with_schema():
 
 
 @pytest.mark.external_db
-def test_database_to_intermediary_with_multiple_schemas():
-    db_uri = create_db()
+def test_database_to_intermediary_with_multiple_schemas(pg_db_uri):
     tables, relationships = database_to_intermediary(
-        db_uri,
+        pg_db_uri,
         schema="public, eralchemy_test",
     )
 
@@ -119,9 +115,8 @@ def test_flask_sqlalchemy():
     check_intermediary_representation_simple_all_table(tables, relationships)
 
 
-def test_table_names_in_relationships():
-    db_uri = create_db()
-    tables, relationships = database_to_intermediary(db_uri)
+def test_table_names_in_relationships(pg_db_uri):
+    tables, relationships = database_to_intermediary(pg_db_uri)
     table_names = [t.name for t in tables]
 
     # Assert column names are table names
@@ -138,11 +133,10 @@ def test_table_names_in_relationships():
         assert l_name.find(".") == -1
 
 
-def test_table_names_in_relationships_with_schema():
-    db_uri = create_db()
+def test_table_names_in_relationships_with_schema(pg_db_uri):
     schema_name = "test"
     matcher = re.compile(rf"{schema_name}\.[\S+]", re.I)
-    tables, relationships = database_to_intermediary(db_uri, schema=schema_name)
+    tables, relationships = database_to_intermediary(pg_db_uri, schema=schema_name)
     table_names = [t.name for t in tables]
 
     # Assert column names match table names, including schema
