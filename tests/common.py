@@ -190,4 +190,6 @@ def sqlite_db_uri(db_uri="sqlite:///test.db"):
 def pg_db_uri(
     db_uri="postgresql://eralchemy:eralchemy@localhost:5432/eralchemy",
 ):
+    engine = create_engine(db_uri)
+    Base.metadata.create_all(engine)
     return db_uri
