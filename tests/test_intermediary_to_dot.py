@@ -1,11 +1,21 @@
-# -*- coding: utf-8 -*-
-import sys
 import re
+import sys
 from multiprocessing import Process
+
+import pytest
 from pygraphviz import AGraph
-from tests.common import parent_id, parent_name, child_id, child_parent_id, relation, child, parent
+
+from eralchemy.cst import DOT_GRAPH_BEGINNING
 from eralchemy.main import _intermediary_to_dot
-from eralchemy.cst import GRAPH_BEGINNING
+from tests.common import (
+    child,
+    child_id,
+    child_parent_id,
+    parent,
+    parent_id,
+    parent_name,
+    relation,
+)
 
 GRAPH_LAYOUT = GRAPH_BEGINNING + "%s }"
 column_re = re.compile(r'\<TR\>\<TD\ ALIGN\=\"LEFT\"\ PORT\=\".+\">(.*)\<\/TD\>\<\/TR\>')
@@ -18,16 +28,15 @@ column_inside = re.compile(
 
 
 def assert_is_dot_format(dot):
-    """ Checks that the dot is usable by graphviz. """
-
+    """Checks that the dot is usable by graphviz."""
     # We launch a process calling graphviz to render the dot. If the exit code is not 0 we assume that the syntax
     # wasn't good
     def run_graph(dot):
-        """ Runs graphviz to see if the syntax is good. """
+        """Runs graphviz to see if the syntax is good."""
         graph = AGraph()
         graph = graph.from_string(dot)
-        extension = 'png'
-        graph.draw(path='output.png', prog='dot', format=extension)
+        extension = "png"
+        graph.draw(path="output.png", prog="dot", format=extension)
         sys.exit(0)
 
     p = Process(target=run_graph, args=(dot,))
@@ -45,14 +54,27 @@ def test_all_to_dot():
         assert element.to_dot() in output
 
 
+@pytest.mark.parametrize(
+    "title",
+    ("Test Title", "häßlicher Titel!", "<div> -not.parsed_ </div>"),  # codespell:ignore
+)
+def test_all_to_dot_with_title(title):
+    tables = [child, parent]
+    relations = [relation]
+    output = _intermediary_to_dot(tables, relations, title=title)
+    assert_is_dot_format(output)
+    for element in relations + tables:
+        assert element.to_dot() in output
+
+
 def assert_column_well_rendered_to_dot(col):
     col_no_table = column_re.match(col.to_dot()).groups()
     assert len(col_no_table) == 1
     col_parsed = column_inside.match(col_no_table[0])
-    assert col_parsed.group('key_opening') == ('<u>' if col.is_key else '')
-    assert col_parsed.group('name') == col.name
-    assert col_parsed.group('key_closing') == ('</u>' if col.is_key else '')
-    assert col_parsed.group('type') == col.type
+    assert col_parsed.group("key_opening") == ("<u>" if col.is_key else "")
+    assert col_parsed.group("name") == col.name
+    assert col_parsed.group("key_closing") == ("</u>" if col.is_key else "")
+    assert col_parsed.group("type") == col.type
 
 
 def test_column_is_dot_format():
@@ -73,14 +95,14 @@ def test_relation():
     assert r.group('l_column') == 'parent_id'
     assert r.group('r_table') == 'parent'
     assert r.group('r_column') == 'id'
-    assert r.group('l_card') == '{0,1}'
-    assert r.group('r_card') == '0..N'
+    assert r.group('l_card') == '0..N'
+    assert r.group('r_card') == '{0,1}'
 
 
 def assert_table_well_rendered_to_dot(table):
-    matchs = header_re.match(table.header_dot).groups()
-    assert len(matchs) == 1
-    assert matchs[0] == table.name
+    matches = header_re.match(table.header_dot).groups()
+    assert len(matches) == 1
+    assert matches[0] == table.name
     table_dot = table.to_dot()
     for col in table.columns:
         assert col.to_dot() in table_dot

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
-# flake8: noqa: F401
-from eralchemy.main import render_er
-from eralchemy.version import version as __version__
+from .main import __version__, render_er
+
+__all__ = ("render_er", "__version__")
