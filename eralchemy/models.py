@@ -113,10 +113,11 @@ class Column(Drawable):
 
     def to_dot(self) -> str:
         base = ROW_TAGS.format(
-            ' ALIGN="LEFT" PORT="{}"'.format(self.name),
+            ' ALIGN="LEFT" {port}',
             "{key_opening}{col_name}{key_closing} {type}{null}",
         )
         return base.format(
+            port=f'PORT="{self.name}"' if self.name else "",
             key_opening="<u>" if self.is_key else "",
             key_closing="</u>" if self.is_key else "",
             col_name=FONT_TAGS.format(self.name),
@@ -174,21 +175,21 @@ class Relation(Drawable):
     def to_markdown(self) -> str:
         return '{}{} {}--{} {}{}'.format(
             self.left_table,
-            '' if self.left_column is None else '."%s"' % self.left_column,
+            '' if self.left_column is None else f'."{self.left_column}"',
             self.left_cardinality,
             self.right_cardinality,
             self.right_table,
-            '' if self.right_column is None else '."%s"' % self.right_column,
+            '' if self.right_column is None else f'."{self.right_column}"',
         )
 
     def to_mermaid(self) -> str:
         normalized = (
             Relation.cardinalities_mermaid.get(k, k)
             for k in (
-                sanitize_mermaid(self.left_col),
+                sanitize_mermaid(self.left_table),
                 self.left_cardinality,
                 self.right_cardinality,
-                sanitize_mermaid(self.right_col),
+                sanitize_mermaid(self.right_table),
             )
         )
         return '{} "{}" -- "{}" {}'.format(*normalized)
@@ -204,8 +205,8 @@ class Relation(Drawable):
             '' if self.right_column is None else f'."{self.right_column}"',
         )
 
-        left_col = sanitize_mermaid(self.left_col, is_er=True)
-        right_col = sanitize_mermaid(self.right_col, is_er=True)
+        left_col = sanitize_mermaid(self.left_table, is_er=True)
+        right_col = sanitize_mermaid(self.right_table, is_er=True)
         return f"{left_col} {left}--{right} {right_col} : has"
 
     def graphviz_cardinalities(self, card) -> str:

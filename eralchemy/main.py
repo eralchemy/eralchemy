@@ -36,7 +36,7 @@ def cli() -> None:
     check_args(args)
     if args.v:
         print(f"eralchemy version {__version__}.")
-        exit(0)
+        sys.exit(0)
     render_er(
         args.i,
         args.o,
@@ -309,10 +309,10 @@ def filter_resources(
     _relationships = [
         r
         for r in _relationships
-        if not exclude_tables_re.fullmatch(r.right_col)
-        and not exclude_tables_re.fullmatch(r.left_col)
-        and include_tables_re.fullmatch(r.right_col)
-        and include_tables_re.fullmatch(r.left_col)
+        if not exclude_tables_re.fullmatch(r.right_table)
+        and not exclude_tables_re.fullmatch(r.left_table)
+        and include_tables_re.fullmatch(r.right_table)
+        and include_tables_re.fullmatch(r.left_table)
     ]
 
     def check_column(name):

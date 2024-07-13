@@ -5,7 +5,6 @@ from multiprocessing import Process
 import pytest
 from pygraphviz import AGraph
 
-from eralchemy.cst import DOT_GRAPH_BEGINNING
 from eralchemy.main import _intermediary_to_dot
 from tests.common import (
     child,
@@ -17,7 +16,6 @@ from tests.common import (
     relation,
 )
 
-GRAPH_LAYOUT = GRAPH_BEGINNING + "%s }"
 column_re = re.compile(r'\<TR\>\<TD\ ALIGN\=\"LEFT\"\ PORT\=\".+\">(.*)\<\/TD\>\<\/TR\>')
 header_re = re.compile(r'\<TR\>\<TD\>\<B\>\<FONT\ POINT\-SIZE\=\"16\"\>(.*)'
                        r'\<\/FONT\>\<\/B\>\<\/TD\>\<\/TR\>')
