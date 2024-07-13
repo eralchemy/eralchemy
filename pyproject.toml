@@ -114,12 +114,10 @@ select = ["E", "F", "W", "I", "UP", "G"]
 ignore = [
   "E501",  # line too long
 ]
+line-length = 100
 
 [tool.ruff.flake8-quotes]
 docstring-quotes = "double"
 
 [tool.ruff.pydocstyle]
 convention = "google"
-
-[tool.black]
-line-length = 100
