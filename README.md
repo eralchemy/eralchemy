@@ -46,7 +46,6 @@ database url.
 
 #### From a markdown file.
 
-    $ curl 'https://raw.githubusercontent.com/eralchemy/eralchemy/main/example/newsmeme.er' > markdown_file.er
     $ eralchemy -i 'markdown_file.er' -o erd_from_markdown_file.pdf
 
 #### From a Postgresql DB to a markdown file excluding tables named `temp` and `audit`
