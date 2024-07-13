@@ -11,7 +11,7 @@ Works with SQLAlchemy < 1.4 but also with versions greater than 1.4
 
 ![Example for a graph](https://raw.githubusercontent.com/eralchemy/eralchemy/main/docs/_static/newsmeme.svg "Example for NewsMeme")
 
-[Example for NewsMeme](https://bitbucket.org/danjac/newsmeme)
+Example for NewsMeme (deleted project)
 
 ## Quick Start
 
