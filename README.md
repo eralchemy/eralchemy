@@ -8,9 +8,7 @@ eralchemy generates Entity Relation (ER) diagram (like the one below) from datab
 
 ## Example
 
-![Example for a graph](https://raw.githubusercontent.com/eralchemy/eralchemy/main/docs/_static/newsmeme.svg "Example for NewsMeme")
-
-[Example for NewsMeme](https://bitbucket.org/danjac/newsmeme)
+![Example for a graph](https://raw.githubusercontent.com/eralchemy/eralchemy/main/docs/_static/forum.svg "Example for a simple Forum")
 
 ## Quick Start
 
@@ -45,7 +43,7 @@ database url.
 
 #### From a markdown file.
 
-    $ curl 'https://raw.githubusercontent.com/eralchemy/eralchemy/main/example/newsmeme.er' > markdown_file.er
+    $ curl 'https://raw.githubusercontent.com/eralchemy/eralchemy/main/example/forum.er' > markdown_file.er
     $ eralchemy -i 'markdown_file.er' -o erd_from_markdown_file.pdf
 
 #### From a Postgresql DB to a markdown file excluding tables named `temp` and `audit`

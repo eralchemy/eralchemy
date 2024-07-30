@@ -1,3 +1,8 @@
+"""Forum like example.
+
+Code credits go to NewsMeme (https://github.com/danjac/newsmeme)
+"""
+
 from datetime import datetime
 
 from sqlalchemy import (
@@ -13,11 +18,6 @@ from sqlalchemy import (
     UnicodeText,
 )
 from sqlalchemy.orm import DeclarativeBase, Relationship
-
-"""
-Example of NewsMeme (open source forum like hacker news or Reddit).
-# Adapted from https://bitbucket.org/danjac/newsmeme (newsmeme / newsmeme / models)
-"""
 
 
 class Base(DeclarativeBase):
@@ -130,5 +130,5 @@ class Tag(Base):
 if __name__ == "__main__":
     from eralchemy import render_er
 
-    render_er(Base, "../newsmeme.svg")
-    render_er(Base, "../newsmeme.er")
+    render_er(Base, "../forum.svg")
+    render_er(Base, "../forum.er")
