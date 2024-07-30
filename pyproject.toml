@@ -31,8 +31,8 @@ dependencies = [
 ]
 
 [project.urls]
-homepage = "https://github.com/Alexis-benoist/eralchemy"
-repository = "https://github.com/Alexis-benoist/eralchemy"
+homepage = "https://github.com/eralchemy/eralchemy"
+repository = "https://github.com/eralchemy/eralchemy"
 
 [project.optional-dependencies]
 ci = [
