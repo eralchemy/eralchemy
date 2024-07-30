@@ -1,6 +1,5 @@
 [![license](https://img.shields.io/badge/License-Apache%202.0-yellow.svg?logo=opensourceinitiative&logoColor=white)](LICENSE)
 [![PyPI Downloads](https://img.shields.io/pypi/dm/eralchemy)](https://pypi.org/project/eralchemy/)
-![Github Actions](https://github.com/Alexis-benoist/eralchemy/actions/workflows/python-app.yml/badge.svg)
 
 # Entity relation diagrams generator
 
