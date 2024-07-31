@@ -1,6 +1,7 @@
-[![license](https://img.shields.io/badge/License-Apache%202.0-yellow.svg?logo=opensourceinitiative&logoColor=white)](LICENSE)
-[![PyPI Downloads](https://img.shields.io/pypi/dm/eralchemy)](https://pypi.org/project/eralchemy/)
-![Github Actions](https://github.com/Alexis-benoist/eralchemy/actions/workflows/python-app.yml/badge.svg)
+[![license](https://img.shields.io/badge/License-Apache%202.0-yellow?logo=opensourceinitiative&logoColor=white)](LICENSE)
+[![PyPI - Version](https://img.shields.io/pypi/v/eralchemy?logo=pypi&logoColor=white)](https://pypi.org/project/ERAlchemy/)
+[![PyPI Downloads](https://img.shields.io/pypi/dm/eralchemy?logo=pypi&logoColor=white)](https://pypi.org/project/eralchemy/)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/eralchemy/eralchemy/unit.yaml?logo=github&logoColor=white)](https://github.com/eralchemy/eralchemy/actions/workflows/unit.yaml)
 
 # Entity relation diagrams generator
 
