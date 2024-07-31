@@ -74,7 +74,7 @@ jobs:
           path: coverage.xml
 
   coverage:
-    needs: [build]
+    needs: [test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
