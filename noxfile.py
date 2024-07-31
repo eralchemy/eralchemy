@@ -5,7 +5,7 @@ The nox run are build in isolated environment that will be stored in .nox. to fo
 
 import nox
 
-nox.options.sessions = ["lint", "docs", "test"]
+nox.options.sessions = ["lint", "mypy", "docs", "test"]
 
 
 @nox.session(reuse_venv=True)
