@@ -17,8 +17,20 @@ jobs:
           python-version: "3.10"
       - uses: pre-commit/action@v3.0.0
 
+  mypy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Install nox
+        run: pip install nox
+      - name: run mypy checks
+        run: nox -s mypy
+
   test:
-    needs: [lint]
+    needs: [lint, mypy]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -46,7 +58,7 @@ jobs:
       - name: Set up pg-client and graphviz
         run: |
           sudo apt-get update
-          sudo apt-get -qq install graphviz python3-dev libgraphviz-dev pkg-config postgresql-client
+          sudo apt-get -qq install graphviz libgraphviz-dev pkg-config postgresql-client
       - name: Setup database schema
         run: psql -h localhost -U eralchemy -c 'CREATE SCHEMA eralchemy_test;'
         env:
