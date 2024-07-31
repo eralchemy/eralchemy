@@ -54,35 +54,6 @@ docs = [
 [project.scripts]
 eralchemy = "eralchemy.main:cli"
 
-[tool.tox]
-legacy_tox_ini = """
-[tox]
-isolated_build = True
-envlist = py38, py39, py310, py310-SA20, py311, py311-SA20, py312
-
-[tox:.package]
-# note tox will use the same python version as under what tox is installed to package
-# so unless this is python 3 you can require a given python version for the packaging
-# environment via the basepython key
-basepython = python3
-
-[gh-actions]
-python =
-    3.8: py38
-    3.9: py39
-    3.10: py310, py310-SA14, py310-SA20
-    3.11: py311, py311-SA14, py311-SA20
-    3.12: py312
-
-[testenv]
-extras = ci
-deps =
-  py310-SA20: sqlalchemy~=2.0.4
-  py311-SA20: sqlalchemy~=2.0.4
-commands =
-  pytest
-"""
-
 [tool.pytest]
 testpaths = "tests"
 
