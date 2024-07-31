@@ -16,3 +16,42 @@ jobs:
         with:
           python-version: "3.10"
       - uses: pre-commit/action@v3.0.0
+
+  test:
+    needs: [lint]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+    services:
+      eralchemy-db:
+        image: postgres:alpine
+        env:
+          POSTGRES_DB: eralchemy
+          POSTGRES_PASSWORD: eralchemy
+          POSTGRES_PORT: 5432
+          POSTGRES_USER: eralchemy
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Set up pg-client and graphviz
+        run: |
+          sudo apt-get update
+          sudo apt-get -qq install graphviz python3-dev libgraphviz-dev pkg-config postgresql-client
+      - name: Setup database schema
+        run: psql -h localhost -U eralchemy -c 'CREATE SCHEMA eralchemy_test;'
+        env:
+          PGPASSWORD: eralchemy
+      - name: Install nox
+        run: pip install nox
+      - name: Test with pytest
+        run: nox -s test
