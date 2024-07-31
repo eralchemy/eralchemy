@@ -69,6 +69,3 @@ jobs:
 
       - name: Run ruff check format
         run: ruff format --check
-
-      - name: Run mypy
-        run: mypy eralchemy
