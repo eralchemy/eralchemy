@@ -54,4 +54,4 @@ jobs:
       - name: Install nox
         run: pip install nox
       - name: Test with pytest
-        run: nox -s test
+        run: nox -s ci_test
