@@ -110,7 +110,7 @@ ignore_missing_imports = true
 [tool.ruff]
 ignore-init-module-imports = true
 fix = true
-select = ["E", "F", "W", "I", "D", "RUF"]
+select = ["D", "E", "F", "W", "I", "UP", "G"]
 ignore = [
   "D100",  # Missing docstring in public module
   "D101",  # Missing docstring in public class
@@ -119,15 +119,12 @@ ignore = [
   "D104",  # Missing docstring in public package
   "D105",  # Missing docstring in magic method
   "D107",  # Missing docstring in `__init__`
-  "E501",  # line too long | Black take care of it
-
+  "E501",  # line too long
 ]
+line-length = 100
 
 [tool.ruff.flake8-quotes]
 docstring-quotes = "double"
 
 [tool.ruff.pydocstyle]
 convention = "google"
-
-[tool.black]
-line-length = 100

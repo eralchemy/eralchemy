@@ -33,6 +33,7 @@ column_inside = re.compile(
 
 def assert_is_dot_format(dot):
     """Checks that the dot is usable by graphviz."""
+
     # We launch a process calling graphviz to render the dot. If the exit code is not 0 we assume that the syntax
     # wasn't good
     def run_graph(dot):
