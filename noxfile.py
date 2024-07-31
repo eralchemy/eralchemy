@@ -5,7 +5,7 @@ The nox run are build in isolated environment that will be stored in .nox. to fo
 
 import nox
 
-nox.options.sessions = ["lint", "docs"]
+nox.options.sessions = ["lint", "docs", "test"]
 
 
 @nox.session(reuse_venv=True)
@@ -21,3 +21,19 @@ def docs(session):
     build = session.posargs.pop() if session.posargs else "html"
     session.install(".[docs]")
     session.run("sphinx-build", "-v", "-b", build, "docs", f"docs/_build/{build}")
+
+
+@nox.session(reuse_venv=True)
+def ci_test(session):
+    """Run the tests report coverage in xml format."""
+    session.install(".[test]")
+    test_files = session.posargs or ["tests"]
+    session.run("pytest", "--color=yes", "--cov", "--cov-report=xml", *test_files)
+
+
+@nox.session(reuse_venv=True)
+def test(session):
+    """Run the tests and report coverage in html format."""
+    session.install(".[test]")
+    test_files = session.posargs or ["tests"]
+    session.run("pytest", "--color=yes", "--cov", "--cov-report=html", *test_files)

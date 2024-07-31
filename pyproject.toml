@@ -35,7 +35,7 @@ homepage = "https://github.com/eralchemy/eralchemy"
 repository = "https://github.com/eralchemy/eralchemy"
 
 [project.optional-dependencies]
-ci = [
+test = [
   "flask-sqlalchemy >= 2.5.1",
   "psycopg2 >= 2.9.3",
   "pytest >= 7.4.3",
@@ -108,8 +108,10 @@ ignore_missing_imports = true
 
 
 [tool.ruff]
-ignore-init-module-imports = true
 fix = true
+line-length = 100
+
+[tool.ruff.lint]
 select = ["D", "E", "F", "W", "I", "UP", "G"]
 ignore = [
   "D100",  # Missing docstring in public module
@@ -121,10 +123,10 @@ ignore = [
   "D107",  # Missing docstring in `__init__`
   "E501",  # line too long
 ]
-line-length = 100
+ignore-init-module-imports = true
 
-[tool.ruff.flake8-quotes]
+[tool.ruff.lint.flake8-quotes]
 docstring-quotes = "double"
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "google"
