@@ -39,6 +39,7 @@ test = [
   "flask-sqlalchemy >= 2.5.1",
   "psycopg2 >= 2.9.3",
   "pytest >= 7.4.3",
+  "pytest-cov",
 ]
 dev = [
   "nox",
