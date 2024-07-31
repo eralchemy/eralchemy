@@ -2,6 +2,7 @@
 [![PyPI - Version](https://img.shields.io/pypi/v/eralchemy?logo=pypi&logoColor=white)](https://pypi.org/project/ERAlchemy/)
 [![PyPI Downloads](https://img.shields.io/pypi/dm/eralchemy?logo=pypi&logoColor=white)](https://pypi.org/project/eralchemy/)
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/eralchemy/eralchemy/unit.yaml?logo=github&logoColor=white)](https://github.com/eralchemy/eralchemy/actions/workflows/unit.yaml)
+[![Codecov](https://img.shields.io/codecov/c/github/eralchemy/eralchemy?logo=codecov&logoColor=white)](https://app.codecov.io/gh/eralchemy/eralchemy)
 
 # Entity relation diagrams generator
 
