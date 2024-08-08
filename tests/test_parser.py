@@ -74,8 +74,10 @@ def test_parse_line():
 
     for s in relations_lst:
         rv = parse_line(s)
-        assert rv.right_col == s[16:].strip()
-        assert rv.left_col == s[:12].strip()
+        assert rv.right_table == s[16:].strip()
+        assert rv.right_column is None
+        assert rv.left_table == s[:12].strip()
+        assert rv.left_column is None
         assert rv.right_cardinality == s[15]
         assert rv.left_cardinality == s[12]
         assert isinstance(rv, Relation)

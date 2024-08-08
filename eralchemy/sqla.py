@@ -47,8 +47,10 @@ def relation_to_intermediary(fk: sa.ForeignKey) -> Relation:
         # if this is the case, we are not optional and must be unique
         right_cardinality = "1" if check_all_compound_same_parent(fk) else "*"
     return Relation(
-        right_col=format_name(fk.parent.table.fullname),
-        left_col=format_name(fk.column.table.fullname),
+        right_table=format_name(fk.parent.table.fullname),
+        right_column=format_name(fk.parent.name),
+        left_table=format_name(fk.column.table.fullname),
+        left_column=format_name(fk.column.name),
         right_cardinality=right_cardinality,
         left_cardinality="?" if fk.parent.nullable else "1",
     )
