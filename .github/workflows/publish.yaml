@@ -1,0 +1,28 @@
+name: Upload Python Package to PyPI
+
+on:
+  release:
+    types: [created]
+
+env:
+  FORCE_COLOR: "1" # Make tools pretty.
+  TWINE_USERNAME: __token__
+  TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+
+jobs:
+  tests:
+    uses: ./.github/workflows/unit.yaml
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install wheel twine build
+      - name: build
+        run: python -m build
+      - name: publish
+        run: twine upload dist/*

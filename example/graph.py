@@ -1,54 +1,46 @@
-# from https://github.com/zzzeek/sqlalchemy/blob/master/examples/graphs/directed_graph.py
-"""a directed graph example."""
+# from https://github.com/sqlalchemy/sqlalchemy/blob/main/examples/graphs/directed_graph.py
+"""A directed graph example."""
 
-from sqlalchemy import Column, ForeignKey, Integer
-from sqlalchemy.orm import declarative_base, relationship
+from __future__ import annotations
+
+from sqlalchemy import ForeignKey, Integer
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 from eralchemy import render_er
 
-Base = declarative_base()
+
+class Base(DeclarativeBase):
+    pass
 
 
 class Node(Base):
     __tablename__ = "node"
 
-    node_id = Column(Integer, primary_key=True)
-
-    def __init__(self, id):
-        self.node_id = id
+    node_id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    lower_edges: Mapped[list[Edge]] = relationship(back_populates="lower_node")
+    higher_edges: Mapped[list[Edge]] = relationship(back_populates="higher_node")
 
     def add_neighbors(self, *nodes):
         for node in nodes:
             Edge(self, node)
         return self
 
-    def higher_neighbors(self):
+    def higher_neighbors(self) -> list[Node]:
         return [x.higher_node for x in self.lower_edges]
 
-    def lower_neighbors(self):
+    def lower_neighbors(self) -> list[Node]:
         return [x.lower_node for x in self.higher_edges]
 
 
 class Edge(Base):
     __tablename__ = "edge"
 
-    lower_id = Column(Integer, ForeignKey("node.node_id"), primary_key=True)
+    lower_id: Mapped[int] = mapped_column(Integer, ForeignKey("node.node_id"), primary_key=True)
+    higher_id: Mapped[int] = mapped_column(Integer, ForeignKey("node.node_id"), primary_key=True)
+    lower_node: Mapped[Node] = relationship(back_populates="lower_edges")
+    higher_node: Mapped[Node] = relationship(back_populates="higher_edges")
 
-    higher_id = Column(Integer, ForeignKey("node.node_id"), primary_key=True)
-
-    lower_node = relationship(
-        Node,
-        primaryjoin=lower_id == Node.node_id,
-        backref="lower_edges",
-    )
-    higher_node = relationship(
-        Node,
-        primaryjoin=higher_id == Node.node_id,
-        backref="higher_edges",
-    )
-
-    # here we have lower.node_id <= higher.node_id
-    def __init__(self, n1, n2):
+    def __init__(self, n1: Node, n2: Node) -> None:
         if n1.node_id < n2.node_id:
             self.lower_node = n1
             self.higher_node = n2

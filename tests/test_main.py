@@ -17,7 +17,6 @@ from tests.common import (
     check_intermediary_representation_simple_table,
     check_tables_columns,
     check_tables_relationships,
-    create_db,
     markdown,
     relationships,
     tables,
@@ -29,16 +28,14 @@ def test_all_to_intermediary_base():
     check_intermediary_representation_simple_all_table(tables, relationships)
 
 
-def test_all_to_intermediary_db_sqlite():
-    db_uri = create_db(db_uri="sqlite:///test.db", use_sqlite=True)
-    tables, relationships = all_to_intermediary(db_uri)
+def test_all_to_intermediary_db_sqlite(sqlite_db_uri):
+    tables, relationships = all_to_intermediary(sqlite_db_uri)
     check_intermediary_representation_simple_table(tables, relationships)
 
 
 @pytest.mark.external_db
-def test_all_to_intermediary_db():
-    db_uri = create_db()
-    tables, relationships = all_to_intermediary(db_uri)
+def test_all_to_intermediary_db(pg_db_uri):
+    tables, relationships = all_to_intermediary(pg_db_uri)
     check_intermediary_representation_simple_table(tables, relationships)
 
 
