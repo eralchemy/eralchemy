@@ -129,7 +129,8 @@ class Column(Drawable):
 class Relation(Drawable):
     """Represents a Relation in the intermediaty syntax."""
 
-    RE = re.compile(r'''
+    RE = re.compile(
+        r"""
         (?P<left_table>[^\s]+?)
         (?:\.\"(?P<left_column>.+)\")?
         \s*
@@ -140,8 +141,8 @@ class Relation(Drawable):
         (?P<right_table>[^\s]+?)
         (?:\.\"(?P<right_column>.+)\")?
         \s*$
-        ''',
-        re.VERBOSE
+        """,
+        re.VERBOSE,
     )
     cardinalities = {"*": "0..N", "?": "{0,1}", "+": "1..N", "1": "1", "": None}
     cardinalities_mermaid = {
@@ -159,7 +160,15 @@ class Relation(Drawable):
     def make_from_match(match: re.Match) -> Relation:
         return Relation(**match.groupdict())
 
-    def __init__(self, right_table, left_table, right_cardinality=None, left_cardinality=None, right_column=None, left_column=None):
+    def __init__(
+        self,
+        right_table,
+        left_table,
+        right_cardinality=None,
+        left_cardinality=None,
+        right_column=None,
+        left_column=None,
+    ):
         if (
             right_cardinality not in self.cardinalities.keys()
             or left_cardinality not in self.cardinalities.keys()
@@ -173,13 +182,13 @@ class Relation(Drawable):
         self.left_cardinality = left_cardinality
 
     def to_markdown(self) -> str:
-        return '{}{} {}--{} {}{}'.format(
+        return "{}{} {}--{} {}{}".format(
             self.left_table,
-            '' if self.left_column is None else f'."{self.left_column}"',
+            "" if self.left_column is None else f'."{self.left_column}"',
             self.left_cardinality,
             self.right_cardinality,
             self.right_table,
-            '' if self.right_column is None else f'."{self.right_column}"',
+            "" if self.right_column is None else f'."{self.right_column}"',
         )
 
     def to_mermaid(self) -> str:
@@ -202,7 +211,7 @@ class Relation(Drawable):
         right = Relation.cardinalities_crowfoot.get(
             self.right_cardinality,
             self.right_table,
-            '' if self.right_column is None else f'."{self.right_column}"',
+            "" if self.right_column is None else f'."{self.right_column}"',
         )
 
         left_col = sanitize_mermaid(self.left_table, is_er=True)
@@ -218,13 +227,13 @@ class Relation(Drawable):
         if self.right_cardinality == self.left_cardinality == "":
             return ""
         cards = []
-        if self.left_cardinality != '':
-            cards.append('tail' +
-                         self.graphviz_cardinalities(self.left_cardinality))
-        if self.right_cardinality != '':
-            cards.append('head' +
-                         self.graphviz_cardinalities(self.right_cardinality))
-        return '"{}":"{}" -- "{}":"{}" [{}];'.format(self.left_table, self.left_column, self.right_table, self.right_column, ','.join(cards))
+        if self.left_cardinality != "":
+            cards.append("tail" + self.graphviz_cardinalities(self.left_cardinality))
+        if self.right_cardinality != "":
+            cards.append("head" + self.graphviz_cardinalities(self.right_cardinality))
+        return '"{}":"{}" -- "{}":"{}" [{}];'.format(
+            self.left_table, self.left_column, self.right_table, self.right_column, ",".join(cards)
+        )
 
     def __eq__(self, other: object) -> bool:
         if super().__eq__(other):

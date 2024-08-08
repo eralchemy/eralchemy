@@ -68,10 +68,10 @@ child_parent_id = ERColumn(
 )
 
 relation = Relation(
-    right_table='parent',
-    right_column='id',
-    left_table='child',
-    left_column='id',
+    right_table="parent",
+    right_column="id",
+    left_table="child",
+    left_column="id",
     right_cardinality="?",
     left_cardinality="*",
 )
@@ -84,12 +84,12 @@ exclude_parent_id = ERColumn(
 )
 
 exclude_relation = Relation(
-    right_table='parent',
-    right_column='id',
-    left_table='exclude',
-    left_column='parent_id',
-    right_cardinality='?',
-    left_cardinality='*',
+    right_table="parent",
+    right_column="id",
+    left_table="exclude",
+    left_column="parent_id",
+    right_cardinality="?",
+    left_cardinality="*",
 )
 
 relationships = [relation, exclude_relation]
