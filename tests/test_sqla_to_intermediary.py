@@ -115,6 +115,7 @@ def test_flask_sqlalchemy():
     check_intermediary_representation_simple_all_table(tables, relationships)
 
 
+@pytest.mark.external_db
 def test_table_names_in_relationships(pg_db_uri):
     tables, relationships = database_to_intermediary(pg_db_uri)
     table_names = [t.name for t in tables]
@@ -133,6 +134,7 @@ def test_table_names_in_relationships(pg_db_uri):
         assert l_name.find(".") == -1
 
 
+@pytest.mark.external_db
 def test_table_names_in_relationships_with_schema(pg_db_uri):
     schema_name = "test"
     matcher = re.compile(rf"{schema_name}\.[\S+]", re.I)
