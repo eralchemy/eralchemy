@@ -121,13 +121,13 @@ def test_table_names_in_relationships(pg_db_uri):
     table_names = [t.name for t in tables]
 
     # Assert column names are table names
-    assert all(r.right_col in table_names for r in relationships)
-    assert all(r.left_col in table_names for r in relationships)
+    assert all(r.right_table in table_names for r in relationships)
+    assert all(r.left_table in table_names for r in relationships)
 
     # Assert column names match table names
     for r in relationships:
-        r_name = table_names[table_names.index(r.right_col)]
-        l_name = table_names[table_names.index(r.left_col)]
+        r_name = table_names[table_names.index(r.right_table)]
+        l_name = table_names[table_names.index(r.left_table)]
 
         # Table name in relationship should *NOT* have a schema
         assert r_name.find(".") == -1
@@ -142,8 +142,8 @@ def test_table_names_in_relationships_with_schema(pg_db_uri):
     table_names = [t.name for t in tables]
 
     # Assert column names match table names, including schema
-    assert all(r.right_col in table_names for r in relationships)
-    assert all(r.left_col in table_names for r in relationships)
+    assert all(r.right_table in table_names for r in relationships)
+    assert all(r.left_table in table_names for r in relationships)
 
     # Assert column names match table names, including schema
     for r in relationships:

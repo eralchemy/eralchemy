@@ -332,10 +332,10 @@ def filter_resources(
     _relationships = [
         r
         for r in _relationships
-        if not exclude_tables_re.fullmatch(r.right_col)
-        and not exclude_tables_re.fullmatch(r.left_col)
-        and include_tables_re.fullmatch(r.right_col)
-        and include_tables_re.fullmatch(r.left_col)
+        if not exclude_tables_re.fullmatch(r.right_table)
+        and not exclude_tables_re.fullmatch(r.left_table)
+        and include_tables_re.fullmatch(r.right_table)
+        and include_tables_re.fullmatch(r.left_table)
     ]
 
     def check_column(name):
