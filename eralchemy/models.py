@@ -113,10 +113,11 @@ class Column(Drawable):
 
     def to_dot(self) -> str:
         base = ROW_TAGS.format(
-            ' ALIGN="LEFT"',
+            ' ALIGN="LEFT" {port}',
             "{key_opening}{col_name}{key_closing} {type}{null}",
         )
         return base.format(
+            port=f'PORT="{self.name}"' if self.name else "",
             key_opening="<u>" if self.is_key else "",
             key_closing="</u>" if self.is_key else "",
             col_name=FONT_TAGS.format(self.name),
@@ -129,7 +130,19 @@ class Relation(Drawable):
     """Represents a Relation in the intermediaty syntax."""
 
     RE = re.compile(
-        r"(?P<left_name>\S+(\s*\S+)?)\s+(?P<left_cardinality>[*?+1])--(?P<right_cardinality>[*?+1])\s*(?P<right_name>\S+(\s*\S+)?)",
+        r"""
+        (?P<left_table>[^\s]+?)
+        (?:\.\"(?P<left_column>.+)\")?
+        \s*
+        (?P<left_cardinality>[*?+1])
+        --
+        (?P<right_cardinality>[*?+1])
+        \s*
+        (?P<right_table>[^\s]+?)
+        (?:\.\"(?P<right_column>.+)\")?
+        \s*$
+        """,
+        re.VERBOSE,
     )
     cardinalities = {"*": "0..N", "?": "{0,1}", "+": "1..N", "1": "1", "": None}
     cardinalities_mermaid = {
@@ -145,41 +158,47 @@ class Relation(Drawable):
 
     @staticmethod
     def make_from_match(match: re.Match) -> Relation:
-        return Relation(
-            right_col=match.group("right_name"),
-            left_col=match.group("left_name"),
-            right_cardinality=match.group("right_cardinality"),
-            left_cardinality=match.group("left_cardinality"),
-        )
+        return Relation(**match.groupdict())
 
     def __init__(
         self,
-        right_col,
-        left_col,
+        right_table,
+        left_table,
         right_cardinality=None,
         left_cardinality=None,
+        right_column=None,
+        left_column=None,
     ):
         if (
             right_cardinality not in self.cardinalities.keys()
             or left_cardinality not in self.cardinalities.keys()
         ):
             raise ValueError(f"Cardinality should be in {self.cardinalities.keys()}")
-        self.right_col = right_col
-        self.left_col = left_col
+        self.right_table = right_table
+        self.right_column = right_column or ""
+        self.left_table = left_table
+        self.left_column = left_column or ""
         self.right_cardinality = right_cardinality
         self.left_cardinality = left_cardinality
 
     def to_markdown(self) -> str:
-        return f"{self.left_col} {self.left_cardinality}--{self.right_cardinality} {self.right_col}"
+        return "{}{} {}--{} {}{}".format(
+            self.left_table,
+            "" if not self.left_column else f'."{self.left_column}"',
+            self.left_cardinality,
+            self.right_cardinality,
+            self.right_table,
+            "" if not self.right_column else f'."{self.right_column}"',
+        )
 
     def to_mermaid(self) -> str:
         normalized = (
             Relation.cardinalities_mermaid.get(k, k)
             for k in (
-                sanitize_mermaid(self.left_col),
+                sanitize_mermaid(self.left_table),
                 self.left_cardinality,
                 self.right_cardinality,
-                sanitize_mermaid(self.right_col),
+                sanitize_mermaid(self.right_table),
             )
         )
         return '{} "{}" -- "{}" {}'.format(*normalized)
@@ -187,15 +206,13 @@ class Relation(Drawable):
     def to_mermaid_er(self) -> str:
         left = Relation.cardinalities_crowfoot.get(
             self.left_cardinality,
-            self.left_cardinality,
         )
         right = Relation.cardinalities_crowfoot.get(
             self.right_cardinality,
-            self.right_cardinality,
         )
 
-        left_col = sanitize_mermaid(self.left_col, is_er=True)
-        right_col = sanitize_mermaid(self.right_col, is_er=True)
+        left_col = sanitize_mermaid(self.left_table, is_er=True)
+        right_col = sanitize_mermaid(self.right_table, is_er=True)
         return f"{left_col} {left}--{right} {right_col} : has"
 
     def graphviz_cardinalities(self, card) -> str:
@@ -211,10 +228,10 @@ class Relation(Drawable):
             cards.append("tail" + self.graphviz_cardinalities(self.left_cardinality))
         if self.right_cardinality != "":
             cards.append("head" + self.graphviz_cardinalities(self.right_cardinality))
-        return '"{}" -- "{}" [{}];'.format(
-            self.left_col,
-            self.right_col,
-            ",".join(cards),
+        left_col = f':"{self.left_column}"' if self.left_column else ""
+        right_col = f':"{self.right_column}"' if self.right_column else ""
+        return (
+            f'"{self.left_table}"{left_col} -- "{self.right_table}"{right_col} [{",".join(cards)}];'
         )
 
     def __eq__(self, other: object) -> bool:
@@ -223,8 +240,10 @@ class Relation(Drawable):
         if not isinstance(other, Relation):
             return False
         other_inversed = Relation(
-            right_col=other.left_col,
-            left_col=other.right_col,
+            right_table=other.left_table,
+            right_column=other.left_column,
+            left_table=other.right_table,
+            left_column=other.right_column,
             right_cardinality=other.left_cardinality,
             left_cardinality=other.right_cardinality,
         )

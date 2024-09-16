@@ -5,7 +5,6 @@ from multiprocessing import Process
 import pytest
 from pygraphviz import AGraph
 
-from eralchemy.cst import DOT_GRAPH_BEGINNING
 from eralchemy.main import _intermediary_to_dot
 from tests.common import (
     child,
@@ -17,17 +16,13 @@ from tests.common import (
     relation,
 )
 
-GRAPH_LAYOUT = DOT_GRAPH_BEGINNING + "%s }"
-column_re = re.compile(
-    '\\<TR\\>\\<TD\\ ALIGN\\=\\"LEFT\\"\\>(.*)\\<\\/TD\\>\\<\\/TR\\>',
-)
+column_re = re.compile(r"\<TR\>\<TD\ ALIGN\=\"LEFT\"\ PORT\=\".+\">(.*)\<\/TD\>\<\/TR\>")
 header_re = re.compile(
-    '\\<TR\\>\\<TD\\>\\<B\\>\\<FONT\\ POINT\\-SIZE\\=\\"16\\"\\>(.*)'
-    "\\<\\/FONT\\>\\<\\/B\\>\\<\\/TD\\>\\<\\/TR\\>",
+    r"\<TR\>\<TD\>\<B\>\<FONT\ POINT\-SIZE\=\"16\"\>(.*)" r"\<\/FONT\>\<\/B\>\<\/TD\>\<\/TR\>"
 )
 column_inside = re.compile(
-    "(?P<key_opening>.*)\\<FONT\\>(?P<name>.*)\\<\\/FONT\\>"
-    "(?P<key_closing>.*)\\ <FONT\\>\\ \\[(?P<type>.*)\\]\\<\\/FONT\\>",
+    r"(?P<key_opening>.*)\<FONT\>(?P<name>.*)\<\/FONT\>"
+    r"(?P<key_closing>.*)\<FONT\>\ \[(?P<type>.*)\]\<\/FONT\>"
 )
 
 
@@ -78,7 +73,7 @@ def assert_column_well_rendered_to_dot(col):
     col_parsed = column_inside.match(col_no_table[0])
     assert col_parsed.group("key_opening") == ("<u>" if col.is_key else "")
     assert col_parsed.group("name") == col.name
-    assert col_parsed.group("key_closing") == ("</u>" if col.is_key else "")
+    assert col_parsed.group("key_closing") == ("</u> " if col.is_key else " ")
     assert col_parsed.group("type") == col.type
 
 
@@ -91,14 +86,16 @@ def test_column_is_dot_format():
 
 def test_relation():
     relation_re = re.compile(
-        '\\"(?P<l_name>.+)\\"\\ \\-\\-\\ \\"(?P<r_name>.+)\\"\\ '
-        "\\[taillabel\\=\\<\\<FONT\\>(?P<l_card>.+)\\<\\/FONT\\>\\>"
-        "\\,headlabel\\=\\<\\<FONT\\>(?P<r_card>.+)\\<\\/FONT\\>\\>\\]\\;",
+        r"\"(?P<l_table>.+)\":\"(?P<l_column>.+)\"\ \-\-\ \"(?P<r_table>.+)\":\"(?P<r_column>.+)\"\ "
+        r"\[taillabel\=\<\<FONT\>(?P<l_card>.+)\<\/FONT\>\>"
+        r"\,headlabel\=\<\<FONT\>(?P<r_card>.+)\<\/FONT\>\>\]\;"
     )
     dot = relation.to_dot()
     r = relation_re.match(dot)
-    assert r.group("l_name") == "child"
-    assert r.group("r_name") == "parent"
+    assert r.group("l_table") == "child"
+    assert r.group("l_column") == "parent_id"
+    assert r.group("r_table") == "parent"
+    assert r.group("r_column") == "id"
     assert r.group("l_card") == "0..N"
     assert r.group("r_card") == "{0,1}"
 
