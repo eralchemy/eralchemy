@@ -31,6 +31,7 @@ column_inside = re.compile(
 )
 
 
+# This test needs fixing with move to graphviz
 def assert_is_dot_format(dot):
     """Checks that the dot is usable by graphviz."""
 
