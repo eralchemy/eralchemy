@@ -25,10 +25,14 @@ def docs(session):
 
 @nox.session(reuse_venv=True)
 def ci_test(session):
-    """Run the tests report coverage in xml format."""
+    """Run the tests report coverage in xml format.
+
+    This is used by the CI and can update the version of sqlalchemy with the posargs.
+    """
     session.install(".[test]")
-    test_files = session.posargs or ["tests"]
-    session.run("pytest", "--color=yes", "--cov", "--cov-report=xml", *test_files)
+    version = f"=={session.posargs[0]}" if session.posargs else ""
+    session.install(f"sqlalchemy{version}")
+    session.run("pytest", "--color=yes", "--cov", "--cov-report=xml", "tests")
 
 
 @nox.session(reuse_venv=True)

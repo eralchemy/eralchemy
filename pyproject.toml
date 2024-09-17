@@ -39,15 +39,11 @@ test = [
   "psycopg2 >= 2.9.3",
   "pytest >= 7.4.3",
   "pytest-cov",
-graphviz = ["graphviz >= 0.20.3"]
-pygraphviz = ["pygraphviz >= 1.9"]
-ci = [
-  "flask-sqlalchemy >= 2.5.1",
-  "psycopg2 >= 2.9.3",
-  "pytest >= 7.4.3",
   "pygraphviz >= 1.9",
   "graphviz >= 0.20.3",
 ]
+graphviz = ["graphviz >= 0.20.3"]
+pygraphviz = ["pygraphviz >= 1.9"]
 dev = [
   "nox",
   "pre-commit"
