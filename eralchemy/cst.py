@@ -24,4 +24,28 @@ config = {
     "DOT_ROW_TAGS": DOT_ROW_TAGS,
     "DOT_GRAPH_BEGINNING": DOT_GRAPH_BEGINNING,
     "MARKDOWN_TITLE": MARKDOWN_TITLE,
+    "DOT_KEY_OPENING": "<u>",
+    "DOT_KEY_CLOSING": "</u>",
 }
+
+
+def dot_star_primary():
+    config["DOT_KEY_OPENING"] = "*"
+    config["DOT_KEY_ClOSING"] = ""
+
+
+def dot_star_underline():
+    config["DOT_KEY_OPENING"] = "<u>"
+    config["DOT_KEY_ClOSING"] = "</u>"
+
+
+def dot_top_down():
+    config["DOT_GRAPH_BEGINNING"] = config["DOT_GRAPH_BEGINNING"].replace(
+        "rankdir=LR", "rankdir=TD"
+    )
+
+
+def dot_left_right():
+    config["DOT_GRAPH_BEGINNING"] = config["DOT_GRAPH_BEGINNING"].replace(
+        "rankdir=TD", "rankdir=LR"
+    )

@@ -120,10 +120,12 @@ class Column(Drawable):
             ' ALIGN="LEFT" {port}',
             "{key_opening}{col_name}{key_closing} {type}{null}",
         )
+        KO = config["DOT_KEY_OPENING"]
+        KC = config["DOT_KEY_CLOSING"]
         return base.format(
             port=f'PORT="{self.name}"' if self.name else "",
-            key_opening="<u>" if self.is_key else "",
-            key_closing="</u>" if self.is_key else "",
+            key_opening=KO if self.is_key else "",
+            key_closing=KC if self.is_key else "",
             col_name=config["DOT_FONT_TAGS"].format(self.name),
             type=(
                 config["DOT_FONT_TAGS"].format(f" [{self.type}]") if self.type is not None else ""
