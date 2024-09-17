@@ -191,8 +191,8 @@ def _intermediary_to_mermaid_er(tables, relationships):
 
 def _intermediary_to_dot(tables, relationships, title="", **kwargs):
     """Returns the dot source representing the database in a string."""
-    t = "\n".join(t.to_dot() for t in tables)
-    r = "\n".join(r.to_dot() for r in relationships)
+    t = "\n\t".join(t.to_dot() for t in tables)
+    r = "\n\t".join(r.to_dot() for r in relationships)
     graph_beginning = kwargs.get("graph_beginning", DOT_GRAPH_BEGINNING)
     graph_config = (
         f"""{graph_beginning}
