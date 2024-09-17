@@ -118,8 +118,10 @@ class Column(Drawable):
         )
         return base.format(
             port=f'PORT="{self.name}"' if self.name else "",
-            key_opening="<u>" if self.is_key else "",
-            key_closing="</u>" if self.is_key else "",
+            # key_opening='<u>' if self.is_key else '',
+            # key_closing='</u>' if self.is_key else '',
+            key_opening="*" if self.is_key else "",
+            key_closing="",
             col_name=FONT_TAGS.format(self.name),
             type=(FONT_TAGS.format(" [{}]").format(self.type) if self.type is not None else ""),
             null=" NOT NULL" if not self.is_null else "",
