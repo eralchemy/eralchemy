@@ -4,13 +4,11 @@
 from __future__ import annotations
 
 from sqlalchemy import ForeignKey, Integer
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, declarative_base, mapped_column, relationship
 
 from eralchemy import render_er
 
-
-class Base(DeclarativeBase):
-    pass
+Base = declarative_base()
 
 
 class Node(Base):

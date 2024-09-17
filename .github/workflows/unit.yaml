@@ -11,8 +11,84 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.10"
-      - uses: pre-commit/action@v3.0.0
+      - uses: pre-commit/action@v3.0.1
+
+  mypy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Install nox
+        run: pip install nox
+      - name: run mypy checks
+        run: nox -s mypy
+
+  test:
+    needs: [lint, mypy]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+        sqlachemy-version: [""]
+        include:
+          # oldest python/sqlalchemy supported
+          - python-version: "3.8"
+            sqlalchemy-version: "1.4.18"
+    services:
+      eralchemy-db:
+        image: postgres:alpine
+        env:
+          POSTGRES_DB: eralchemy
+          POSTGRES_PASSWORD: eralchemy
+          POSTGRES_PORT: 5432
+          POSTGRES_USER: eralchemy
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Set up pg-client and graphviz
+        run: |
+          sudo apt-get update
+          sudo apt-get -qq install graphviz libgraphviz-dev pkg-config postgresql-client
+      - name: Setup database schema
+        run: psql -h localhost -U eralchemy -c 'CREATE SCHEMA eralchemy_test;'
+        env:
+          PGPASSWORD: eralchemy
+      - name: Install nox
+        run: pip install nox
+      - name: Test with pytest
+        run: nox -s ci_test -- ${{ matrix.sqlalchemy-version }}
+      - uses: actions/upload-artifact@v4
+        if: ${{ matrix.python-version == '3.10' }}
+        with:
+          name: coverage
+          path: coverage.xml
+
+  coverage:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: coverage
+          path: coverage.xml
+      - name: codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
