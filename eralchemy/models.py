@@ -168,6 +168,8 @@ class Relation(Drawable):
         left_cardinality=None,
         right_column=None,
         left_column=None,
+        style="not-crow",
+        graph="graph"
     ):
         if (
             right_cardinality not in self.cardinalities.keys()
@@ -180,6 +182,8 @@ class Relation(Drawable):
         self.left_column = left_column or ""
         self.right_cardinality = right_cardinality
         self.left_cardinality = left_cardinality
+        self.style = style
+        self.graph = graph
 
     def to_markdown(self) -> str:
         return "{}{} {}--{} {}{}".format(
@@ -220,19 +224,42 @@ class Relation(Drawable):
             return ""
         return f"label=<<FONT>{self.cardinalities[card]}</FONT>>"
 
+    def graphviz_crow_arrowheads(self, card):
+        if card == "*":
+            head = '="crowodot"'
+        elif card == "?":
+            head = '="teeodot"'
+        elif card == "+":
+            head = '="crowtee"'
+        elif card == "1":
+            head = '="teetee"'
+        return head
+
     def to_dot(self) -> str:
         if self.right_cardinality == self.left_cardinality == "":
             return ""
         cards = []
+        edge = "--"
+        if self.graph == "digraph":
+            # digraph needs direction
+            # https://graphviz.org/doc/info/lang.html#lexical-and-semantic-notes
+            edge = "->"
+        if self.style == "crow":
+            if self.right_cardinality and self.left_cardinality:
+                cards.append('dir="both"')
         if self.left_cardinality != "":
-            cards.append("tail" + self.graphviz_cardinalities(self.left_cardinality))
+            if self.style == "crow":
+                cards.append("arrowhead" + self.graphviz_crow_arrowheads(self.left_cardinality))
+            else:
+                cards.append("tail" + self.graphviz_cardinalities(self.left_cardinality))
         if self.right_cardinality != "":
-            cards.append("head" + self.graphviz_cardinalities(self.right_cardinality))
+            if self.style == "crow":
+                cards.append("arrowtail" + self.graphviz_crow_arrowheads(self.right_cardinality))
+            else:
+                cards.append("head" + self.graphviz_cardinalities(self.right_cardinality))
         left_col = f':"{self.left_column}"' if self.left_column else ""
         right_col = f':"{self.right_column}"' if self.right_column else ""
-        return (
-            f'"{self.left_table}"{left_col} -- "{self.right_table}"{right_col} [{",".join(cards)}];'
-        )
+        return f'"{self.left_table}"{left_col} {edge} "{self.right_table}"{right_col} [{",".join(cards)}];'
 
     def __eq__(self, other: object) -> bool:
         if super().__eq__(other):
