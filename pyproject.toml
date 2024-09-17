@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "eralchemy"
-version = "1.4.1"
+version = "1.5.0"
 description = "Simple entity relation (ER) diagrams generation"
 authors = [
   { name = "Alexis Benoist", email = "Alexis-benoist@users.noreply.github.com"},
