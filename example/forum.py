@@ -17,11 +17,9 @@ from sqlalchemy import (
     Unicode,
     UnicodeText,
 )
-from sqlalchemy.orm import DeclarativeBase, Relationship
+from sqlalchemy.orm import Relationship, declarative_base
 
-
-class Base(DeclarativeBase):
-    pass
+Base = declarative_base()
 
 
 post_tags = Table(

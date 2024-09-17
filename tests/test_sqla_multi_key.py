@@ -1,5 +1,5 @@
 from sqlalchemy import Column, ForeignKey, String
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import declarative_base
 
 from eralchemy.models import Relation, Table
 from eralchemy.sqla import (
@@ -8,8 +8,7 @@ from eralchemy.sqla import (
 
 
 def test_columns_parent():
-    class Base(DeclarativeBase):
-        pass
+    Base = declarative_base()
 
     class Parent(Base):
         __tablename__ = "parent"
@@ -32,8 +31,7 @@ def test_columns_parent():
 
 
 def test_columns_one_to_many_parent():
-    class Base(DeclarativeBase):
-        pass
+    Base = declarative_base()
 
     class Parent(Base):
         __tablename__ = "parent"
@@ -56,8 +54,7 @@ def test_columns_one_to_many_parent():
 
 
 def test_columns_one_to_one_parent():
-    class Base(DeclarativeBase):
-        pass
+    Base = declarative_base()
 
     class Parent(Base):
         __tablename__ = "parent"
@@ -79,8 +76,7 @@ def test_columns_one_to_one_parent():
 
 
 def test_compound_one_to_one_parent():
-    class Base(DeclarativeBase):
-        pass
+    Base = declarative_base()
 
     class Parent(Base):
         __tablename__ = "parent"
