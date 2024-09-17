@@ -1,3 +1,33 @@
+eralchemy 1.5.0 (2024-09-17)
+=============================
+
+This is release 1.5.0 back on eralchemy.
+Instead of `pip install eralchemy2` one should use `pip install eralchemy[graphviz]`.
+
+Other than that, no breaking changes are to be expected.
+
+Features
+--------
+
+- Unite codebase of eralchemy2 and eralchemy back to eralchemy
+- Includes features from eralchemy2
+- Allow having either graphviz or pygraphviz installed by @maurerle in https://github.com/eralchemy/eralchemy/pull/126
+- Draw column relations by @JosePVB in https://github.com/eralchemy/eralchemy/pull/72
+- CI now uses nox
+- proper regex to include/exclude tables/columns
+- allow setting title of diagram
+- mermaid rendering support
+
+
+Bugfixes
+--------
+
+- Improve tests by using fixtures by @maurerle in https://github.com/eralchemy/eralchemy/pull/120
+- build: create a release workflow by @12rambau in https://github.com/eralchemy/eralchemy/pull/128
+- Remove references to newsmeme by @kasium in https://github.com/eralchemy/eralchemy/pull/129
+- give more readable error output when non sqlalchemy input is given by @maurerle in https://github.com/eralchemy/eralchemy/pull/118
+
+
 eralchemy2 1.4.1 (2024-05-20)
 =============================
 
