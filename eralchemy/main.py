@@ -145,9 +145,9 @@ title: {title}
         file_out.write(md_markup)
 
 
-def intermediary_to_dot(tables, relationships, output, title=""):
+def intermediary_to_dot(tables, relationships, output, title="", **kwargs):
     """Save the intermediary representation to dot format."""
-    dot_file = _intermediary_to_dot(tables, relationships, title)
+    dot_file = _intermediary_to_dot(tables, relationships, title, **kwargs)
     with open(output, "w") as file_out:
         file_out.write(dot_file)
 
@@ -189,17 +189,17 @@ def _intermediary_to_mermaid_er(tables, relationships):
     return f"erDiagram\n{t}\n{r}"
 
 
-def _intermediary_to_dot(tables, relationships, title=""):
+def _intermediary_to_dot(tables, relationships, title="", **kwargs):
     """Returns the dot source representing the database in a string."""
     t = "\n".join(t.to_dot() for t in tables)
     r = "\n".join(r.to_dot() for r in relationships)
-
+    graph_beginning = kwargs.get("graph_beginning", DOT_GRAPH_BEGINNING)
     graph_config = (
-        f"""{DOT_GRAPH_BEGINNING}
+        f"""{graph_beginning}
          label="{title}"
          labelloc=t\n"""
         if title
-        else DOT_GRAPH_BEGINNING
+        else graph_beginning
     )
     return f"{graph_config}\n{t}\n{r}\n}}"
 
@@ -359,6 +359,7 @@ def render_er(
     exclude_columns=None,
     schema=None,
     title=None,
+    **kwargs,
 ):
     """Transform the metadata into a representation.
 
@@ -395,7 +396,7 @@ def render_er(
             exclude_columns=exclude_columns,
         )
         intermediary_to_output = get_output_mode(output, mode)
-        return intermediary_to_output(tables, relationships, output, title)
+        return intermediary_to_output(tables, relationships, output, title, **kwargs)
     except ImportError as e:
         module_name = e.message.split()[-1]
         print(f'Please install {module_name} using "pip install {module_name}".')
