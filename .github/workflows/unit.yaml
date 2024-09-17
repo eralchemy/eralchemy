@@ -38,8 +38,8 @@ jobs:
         sqlachemy-version: [""]
         include:
           # oldest python/sqlalchemy supported
-          python-version: "3.8"
-          sqlalchemy-version: "1.4"
+          - python-version: "3.8"
+            sqlalchemy-version: "1.4"
     services:
       eralchemy-db:
         image: postgres:alpine
