@@ -20,6 +20,21 @@ To install eralchemy, just do:
 
     $ pip install eralchemy
 
+### Graph library flavors
+
+To create Pictures and PDFs, eralchemy relies on either graphviz or pygraphviz.
+
+You can use either
+
+    $ pip install eralchemy[graphviz]
+
+or
+
+    $ pip install eralchemy[pygraphviz]
+
+to retrieve the correct dependencies.
+The `graphviz` library is the default if both are installed.
+
 `eralchemy` requires [GraphViz](http://www.graphviz.org/download) to generate the graphs and Python. Both are available for Windows, Mac and Linux.
 
 For Debian based systems, run:

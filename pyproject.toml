@@ -26,8 +26,7 @@ classifiers=[
 ]
 requires-python = ">=3.8"
 dependencies = [
-  "sqlalchemy >= 1.4",
-  "pygraphviz >= 1.9",
+  "sqlalchemy >= 1.4"
 ]
 
 [project.urls]
@@ -40,6 +39,14 @@ test = [
   "psycopg2 >= 2.9.3",
   "pytest >= 7.4.3",
   "pytest-cov",
+graphviz = ["graphviz >= 0.20.3"]
+pygraphviz = ["pygraphviz >= 1.9"]
+ci = [
+  "flask-sqlalchemy >= 2.5.1",
+  "psycopg2 >= 2.9.3",
+  "pytest >= 7.4.3",
+  "pygraphviz >= 1.9",
+  "graphviz >= 0.20.3",
 ]
 dev = [
   "nox",
@@ -75,7 +82,7 @@ show_error_codes = true
 pretty = true
 
 [[tool.mypy.overrides]]
-module = ["pygraphviz.*", "sqlalchemy.*"]
+module = ["graphviz.*", "pygraphviz.*", "sqlalchemy.*"]
 ignore_missing_imports = true
 
 
