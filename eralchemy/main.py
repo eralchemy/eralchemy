@@ -44,11 +44,11 @@ except PackageNotFoundError:
     __version__ = "na"
 
 
-def cli() -> None:
+def cli(args=None) -> None:
     """Entry point for the application script."""
     parser = get_argparser()
 
-    args = parser.parse_args()
+    args = parser.parse_args(args)
     check_args(args)
     if args.v:
         print(f"eralchemy version {__version__}.")
@@ -395,7 +395,7 @@ def render_er(
             exclude_columns=exclude_columns,
         )
         intermediary_to_output = get_output_mode(output, mode)
-        return intermediary_to_output(tables, relationships, output)
+        return intermediary_to_output(tables, relationships, output, title)
     except ImportError as e:
         module_name = e.message.split()[-1]
         print(f'Please install {module_name} using "pip install {module_name}".')
@@ -406,4 +406,5 @@ def render_er(
 
 
 if __name__ == "__main__":
+    # cli("-i example/forum.er -o test.dot".split(" "))
     cli()
