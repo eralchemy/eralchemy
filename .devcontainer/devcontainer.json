@@ -5,6 +5,5 @@
     "ghcr.io/devcontainers-contrib/features/nox:2": {},
     "ghcr.io/devcontainers-contrib/features/pre-commit:2": {}
   },
-  "postCreateCommand": "sudo apt-get install graphviz graphviz-dev",
-  "postStartCommand": "pre-commit install"
+  "postCreateCommand": "pre-commit install"
 }
