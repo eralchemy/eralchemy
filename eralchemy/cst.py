@@ -13,11 +13,11 @@ DOT_GRAPH_BEGINNING = """
       graph {
          graph [rankdir=LR];
          node [label="\\N",
-             shape=plaintext
+             shape=plain
          ];
          edge [color=gray50,
              minlen=2,
-             style=dashed
+             style=solid
          ];
       """
 ER_FORMAT_TITLE = 'title {{label: "{}", size: "40"}}'
