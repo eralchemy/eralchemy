@@ -43,11 +43,11 @@ try:
     __has_plantuml = True
 
 except ModuleNotFoundError as m:
-    print(m)
+    logging.debug(m)
     __has_plantuml = False
 
 except ImportError as m:
-    print(m)
+    logging.debug(m)
     __has_plantuml = False
 
 try:
