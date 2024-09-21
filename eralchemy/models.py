@@ -138,6 +138,7 @@ class Column(Drawable):
             "\n--" if self.is_key else "",
         )
 
+
 class Relation(Drawable):
     """Represents a Relation in the intermediaty syntax."""
 

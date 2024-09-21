@@ -25,13 +25,13 @@ from .sqla import (
 USE_PYGRAPHVIZ = True
 GRAPHVIZ_AVAILABLE = True
 try:
-    from pygraphviz.agraph import AGraph # type: ignore
+    from pygraphviz.agraph import AGraph
 
     logging.debug("using pygraphviz")
 except ImportError:
     USE_PYGRAPHVIZ = False
     try:
-        from graphviz import Source # type: ignore
+        from graphviz import Source  
 
         logging.debug("using graphviz")
     except ImportError:
@@ -40,6 +40,7 @@ except ImportError:
 
 try:
     import plantuml  # type: ignore
+
     __has_plantuml = True
 
 except ModuleNotFoundError as m:
@@ -232,12 +233,12 @@ def _intermediary_to_dot(tables, relationships, title=""):
     )
     return f"{graph_config}\n{t}\n{r}\n}}"
 
+
 def _intermediary_to_puml(tables, relationships):
     """Returns the er markup source in a string."""
     t = "\n".join(t.to_puml() for t in tables)
     r = "\n".join(r.to_puml() for r in relationships)
     return f"{t}\n{r}"
-
 
 
 # Routes from the class name to the function transforming this class in
