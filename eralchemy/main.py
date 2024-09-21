@@ -25,18 +25,30 @@ from .sqla import (
 USE_PYGRAPHVIZ = True
 GRAPHVIZ_AVAILABLE = True
 try:
-    from pygraphviz.agraph import AGraph
+    from pygraphviz.agraph import AGraph # type: ignore
 
     logging.debug("using pygraphviz")
 except ImportError:
     USE_PYGRAPHVIZ = False
     try:
-        from graphviz import Source
+        from graphviz import Source # type: ignore
 
         logging.debug("using graphviz")
     except ImportError:
         logging.error("either pygraphviz or graphviz should be installed")
         GRAPHVIZ_AVAILABLE = False
+
+try:
+    import plantuml  # type: ignore
+    __has_plantuml = True
+
+except ModuleNotFoundError as m:
+    print(m)
+    __has_plantuml = False
+
+except ImportError as m:
+    print(m)
+    __has_plantuml = False
 
 try:
     __version__ = version(__package__)
@@ -168,6 +180,23 @@ def intermediary_to_schema(tables, relationships, output, title=""):
     return graph
 
 
+def intermediary_to_puml(tables, relationships, output, title=""):
+    """Saves the intermediary representation to PlantUML."""
+    puml_markup = _intermediary_to_puml(tables, relationships)
+    if title:
+        puml_markup = f"title {title}\n {puml_markup}"
+    if __has_plantuml:
+        markup_encoded = plantuml.deflate_and_encode(puml_markup)
+        puml_markup += (
+            f"\nfooter [[https://www.plantuml.com/plantuml/svg/{markup_encoded}"
+            "{link to PlantUML server} Link to PlantUML server]]"
+        )
+
+    puml_markup = f"@startuml\n{puml_markup}\n@enduml"
+    with open(output, "w") as file_out:
+        file_out.write(puml_markup)
+
+
 def _intermediary_to_markdown(tables, relationships):
     """Returns the er markup source in a string."""
     t = "\n".join(t.to_markdown() for t in tables)
@@ -203,6 +232,13 @@ def _intermediary_to_dot(tables, relationships, title=""):
     )
     return f"{graph_config}\n{t}\n{r}\n}}"
 
+def _intermediary_to_puml(tables, relationships):
+    """Returns the er markup source in a string."""
+    t = "\n".join(t.to_puml() for t in tables)
+    r = "\n".join(r.to_puml() for r in relationships)
+    return f"{t}\n{r}"
+
+
 
 # Routes from the class name to the function transforming this class in
 # the intermediary representation.
@@ -224,6 +260,8 @@ switch_output_mode_auto = {
     "mermaid_er": intermediary_to_mermaid_er,
     "graph": intermediary_to_schema,
     "dot": intermediary_to_dot,
+    "puml": intermediary_to_puml,
+    "pu": intermediary_to_puml,
 }
 
 # Routes from the file extension to the method to transform
@@ -232,6 +270,9 @@ switch_output_mode = {
     "er": intermediary_to_markdown,
     "md": intermediary_to_mermaid,
     "dot": intermediary_to_dot,
+    "puml": intermediary_to_puml,
+    "uml": intermediary_to_puml,
+    "pu": intermediary_to_puml,
 }
 
 
