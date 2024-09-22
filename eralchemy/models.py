@@ -262,8 +262,8 @@ class Relation(Drawable):
             "1": "||",
             "": None,
         }
-        left_col = f'::{self.left_column}' if self.left_column else ""
-        right_col = f'::{self.right_column}' if self.right_column else ""
+        left_col = f"::{self.left_column}" if self.left_column else ""
+        right_col = f"::{self.right_column}" if self.right_column else ""
 
         return (
             f"{self.left_table}{left_col}"
