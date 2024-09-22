@@ -262,12 +262,14 @@ class Relation(Drawable):
             "1": "||",
             "": None,
         }
+        left_col = f'::{self.left_column}' if self.left_column else ""
+        right_col = f'::{self.right_column}' if self.right_column else ""
 
         return (
-            f"{self.left_table}"
+            f"{self.left_table}{left_col}"
             f" {__puml_left_cardinalities[self.left_cardinality]}"
             f"--{__puml_right_cardinalities[self.right_cardinality]}"
-            f" {self.right_table}"
+            f" {self.right_table}{right_col}"
         )
 
     def __eq__(self, other: object) -> bool:

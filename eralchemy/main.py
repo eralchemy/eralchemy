@@ -193,7 +193,7 @@ def intermediary_to_puml(tables, relationships, output, title=""):
             "{link to PlantUML server} Link to PlantUML server]]"
         )
 
-    puml_markup = f"@startuml\n{puml_markup}\n@enduml"
+    puml_markup = f"@startuml\n\'left to right direction\n{puml_markup}\n@enduml"
     with open(output, "w") as file_out:
         file_out.write(puml_markup)
 
