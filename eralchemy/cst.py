@@ -1,7 +1,8 @@
 """All the constants used in the module."""
 
 TABLE = (
-    '"{}" [label=<<FONT FACE="Arial;Helvetica Neue;Helvetica;"><TABLE BORDER="0" CELLBORDER="1"'
+    #'"{}" [label=<<FONT FACE="Arial;Helvetica Neue;Helvetica;"><TABLE BORDER="0" CELLBORDER="1"'
+    '"{}" [label=<<FONT FACE="Helvetica;"><TABLE BORDER="0" CELLBORDER="1"'
     ' CELLPADDING="4" CELLSPACING="0">{}{}</TABLE></FONT>>];'
 )
 

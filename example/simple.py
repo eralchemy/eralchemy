@@ -22,8 +22,11 @@ class Child(Base):
 def example():
     render_er(Base, "simple.png")
     render_er(Base, "simple.dot")
-    render_er(Base, "simple.pdf")
+    # render_er(Base, "simple.pdf")
     render_er(Base, "simple.er")
+    render_er(Base, "simple.pu")
+    render_er(Base, "simple.puml")
+    render_er(Base, "simple.uml")
 
 
 if __name__ == "__main__":

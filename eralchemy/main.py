@@ -184,8 +184,13 @@ def intermediary_to_schema(tables, relationships, output, title=""):
 def intermediary_to_puml(tables, relationships, output, title=""):
     """Saves the intermediary representation to PlantUML."""
     puml_markup = _intermediary_to_puml(tables, relationships)
-    if title:
-        puml_markup = f"title {title}\n {puml_markup}"
+    puml_markup = "\n".join(
+        (
+            "left to right direction",
+            f"title {title}\n {puml_markup}" if title else "",
+            puml_markup,
+        )
+    )
     if __has_plantuml:
         markup_encoded = plantuml.deflate_and_encode(puml_markup)
         puml_markup += (
@@ -193,7 +198,7 @@ def intermediary_to_puml(tables, relationships, output, title=""):
             "{link to PlantUML server} Link to PlantUML server]]"
         )
 
-    puml_markup = f"@startuml\n'left to right direction\n{puml_markup}\n@enduml"
+    puml_markup = f"@startuml\n{puml_markup}\n@enduml"
     with open(output, "w") as file_out:
         file_out.write(puml_markup)
 
