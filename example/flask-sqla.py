@@ -26,7 +26,9 @@ class Posts(db.Model):
 def example():
     render_er(db.Model, "flask.png")
     render_er(db.Model, "flask.dot")
-    render_er(db.Model, "flask.pdf")
+    # render_er(db.Model, "flask.pdf")
+    render_er(db.Model, "flask.eps")
+    render_er(db.Model, "flask_UML.puml")
     render_er(db.Model, "flask.er")
 
 

@@ -43,6 +43,6 @@
 tags."id" 1--* post_tags."tag_id"
 posts."id" 1--* post_tags."post_id"
 users."id" 1--* posts."author_id"
-comments."id" ?--* comments."parent_id"
 posts."id" 1--* comments."post_id"
+comments."id" ?--* comments."parent_id"
 users."id" 1--* comments."author_id"
