@@ -204,12 +204,8 @@ class Relation(Drawable):
         return '{} "{}" -- "{}" {}'.format(*normalized)
 
     def to_mermaid_er(self) -> str:
-        left = Relation.cardinalities_crowfoot.get(
-            self.left_cardinality,
-        )
-        right = Relation.cardinalities_crowfoot.get(
-            self.right_cardinality,
-        )
+        left = Relation.cardinalities_crowfoot.get(self.left_cardinality, self.left_cardinality)
+        right = Relation.cardinalities_crowfoot.get(self.right_cardinality, self.right_cardinality)
 
         left_col = sanitize_mermaid(self.left_table, is_er=True)
         right_col = sanitize_mermaid(self.right_table, is_er=True)
