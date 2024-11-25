@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.3.0
+    rev: v5.0.0
     hooks:
       - id: end-of-file-fixer
       - id: trailing-whitespace
@@ -10,7 +10,7 @@ repos:
     rev: v2.3.0
     hooks:
       - id: codespell
-        stages: [commit]
+        stages: [pre-commit]
         additional_dependencies:
           - tomli
 
@@ -18,12 +18,12 @@ repos:
     rev: v3.1.0
     hooks:
       - id: prettier
-        stages: [commit]
+        stages: [pre-commit]
         exclude: tests\/test_.+\.
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: v0.4.4
+    rev: v0.7.4
     hooks:
       # Run the linter.
       - id: ruff
