@@ -5,8 +5,9 @@ import argparse
 
 def create_db(path):
     from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, func
-    from sqlalchemy.ext.declarative import declarative_base
-    from sqlalchemy.orm import backref, relationship
+
+    # from sqlalchemy.ext.declarative import declarative_base
+    from sqlalchemy.orm import backref, declarative_base, relationship
 
     Base = declarative_base()
 
@@ -50,6 +51,7 @@ def cli():
         default="orm_in_detail.sqlite",
     )
     args = parser.parse_args()
+    print(args.u)
     create_db(args.u)
 
 

@@ -130,3 +130,4 @@ if __name__ == "__main__":
 
     render_er(Base, "forum.svg")
     render_er(Base, "forum.er")
+    render_er(Base, "forum.puml")
