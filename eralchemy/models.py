@@ -201,7 +201,7 @@ class Relation(Drawable):
                 sanitize_mermaid(self.right_table),
             )
         )
-        return '{} "{}" -- "{}" {}'.format(*normalized)
+        return '  {} "{}" -- "{}" {}'.format(*normalized)
 
     def to_mermaid_er(self) -> str:
         left = Relation.cardinalities_crowfoot.get(self.left_cardinality, self.left_cardinality)
@@ -269,7 +269,7 @@ class Table(Drawable):
     def to_mermaid(self) -> str:
         columns = [c.to_mermaid() for c in self.columns]
         name = sanitize_mermaid(self.name)
-        return f"class {name}{{\n" + "\n  ".join(columns) + "\n}"
+        return f"  class {name}{{\n   " + "\n   ".join(columns) + "\n  }"
 
     def to_mermaid_er(self) -> str:
         columns = [c.to_mermaid_er() for c in self.columns]
