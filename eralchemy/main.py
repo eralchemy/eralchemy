@@ -145,6 +145,20 @@ title: {title}
         file_out.write(md_markup)
 
 
+def intermediary_to_mermaid_plain(tables, relationships, output, title=""):
+    """Saves the intermediary representation to markdown."""
+    markup = _intermediary_to_mermaid(tables, relationships)
+    if title:
+        markup = f"""---
+title: {title}
+---
+{markup}
+"""
+    md_markup = f"```mermaid\n\n{markup}\n\n```\n"
+    with open(output, "w") as file_out:
+        file_out.write(md_markup)
+
+
 def intermediary_to_dot(tables, relationships, output, title=""):
     """Save the intermediary representation to dot format."""
     dot_file = _intermediary_to_dot(tables, relationships, title)
@@ -222,6 +236,7 @@ switch_output_mode_auto = {
     "er": intermediary_to_markdown,
     "mermaid": intermediary_to_mermaid,
     "mermaid_er": intermediary_to_mermaid_er,
+    "mermaid_plain": intermediary_to_mermaid_plain,
     "graph": intermediary_to_schema,
     "dot": intermediary_to_dot,
 }
