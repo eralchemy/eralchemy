@@ -92,7 +92,33 @@ render_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
 
 ## Architecture
 
-![Architecture schema](https://raw.githubusercontent.com/eralchemy/eralchemy/main/docs/_static/eralchemy_architecture.png "Architecture schema")
+```mermaid
+
+graph LR
+    subgraph Inputs
+        A[Markdown representation]
+        B[SQLAlchemy Schema]
+        C[Existing database]
+        D[Other ORM ?]
+    end
+
+    E[Intermediary representation]
+
+    subgraph Outputs
+        F[Markdown representation]
+        G[Graphviz code]
+        H[Drawing]
+    end
+
+    A --> E
+    B --> E
+    C --> E
+    D --> E
+    E --> F
+    E --> G
+    E --> H
+
+```
 
 Thanks to it's modular architecture, it can be connected to other ORMs/ODMs/OGMs/O\*Ms.
 
