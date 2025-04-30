@@ -10,7 +10,7 @@ import re
 from abc import ABC, abstractmethod
 from typing import ClassVar
 
-from .cst import FONT_TAGS, ROW_TAGS, TABLE
+from .cst import config
 
 
 class Drawable(ABC):
@@ -116,7 +116,7 @@ class Column(Drawable):
         return f" {type_str} {name} {'PK' if self.is_key else ''}"
 
     def to_dot(self) -> str:
-        base = ROW_TAGS.format(
+        base = config["DOT_ROW_TAGS"].format(
             ' ALIGN="LEFT" {port}',
             "{key_opening}{col_name}{key_closing} {type}{null}",
         )
@@ -124,8 +124,10 @@ class Column(Drawable):
             port=f'PORT="{self.name}"' if self.name else "",
             key_opening="<u>" if self.is_key else "",
             key_closing="</u>" if self.is_key else "",
-            col_name=FONT_TAGS.format(self.name),
-            type=(FONT_TAGS.format(" [{}]").format(self.type) if self.type is not None else ""),
+            col_name=config["DOT_FONT_TAGS"].format(self.name),
+            type=(
+                config["DOT_FONT_TAGS"].format(f" [{self.type}]") if self.type is not None else ""
+            ),
             null=" NOT NULL" if not self.is_null else "",
         )
 
@@ -320,11 +322,11 @@ class Table(Drawable):
 
     @property
     def header_dot(self) -> str:
-        return ROW_TAGS.format("", f'<B><FONT POINT-SIZE="16">{self.name}</FONT></B>')
+        return config["DOT_ROW_TAGS"].format("", f'<B><FONT POINT-SIZE="16">{self.name}</FONT></B>')
 
     def to_dot(self) -> str:
         body = "".join(c.to_dot() for c in self.columns)
-        return TABLE.format(self.name, self.header_dot, body)
+        return config["DOT_TABLE"].format(self.name, self.header_dot, body)
 
     def to_puml(self) -> str:
         columns = [c.to_puml() for c in self.columns]

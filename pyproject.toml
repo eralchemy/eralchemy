@@ -98,7 +98,6 @@ ignore = [
   "D107",  # Missing docstring in `__init__`
   "E501",  # line too long
 ]
-ignore-init-module-imports = true
 
 [tool.ruff.lint.flake8-quotes]
 docstring-quotes = "double"
