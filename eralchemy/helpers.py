@@ -1,8 +1,18 @@
 from __future__ import annotations
 
+import base64
+import string
 import sys
 from argparse import Namespace
 from typing import Any
+from zlib import compress
+
+# from https://github.com/dougn/python-plantuml/blob/master/plantuml.py
+plantuml_alphabet = string.digits + string.ascii_uppercase + string.ascii_lowercase + "-_"
+base64_alphabet = string.ascii_uppercase + string.ascii_lowercase + string.digits + "+/"
+b64_to_plantuml = bytes.maketrans(
+    base64_alphabet.encode("utf-8"), plantuml_alphabet.encode("utf-8")
+)
 
 
 # from https://github.com/mitsuhiko/flask/blob/master/scripts/make-release.py L92
@@ -37,3 +47,10 @@ def check_args_has_attributes(args: Namespace) -> None:
 def check_args_has_attribute(args: Namespace, name: str) -> None:
     if not hasattr(args, name):
         raise Exception(f"{name} should be set")
+
+
+def plantuml_convert(puml_markup):
+    zlibbed_str = compress(puml_markup.encode("utf-8"))
+    compressed_string = zlibbed_str[2:-4]
+    markup_encoded = base64.b64encode(compressed_string).translate(b64_to_plantuml).decode("utf-8")
+    return markup_encoded

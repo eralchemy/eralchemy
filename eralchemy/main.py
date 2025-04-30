@@ -13,7 +13,7 @@ from sqlalchemy.engine.url import make_url
 from sqlalchemy.exc import ArgumentError
 
 from .cst import DOT_GRAPH_BEGINNING, ER_FORMAT_TITLE
-from .helpers import check_args
+from .helpers import check_args, plantuml_convert
 from .parser import (
     ParsingException,
     line_iterator_to_intermediary,
@@ -116,7 +116,7 @@ def intermediary_to_markdown(tables, relationships, title=""):
         er_markup_with_config = f"{ER_FORMAT_TITLE.format(title)}\n{er_markup}"
     else:
         er_markup_with_config = er_markup
-    return er_markup_with_config
+    return er_markup_with_config.encode()
 
 
 def intermediary_to_mermaid(tables, relationships, title=""):
@@ -169,6 +169,26 @@ def intermediary_to_schema(tables, relationships, title="", extension="png"):
         return graph.pipe(format=extension)
 
 
+def intermediary_to_puml(tables, relationships, output, title=""):
+    """Saves the intermediary representation to PlantUML."""
+    puml_markup = _intermediary_to_puml(tables, relationships)
+    puml_markup = "\n".join(
+        (
+            "left to right direction",
+            f"title {title}\n {puml_markup}" if title else "",
+            puml_markup,
+        )
+    )
+    markup_encoded = plantuml_convert(puml_markup)
+    puml_markup += (
+        f"\nfooter [[https://www.plantuml.com/plantuml/svg/{markup_encoded}"
+        "{link to PlantUML server} Link to PlantUML server]]"
+    )
+
+    puml_markup = f"@startuml\n{puml_markup}\n@enduml"
+    return puml_markup.encode()
+
+
 def _intermediary_to_markdown(tables, relationships):
     """Returns the er markup source in a string."""
     t = "\n".join(t.to_markdown() for t in tables)
@@ -205,6 +225,13 @@ def _intermediary_to_dot(tables, relationships, title=""):
     return f"{graph_config}\n{t}\n{r}\n}}"
 
 
+def _intermediary_to_puml(tables, relationships):
+    """Returns the er markup source in a string."""
+    t = "\n".join(t.to_puml() for t in tables)
+    r = "\n".join(r.to_puml() for r in relationships)
+    return f"{t}\n{r}"
+
+
 # Routes from the class name to the function transforming this class in
 # the intermediary representation.
 switch_input_class_to_method = {
@@ -226,6 +253,8 @@ switch_output_mode_auto = {
     "graph": intermediary_to_schema,
     "graph_svg": partial(intermediary_to_schema, extension="svg"),
     "dot": intermediary_to_dot,
+    "puml": intermediary_to_puml,
+    "pu": intermediary_to_puml,
 }
 
 # Routes from the file extension to the method to transform
@@ -234,6 +263,7 @@ switch_output_mode = {
     "er": intermediary_to_markdown,
     "md": intermediary_to_mermaid,
     "dot": intermediary_to_dot,
+    "puml": intermediary_to_puml,
 }
 
 
