@@ -124,7 +124,8 @@ def test_filter_exclude_columns(exclude_columns):
 
 
 def test_get_output_mode():
-    assert get_output_mode("hello.png", "auto") == intermediary_to_schema
+    # access .func for partial
+    assert get_output_mode("hello.png", "auto").func == intermediary_to_schema
     assert get_output_mode("hello.er", "auto") == intermediary_to_markdown
     assert get_output_mode("hello.dot", "auto") == intermediary_to_dot
     assert get_output_mode("hello.md", "auto") == intermediary_to_mermaid

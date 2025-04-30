@@ -22,8 +22,6 @@ def check_args(args: Namespace) -> None:
         return
     if args.i is None:
         fail("Cannot draw ER diagram of no database.")
-    if args.o is None:
-        fail("Cannot draw ER diagram with no output file.")
 
 
 def check_args_has_attributes(args: Namespace) -> None:
