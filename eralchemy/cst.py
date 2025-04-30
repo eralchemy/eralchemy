@@ -18,7 +18,7 @@ DOT_GRAPH_BEGINNING = """graph {
     ];"""
 MARKDOWN_TITLE = 'title {{label: "{}", size: "40"}}'
 
-config = {
+DEFAULT_CONFIG = {
     "DOT_TABLE": DOT_TABLE,
     "DOT_FONT_TAGS": DOT_FONT_TAGS,
     "DOT_ROW_TAGS": DOT_ROW_TAGS,
@@ -30,24 +30,40 @@ config = {
     "DOT_RELATION_STYLE": "",
 }
 
+config = DEFAULT_CONFIG.copy()
+
 
 def dot_star_primary():
     config["DOT_KEY_OPENING"] = "*"
-    config["DOT_KEY_ClOSING"] = ""
+    config["DOT_KEY_CLOSING"] = ""
 
 
 def dot_star_underline():
     config["DOT_KEY_OPENING"] = "<u>"
-    config["DOT_KEY_ClOSING"] = "</u>"
+    config["DOT_KEY_CLOSING"] = "</u>"
 
 
 def dot_top_down():
     config["DOT_GRAPH_BEGINNING"] = config["DOT_GRAPH_BEGINNING"].replace(
-        "rankdir=LR", "rankdir=TD"
+        "rankdir=LR", "rankdir=TB"
     )
 
 
 def dot_left_right():
     config["DOT_GRAPH_BEGINNING"] = config["DOT_GRAPH_BEGINNING"].replace(
-        "rankdir=TD", "rankdir=LR"
+        "rankdir=TB", "rankdir=LR"
     )
+
+
+def dot_digraph():
+    config["DOT_GRAPH_BEGINNING"] = config["DOT_GRAPH_BEGINNING"].replace("graph {", "digraph {")
+    config["DOT_RELATION_GRAPH"] = "digraph"
+
+
+def dot_crowfoot():
+    config["DOT_RELATION_STYLE"] = "crow"
+
+
+def reset_config():
+    for key, value in DEFAULT_CONFIG.items():
+        config[key] = value

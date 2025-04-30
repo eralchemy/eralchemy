@@ -90,6 +90,27 @@ render_er(Base, 'erd_from_sqlalchemy.png')
 render_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
 ```
 
+#### Adjustments to the rendering config
+
+When rendering dot files, it can be needed to adjust how some parts are visualized.
+This can be used to get `crowfoot` relations, stars instead of underlines for primary keys or a top-bottom rendering instead the default left-right rendering.
+
+It can be adjusted by manipulating the global `from eralchemy.cst import config` dictionary.
+
+Some helper functions exist like `dot_star_primary`, `dot_top_down`, `dot_digraph` and `dot_crowfoot`.
+The config can be reset using `reset_config`.
+
+This can be used like
+
+```python
+from eralchemy import render_er
+from eralchemy.cst import dot_crowfoot, dot_digraph
+dot_crowfoot()
+dot_digraph()
+
+render_er(Base, "forum.svg")
+```
+
 ## Architecture
 
 ```mermaid
@@ -97,7 +118,7 @@ render_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
 graph LR
     subgraph Inputs
         A[Markdown representation]
-        B[SQLAlchemy Schema]
+        )B[SQLAlchemy Schema]
         C[Existing database]
         D[Other ORM ?]
     end
