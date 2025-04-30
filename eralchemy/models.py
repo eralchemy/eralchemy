@@ -233,19 +233,44 @@ class Relation(Drawable):
             return ""
         return f"label=<<FONT>{self.cardinalities[card]}</FONT>>"
 
+    def graphviz_crow_arrowheads(self, card):
+        if card == "*":
+            head = '="crowodot"'
+        elif card == "?":
+            head = '="teeodot"'
+        elif card == "+":
+            head = '="crowtee"'
+        elif card == "1":
+            head = '="teetee"'
+        else:
+            raise ValueError(f"unknown cardinality: {card}")
+        return head
+
     def to_dot(self) -> str:
         if self.right_cardinality == self.left_cardinality == "":
             return ""
         cards = []
+        edge = "--"
+        if config["DOT_RELATION_GRAPH"] == "digraph":
+            # digraph needs direction
+            # https://graphviz.org/doc/info/lang.html#lexical-and-semantic-notes
+            edge = "->"
+        if config["DOT_RELATION_STYLE"] == "crow":
+            if self.right_cardinality and self.left_cardinality:
+                cards.append('dir="both"')
         if self.left_cardinality != "":
-            cards.append("tail" + self.graphviz_cardinalities(self.left_cardinality))
+            if config["DOT_RELATION_STYLE"] == "crow":
+                cards.append("arrowhead" + self.graphviz_crow_arrowheads(self.left_cardinality))
+            else:
+                cards.append("tail" + self.graphviz_cardinalities(self.left_cardinality))
         if self.right_cardinality != "":
-            cards.append("head" + self.graphviz_cardinalities(self.right_cardinality))
+            if config["DOT_RELATION_STYLE"] == "crow":
+                cards.append("arrowtail" + self.graphviz_crow_arrowheads(self.right_cardinality))
+            else:
+                cards.append("head" + self.graphviz_cardinalities(self.right_cardinality))
         left_col = f':"{self.left_column}"' if self.left_column else ""
         right_col = f':"{self.right_column}"' if self.right_column else ""
-        return (
-            f'"{self.left_table}"{left_col} -- "{self.right_table}"{right_col} [{",".join(cards)}];'
-        )
+        return f'"{self.left_table}"{left_col} {edge} "{self.right_table}"{right_col} [{",".join(cards)}];'
 
     def to_puml(self) -> str:
         __puml_left_cardinalities = {

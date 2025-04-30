@@ -26,6 +26,8 @@ config = {
     "MARKDOWN_TITLE": MARKDOWN_TITLE,
     "DOT_KEY_OPENING": "<u>",
     "DOT_KEY_CLOSING": "</u>",
+    "DOT_RELATION_GRAPH": "graph",
+    "DOT_RELATION_STYLE": "",
 }
 
 
