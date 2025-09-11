@@ -12,7 +12,7 @@ from importlib.metadata import PackageNotFoundError, version
 from sqlalchemy.engine.url import make_url
 from sqlalchemy.exc import ArgumentError
 
-from .cst import DOT_GRAPH_BEGINNING, ER_FORMAT_TITLE
+from .cst import config
 from .helpers import check_args, plantuml_convert
 from .parser import (
     ParsingException,
@@ -113,7 +113,8 @@ def intermediary_to_markdown(tables, relationships, title=""):
     """Saves the intermediary representation to markdown."""
     er_markup = _intermediary_to_markdown(tables, relationships)
     if title:
-        er_markup_with_config = f"{ER_FORMAT_TITLE.format(title)}\n{er_markup}"
+        format_title = config["MARKDOWN_TITLE"].format(title)
+        er_markup_with_config = f"{format_title}\n{er_markup}"
     else:
         er_markup_with_config = er_markup
     return er_markup_with_config.encode()
@@ -216,11 +217,11 @@ def _intermediary_to_dot(tables, relationships, title=""):
     r = "\n".join(r.to_dot() for r in relationships)
 
     graph_config = (
-        f"""{DOT_GRAPH_BEGINNING}
+        f"""{config["DOT_GRAPH_BEGINNING"]}
          label="{title}"
          labelloc=t\n"""
         if title
-        else DOT_GRAPH_BEGINNING
+        else config["DOT_GRAPH_BEGINNING"]
     )
     return f"{graph_config}\n{t}\n{r}\n}}"
 
@@ -450,4 +451,13 @@ def render_er(
 
 if __name__ == "__main__":
     # cli("-i example/forum.er -o test.dot".split(" "))
+    config["DOT_GRAPH_BEGINNING"] = """graph {
+    graph [rankdir=TD];
+    node [label="\\N",
+        shape=plaintext
+    ];
+    edge [color=gray50,
+        minlen=2,
+        style=dashed
+    ];"""
     cli()
