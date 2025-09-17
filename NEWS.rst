@@ -1,4 +1,4 @@
-eralchemy 1.5.0 (2025-09-18)
+eralchemy 1.6.0 (2025-09-18)
 =============================
 
 This is release 1.6.0 of eralchemy.
