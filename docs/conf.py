@@ -12,7 +12,7 @@ from datetime import datetime
 project = "eralchemy"
 author = "Alexis Benoist"
 copyright = f"2015-{datetime.now().year}, {author}"
-release = "1.5.0"
+release = "1.6.0"
 
 # -- General configuration -----------------------------------------------------
 extensions = [

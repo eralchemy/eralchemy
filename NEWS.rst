@@ -1,3 +1,25 @@
+eralchemy 1.5.0 (2025-09-18)
+=============================
+
+This is release 1.6.0 of eralchemy.
+This release includes some bug fixes and new features:
+
+Features
+--------
+
+- Make Config adjustable for rendering adjustments of dot files
+- Add support for PlantUML
+
+Bugfixes
+--------
+
+- Fix coverage badge
+- Fix indentation in mermaid output for better readability
+- Update Architecture image to markdown
+- Allow calling format without writing to file
+- Fixup mermaid er cardinalities
+- Update pre-commit versions
+
 eralchemy 1.5.0 (2024-09-17)
 =============================
 
