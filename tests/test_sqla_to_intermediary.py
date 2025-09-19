@@ -85,6 +85,7 @@ def test_database_to_intermediary_with_schema(pg_db_uri):
 
 
 @pytest.mark.external_db
+@pytest.mark.filterwarnings("ignore:Ignoring duplicate class name")
 def test_database_to_intermediary_with_multiple_schemas(pg_db_uri):
     tables, relationships = database_to_intermediary(
         pg_db_uri,
