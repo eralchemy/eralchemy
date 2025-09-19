@@ -56,7 +56,6 @@ def cli(args=None) -> None:
     if args.v:
         print(f"eralchemy version {__version__}.")
         exit(0)
-    print("#", args.sort_mode)
     output = render_er(
         args.i,
         args.o,
@@ -110,7 +109,6 @@ def get_argparser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--sort_mode",
         nargs="?",
-        default="alphabetical",
         choices=["alphabetical", "original"],
         help="sorting mode for the key columns and then the non-key columns, default: alphabetical",
     )
