@@ -118,7 +118,7 @@ render_er(Base, "forum.svg")
 graph LR
     subgraph Inputs
         A[Markdown representation]
-        )B[SQLAlchemy Schema]
+        B[SQLAlchemy Schema]
         C[Existing database]
         D[Other ORM ?]
     end
@@ -151,7 +151,7 @@ Every feedback is welcome on the [GitHub issues](https://github.com/eralchemy/er
 
 Install the development dependencies using
 
-    $ pip install -e .[ci,dev]
+    $ pip install -e .[dev,test]
 
 Make sure to run the pre-commit to fix formatting
 
@@ -162,7 +162,7 @@ All tested PR are welcome.
 ## Running tests
 
 This project uses the pytest test suite.
-To run the tests, use : `$ pytest` or `$ tox`.
+To run the tests, use : `$ pytest` or `$ nox`.
 
 Some tests require having a local PostgreSQL database with a schema named test in a database
 named test all owned by a user named eralchemy with a password of eralchemy.
