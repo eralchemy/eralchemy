@@ -208,8 +208,6 @@ def test_sort_mode(sort_mode, expected_column_order):
         sort_mode=sort_mode,
     )
 
-    # key columns first in alphabetical order, then non-key columns in alphabetical order
-
     assert len(actual_tables) == 1
     actual_table = actual_tables[0]
     assert len(actual_table.columns) == len(expected_column_order)
