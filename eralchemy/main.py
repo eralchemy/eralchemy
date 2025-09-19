@@ -13,7 +13,7 @@ from sqlalchemy.engine.url import make_url
 from sqlalchemy.exc import ArgumentError
 
 from .cst import config
-from .helpers import check_args, plantuml_convert
+from .helpers import check_args, original_order_keys_first, plantuml_convert
 from .parser import (
     ParsingException,
     line_iterator_to_intermediary,
@@ -56,6 +56,7 @@ def cli(args=None) -> None:
     if args.v:
         print(f"eralchemy version {__version__}.")
         exit(0)
+    print("#", args.sort_mode)
     output = render_er(
         args.i,
         args.o,
@@ -66,6 +67,7 @@ def cli(args=None) -> None:
         exclude_tables=args.exclude_tables,
         exclude_columns=args.exclude_columns,
         schema=args.s,
+        sort_mode=args.sort_mode,
     )
     if output:
         with os.fdopen(sys.stdout.fileno(), "wb", closefd=False) as stdout:
@@ -104,6 +106,13 @@ def get_argparser() -> argparse.ArgumentParser:
         "--include-columns",
         nargs="+",
         help="Name of columns to be displayed alone (for all tables).",
+    )
+    parser.add_argument(
+        "--sort_mode",
+        nargs="?",
+        default="alphabetical",
+        choices=["alphabetical", "original"],
+        help="sorting mode for the key columns and then the non-key columns, default: alphabetical",
     )
     parser.add_argument("-v", help="Prints version number.", action="store_true")
     return parser
@@ -327,6 +336,7 @@ def filter_resources(
     include_columns=None,
     exclude_tables=None,
     exclude_columns=None,
+    sort_mode="alphabetical",
 ):
     """Filter the resources.
 
@@ -379,8 +389,10 @@ def filter_resources(
             name,
         )
 
+    # default sort mode 'alphabetical' is implemented in Column class (__eq__ method)
+    sort_func = original_order_keys_first if sort_mode == "original" else None
     for t in _tables:
-        t.columns = sorted([c for c in t.columns if check_column(c.name)])
+        t.columns = sorted([c for c in t.columns if check_column(c.name)], key=sort_func)
 
     return _tables, _relationships
 
@@ -395,6 +407,7 @@ def render_er(
     exclude_columns=None,
     schema=None,
     title=None,
+    sort_mode="alphabetical",
 ):
     """Transform the metadata into a representation.
 
@@ -420,6 +433,9 @@ def render_er(
     :param exclude_columns: lst of str, field names to exclude, None means exclude nothing
     :param schema: name of the schema
     :param title: title of the graph, only for .er, .dot, .png, .jpg outputs.
+    :param sort_mode: str, sorting mode for the key columns (first) and non-key columns (second):
+        'alphabetical': key and non-key columns are sorted by name in alphabetical order (default).
+        'original': key and non-key columns are kept in the order, in which they were defined.
     """
     try:
         tables, relationships = all_to_intermediary(input, schema=schema)
@@ -430,6 +446,7 @@ def render_er(
             include_columns=include_columns,
             exclude_tables=exclude_tables,
             exclude_columns=exclude_columns,
+            sort_mode=sort_mode,
         )
         intermediary_to_output = get_output_mode(output, mode)
         text = intermediary_to_output(tables, relationships, title)

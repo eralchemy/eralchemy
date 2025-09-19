@@ -4,8 +4,11 @@ import base64
 import string
 import sys
 from argparse import Namespace
-from typing import Any
+from typing import TYPE_CHECKING, Any
 from zlib import compress
+
+if TYPE_CHECKING:
+    from .models import Column
 
 # from https://github.com/dougn/python-plantuml/blob/master/plantuml.py
 plantuml_alphabet = string.digits + string.ascii_uppercase + string.ascii_lowercase + "-_"
@@ -54,3 +57,20 @@ def plantuml_convert(puml_markup):
     compressed_string = zlibbed_str[2:-4]
     markup_encoded = base64.b64encode(compressed_string).translate(b64_to_plantuml).decode("utf-8")
     return markup_encoded
+
+
+def original_order_keys_first(column: Column) -> bool:
+    """Function can be used with sorted() and places columns with primary keys first.
+
+    All other non-key columns will stay in the same order as they were in the original list.
+
+    Example: Given is the following list of `Column` objects with names and is_key attributes:
+    `"D", "C", "B", "A", "E"` where `D` and `A` are key columns.
+    `False, True, True, False, True` is the result of element-wise application of this function.
+    `"D", "A", "C", "B", "E"` is the result of `sorted(input, key=original_order_keys_first)`,
+        because elements with `False` are sorted first.
+
+    :param column: Column object to sort
+    :return: Boolean indicating if the column is not a key column
+    """
+    return not column.is_key
