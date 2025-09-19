@@ -55,8 +55,9 @@ def table_equals_helper(sqla_table, expected_table):
     table = table_to_intermediary(sqla_table.__table__)
     assert len(table.columns) == len(expected_table.columns)
     assert table.name == expected_table.name
-    for col in table.columns:
-        assert col in expected_table.columns
+    # The order of columns in `table` and `expected_table` should be the same.
+    for column_index in range(len(expected_table.columns)):
+        assert table.columns[column_index] == expected_table.columns[column_index]
 
 
 def test_tables():
