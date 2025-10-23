@@ -79,6 +79,7 @@ def column_to_intermediary(
         type=type_formatter(col.type),
         is_key=col.primary_key,
         is_null=col.nullable,
+        is_foreign_key=len(col.foreign_keys) > 0,
     )
 
 
