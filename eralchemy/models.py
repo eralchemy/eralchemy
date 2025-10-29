@@ -78,6 +78,7 @@ class Column(Drawable):
         :param type:
         :param is_key:
         :param is_null:
+        :param is_foreign_key:
         :return:
         """
         self.name = name
