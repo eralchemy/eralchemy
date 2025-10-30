@@ -65,6 +65,7 @@ child_parent_id = ERColumn(
     name="parent_id",
     type="INTEGER",
     is_null=True,
+    is_foreign_key=True,
 )
 
 relation = Relation(
@@ -81,6 +82,7 @@ exclude_id = ERColumn(name="id", type="INTEGER", is_key=True)
 exclude_parent_id = ERColumn(
     name="parent_id",
     type="INTEGER",
+    is_foreign_key=True,
 )
 
 exclude_relation = Relation(
