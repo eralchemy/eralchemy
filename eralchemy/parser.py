@@ -101,6 +101,7 @@ def _check_not_creating_duplicates(
         msg = f'Cannot add {type} named "{new_name}" which is already present in the schema.'
         raise exc(msg)
 
+
 def update_models(
     new_obj,
     current_table: Table | None,
