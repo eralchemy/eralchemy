@@ -55,8 +55,9 @@ def table_equals_helper(sqla_table, expected_table):
     table = table_to_intermediary(sqla_table.__table__)
     assert len(table.columns) == len(expected_table.columns)
     assert table.name == expected_table.name
-    for col in table.columns:
-        assert col in expected_table.columns
+    # The order of columns in `table` and `expected_table` should be the same.
+    for column_index in range(len(expected_table.columns)):
+        assert table.columns[column_index] == expected_table.columns[column_index]
 
 
 def test_tables():
@@ -84,6 +85,7 @@ def test_database_to_intermediary_with_schema(pg_db_uri):
 
 
 @pytest.mark.external_db
+@pytest.mark.filterwarnings("ignore:Ignoring duplicate class name")
 def test_database_to_intermediary_with_multiple_schemas(pg_db_uri):
     tables, relationships = database_to_intermediary(
         pg_db_uri,

@@ -1,4 +1,6 @@
 import pytest
+from sqlalchemy import Column, String
+from sqlalchemy.orm import declarative_base
 
 from eralchemy.main import (
     all_to_intermediary,
@@ -142,3 +144,74 @@ def test_get_output_mode():
 
 def test_import_render_er():
     from eralchemy import render_er  # noqa: F401
+
+
+@pytest.mark.parametrize(
+    "sort_mode, expected_column_order",
+    (
+        pytest.param(
+            None,
+            [
+                # key columns in alphabetical order first
+                "fifth_column",
+                "first_column",
+                # then non-key columns in alphabetical order
+                "fourth_column",
+                "second_column",
+                "third_column",
+            ],
+            id="sort_mode=None",
+        ),
+        pytest.param(
+            "alphabetical",
+            [
+                # key columns in alphabetical order first
+                "fifth_column",
+                "first_column",
+                # then non-key columns in alphabetical order
+                "fourth_column",
+                "second_column",
+                "third_column",
+            ],
+            id="sort_mode='alphabetical'",
+        ),
+        pytest.param(
+            "original",
+            [
+                # key columns in original order first
+                "first_column",
+                "fifth_column",
+                # then non-key columns in original order
+                "second_column",
+                "third_column",
+                "fourth_column",
+            ],
+            id="sort_mode='original'",
+        ),
+    ),
+)
+def test_sort_mode(sort_mode, expected_column_order):
+    Base = declarative_base()
+
+    class Table(Base):
+        __tablename__ = "table"
+        first_column = Column(String, primary_key=True)
+        second_column = Column(String)
+        third_column = Column(String)
+        fourth_column = Column(String)
+        fifth_column = Column(String, primary_key=True)
+
+    tables, relationships = all_to_intermediary(Base)
+    actual_tables, actual_relationships = filter_resources(
+        tables,
+        relationships,
+        sort_mode=sort_mode,
+    )
+
+    assert len(actual_tables) == 1
+    actual_table = actual_tables[0]
+    assert len(actual_table.columns) == len(expected_column_order)
+
+    # The order of columns in `table` and `expected_column_order` should be the same.
+    for column_index in range(len(actual_table.columns)):
+        assert actual_table.columns[column_index].name == expected_column_order[column_index]
