@@ -69,18 +69,22 @@ class Column(Drawable):
             is_null="*" not in match.group("primary"),
         )
 
-    def __init__(self, name: str, type=None, is_key: bool = False, is_null=None):
+    def __init__(
+        self, name: str, type=None, is_key: bool = False, is_null=None, is_foreign_key: bool = False
+    ):
         """Initialize the Column class.
 
         :param name: (str) Name of the column
         :param type:
         :param is_key:
         :param is_null:
+        :param is_foreign_key:
         :return:
         """
         self.name = name
         self.type = type
         self.is_key = is_key
+        self.is_foreign_key = is_foreign_key
         if is_null is None:
             self.is_null = not is_key
         else:
@@ -113,7 +117,13 @@ class Column(Drawable):
     def to_mermaid_er(self) -> str:
         type_str = self.type.replace(" ", "_")
         name = sanitize_mermaid(self.name, is_er=True)
-        return f" {type_str} {name} {'PK' if self.is_key else ''}"
+        attributes = []
+        if self.is_key:
+            attributes.append("PK")
+        if self.is_foreign_key:
+            attributes.append("FK")
+        attributes_str = f"{', '.join(attributes)}" if attributes else ""
+        return f" {type_str} {name} {attributes_str}"
 
     def to_dot(self) -> str:
         base = config["DOT_ROW_TAGS"].format(

@@ -183,10 +183,10 @@ def test_integration_parser():
 
 
 def test_generate_and_parse():
-    markdown = _intermediary_to_markdown(c.tables, [c.relation])
+    markdown = _intermediary_to_markdown(c.tables, c.relationships)
     tables, relations = line_iterator_to_intermediary(markdown.split("\n"))
     c.assert_lst_equal(tables, c.tables)
-    c.assert_lst_equal(relations, [c.relation])
+    c.assert_lst_equal(relations, c.relationships)
 
 
 def test_integration_errors():

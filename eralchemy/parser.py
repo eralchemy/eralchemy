@@ -123,9 +123,19 @@ def update_models(
         return new_obj, tables + [new_obj], relations
 
     if isinstance(new_obj, Relation):
-        tables_names = [t.name for t in tables]
+        tables_by_name = {t.name: t for t in tables}
+        tables_names = list(tables_by_name)
         _check_colname_in_lst(new_obj.right_table, tables_names)
         _check_colname_in_lst(new_obj.left_table, tables_names)
+
+        # set foreign key flag if needed
+        left_table_obj = tables_by_name[new_obj.left_table]
+        if new_obj.left_column:
+            for column in left_table_obj.columns:
+                if column.name == new_obj.left_column:
+                    column.is_foreign_key = True
+                    break
+
         return current_table, tables, relations + [new_obj]
 
     if isinstance(new_obj, Column):
