@@ -24,7 +24,7 @@ classifiers=[
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Database",
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 dependencies = [
   "sqlalchemy >= 1.4.18"
 ]

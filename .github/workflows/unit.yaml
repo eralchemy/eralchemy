@@ -35,12 +35,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12"]
-        sqlachemy-version: [""]
-        include:
-          # oldest python/sqlalchemy supported
-          - python-version: "3.8"
-            sqlalchemy-version: "1.4.18"
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
     services:
       eralchemy-db:
         image: postgres:alpine
@@ -72,9 +67,9 @@ jobs:
       - name: Install nox
         run: pip install nox
       - name: Test with pytest
-        run: nox -s ci_test -- ${{ matrix.sqlalchemy-version }}
+        run: nox -s ci_test
       - uses: actions/upload-artifact@v4
-        if: ${{ matrix.python-version == '3.10' }}
+        if: ${{ matrix.python-version == '3.12' }}
         with:
           name: coverage
           path: coverage.xml
