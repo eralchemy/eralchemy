@@ -5,7 +5,6 @@ import logging
 import os
 import re
 import sys
-import typing
 from functools import partial
 from importlib.metadata import PackageNotFoundError, version
 
@@ -309,7 +308,7 @@ def all_to_intermediary(filename_or_input, schema=None):
         raise ValueError(f"Cannot process filename_or_input {input_class_name}: {e}")
 
 
-def get_output_mode(output: typing.Union[str, None], mode: str):
+def get_output_mode(output: str | None, mode: str):
     """From the output name and the mode returns a the function that will transform the intermediary representation to the output."""
     if mode != "auto":
         try:
@@ -397,7 +396,7 @@ def filter_resources(
 
 def render_er(
     input,
-    output: typing.Union[str, None],
+    output: str | None,
     mode="auto",
     include_tables=None,
     include_columns=None,

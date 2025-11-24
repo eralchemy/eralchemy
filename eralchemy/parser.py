@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import ClassVar, Iterator
+from collections.abc import Iterator
 
 from .models import Column, Drawable, Relation, Table
 
@@ -9,7 +9,7 @@ TYPES: list[type[Drawable]] = [Table, Relation, Column]
 
 class ParsingException(Exception):
     base_traceback = "Error on line {line_nb}: {line}\n{error}"
-    hint: ClassVar[str | None] = None
+    hint: str | None = None
 
     @property
     def traceback(self) -> str:
