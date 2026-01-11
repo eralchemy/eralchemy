@@ -26,21 +26,21 @@ column_inside = re.compile(
 )
 
 
+def _run_graph(dot):
+    """Runs graphviz to see if the syntax is good."""
+    graph = AGraph()
+    graph = graph.from_string(dot)
+    extension = "png"
+    graph.draw(path="output.png", prog="dot", format=extension)
+    sys.exit(0)
+
+
 # This test needs fixing with move to graphviz
 def assert_is_dot_format(dot):
     """Checks that the dot is usable by graphviz."""
-
     # We launch a process calling graphviz to render the dot. If the exit code is not 0 we assume that the syntax
     # wasn't good
-    def run_graph(dot):
-        """Runs graphviz to see if the syntax is good."""
-        graph = AGraph()
-        graph = graph.from_string(dot)
-        extension = "png"
-        graph.draw(path="output.png", prog="dot", format=extension)
-        sys.exit(0)
-
-    p = Process(target=run_graph, args=(dot,))
+    p = Process(target=_run_graph, args=(dot,))
     p.start()
     p.join()
     assert p.exitcode == 0
