@@ -29,8 +29,6 @@ def ci_test(session):
 
     This is used by the CI and can update the version of sqlalchemy with the posargs.
     """
-    version = f"=={session.posargs[0]}" if session.posargs else ""
-    session.install(f"sqlalchemy{version}")
     session.install(".[test]")
     session.run("pytest", "--color=yes", "--cov", "--cov-report=xml", "tests")
 
