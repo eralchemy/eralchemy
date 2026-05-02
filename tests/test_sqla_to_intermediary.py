@@ -155,6 +155,8 @@ def test_table_names_in_relationships_with_schema(pg_db_uri):
         # Table name in relationship *SHOULD* have a schema
         assert re.match(matcher, r_name) is not None
         assert re.match(matcher, l_name) is not None
+
+
 def test_relationships_are_sorted_deterministically():
     from sqlalchemy import Column, ForeignKey, String
     from sqlalchemy.orm import declarative_base
