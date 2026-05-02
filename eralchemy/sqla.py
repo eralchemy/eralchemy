@@ -84,6 +84,16 @@ def column_to_intermediary(
     )
 
 
+def foreign_key_sort_key(fk: sa.ForeignKey) -> tuple[str, str, str, str]:
+    """Return a stable sort key for SQLAlchemy foreign keys."""
+    return (
+        format_name(fk.parent.table.fullname),
+        format_name(fk.column.table.fullname),
+        format_name(fk.parent.name),
+        format_name(fk.column.name),
+    )
+
+
 def table_to_intermediary(table: sa.Table) -> Table:
     """Transform an SQLAlchemy Table object to its intermediary representation."""
     return Table(
@@ -100,7 +110,8 @@ def metadata_to_intermediary(
     relationships = [
         relation_to_intermediary(fk)
         for table in metadata.tables.values()
-        for fk in table.foreign_keys
+        # Normalize FK iteration so rendered output stays deterministic across processes.
+        for fk in sorted(table.foreign_keys, key=foreign_key_sort_key)
     ]
     return tables, relationships
 

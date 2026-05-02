@@ -1,4 +1,5 @@
 import re
+import subprocess
 
 import pytest
 
@@ -155,3 +156,79 @@ def test_table_names_in_relationships_with_schema(pg_db_uri):
         # Table name in relationship *SHOULD* have a schema
         assert re.match(matcher, r_name) is not None
         assert re.match(matcher, l_name) is not None
+
+
+def test_render_er_dot_is_deterministic_across_hash_seeds():
+    script = """
+tmpdir=$(mktemp -d)
+for seed in 1 2 3 4 5 6 7 8 9 10; do
+    env -i PATH="$PATH" HOME="$HOME" PYTHONPATH="$PWD" PYTHONHASHSEED="$seed" python3 - <<'PY' > "$tmpdir/$seed.txt"
+from sqlalchemy import Column, ForeignKey, String
+from sqlalchemy.orm import declarative_base
+
+from eralchemy.main import render_er
+
+Base = declarative_base()
+
+
+class ParentA(Base):
+    __tablename__ = "parent_a"
+    id = Column(String(), primary_key=True)
+
+
+class ParentB(Base):
+    __tablename__ = "parent_b"
+    id = Column(String(), primary_key=True)
+
+
+class Child(Base):
+    __tablename__ = "child"
+    id = Column(String(), primary_key=True)
+    b_id = Column(String(), ForeignKey(ParentB.id))
+    a_id = Column(String(), ForeignKey(ParentA.id))
+
+
+out = render_er(Base, output=None, mode="dot")
+print(out.decode() if isinstance(out, bytes) else out)
+PY
+done
+sha256sum "$tmpdir"/*.txt | awk '{print $1}' | sort -u | wc -l
+"""
+    result = subprocess.run(
+        ["bash", "-lc", script],
+        capture_output=True,
+        check=True,
+        text=True,
+    )
+    assert result.stdout.strip() == "1"
+
+
+def test_relationships_are_sorted_deterministically():
+    from sqlalchemy import Column, ForeignKey, String
+    from sqlalchemy.orm import declarative_base
+
+    Base = declarative_base()
+
+    class ParentA(Base):
+        __tablename__ = "parent_a"
+        id = Column(String(), primary_key=True)
+
+    class ParentB(Base):
+        __tablename__ = "parent_b"
+        id = Column(String(), primary_key=True)
+
+    class Child(Base):
+        __tablename__ = "child"
+        id = Column(String(), primary_key=True)
+        b_id = Column(String(), ForeignKey(ParentB.id))
+        a_id = Column(String(), ForeignKey(ParentA.id))
+
+    _, relationships = declarative_to_intermediary(Base)
+
+    assert [
+        (relationship.left_table, relationship.left_column, relationship.right_table, relationship.right_column)
+        for relationship in relationships
+    ] == [
+        ("parent_a", "id", "child", "a_id"),
+        ("parent_b", "id", "child", "b_id"),
+    ]
