@@ -1,5 +1,25 @@
+eralchemy 1.7.0 (2026-05-05)
+============================
+
+Features
+--------
+
+- Add column sort mode by @LoHertel in https://github.com/eralchemy/eralchemy/pull/157
+- Add Foreign Key attribute to Mermaid ER output by @yosshi4486 in https://github.com/eralchemy/eralchemy/pull/159
+
+Bugfixes
+--------
+
+- fix test errors by @maurerle in https://github.com/eralchemy/eralchemy/pull/163
+- Move `run_graph` to module scope for Python 3.14 compatibility (fixes #158) by @0x9fff00 in https://github.com/eralchemy/eralchemy/pull/165
+
+Deprecation
+-----------
+
+- Remove support for python < 3.10 by @maurerle in https://github.com/eralchemy/eralchemy/pull/162
+
 eralchemy 1.6.0 (2025-09-18)
-=============================
+============================
 
 This is release 1.6.0 of eralchemy.
 This release includes some bug fixes and new features:
