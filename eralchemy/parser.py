@@ -185,4 +185,6 @@ def line_iterator_to_intermediary(
     if len(errors) != 0:
         msg = f"eralchemy couldn't complete the generation due the {len(errors)} following errors"
         raise ParsingException(msg + "\n\n".join(e.traceback for e in errors))
-    return tables, relations
+    # Sort relations for stability.
+    sorted_relations = sorted(relations, key=lambda x: x.to_markdown())
+    return tables, sorted_relations
