@@ -155,3 +155,34 @@ def test_table_names_in_relationships_with_schema(pg_db_uri):
         # Table name in relationship *SHOULD* have a schema
         assert re.match(matcher, r_name) is not None
         assert re.match(matcher, l_name) is not None
+
+
+def test_relationships_are_sorted_deterministically():
+    from sqlalchemy import Column, ForeignKey, String
+    from sqlalchemy.orm import declarative_base
+
+    Base = declarative_base()
+
+    class ParentA(Base):
+        __tablename__ = "parent_a"
+        id = Column(String(), primary_key=True)
+
+    class ParentB(Base):
+        __tablename__ = "parent_b"
+        id = Column(String(), primary_key=True)
+
+    class Child(Base):
+        __tablename__ = "child"
+        id = Column(String(), primary_key=True)
+        b_id = Column(String(), ForeignKey(ParentB.id))
+        a_id = Column(String(), ForeignKey(ParentA.id))
+
+    _, relationships = declarative_to_intermediary(Base)
+
+    assert [
+        (relationship.left_table, relationship.left_column, relationship.right_table, relationship.right_column)
+        for relationship in relationships
+    ] == [
+        ("parent_a", "id", "child", "a_id"),
+        ("parent_b", "id", "child", "b_id"),
+    ]
