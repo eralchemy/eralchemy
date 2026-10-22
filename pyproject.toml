@@ -34,6 +34,10 @@ homepage = "https://github.com/eralchemy/eralchemy"
 repository = "https://github.com/eralchemy/eralchemy"
 
 [project.optional-dependencies]
+graphviz = ["graphviz >= 0.20.3"]
+pygraphviz = ["pygraphviz >= 1.9"]
+
+[dependency-groups]
 test = [
   "flask-sqlalchemy >= 2.5.1",
   "psycopg2-binary >= 2.9.3",
@@ -42,11 +46,10 @@ test = [
   "pygraphviz >= 1.9",
   "graphviz >= 0.20.3",
 ]
-graphviz = ["graphviz >= 0.20.3"]
-pygraphviz = ["pygraphviz >= 1.9"]
 dev = [
   "nox",
-  "pre-commit"
+  "pre-commit",
+  {include-group = "test"},
 ]
 docs = [
   "sphinx>=6.2.1",

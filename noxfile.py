@@ -5,6 +5,8 @@ The nox run are build in isolated environment that will be stored in .nox. to fo
 
 import nox
 
+PYPROJECT = nox.project.load_toml("pyproject.toml")
+
 nox.options.sessions = ["lint", "mypy", "docs", "test"]
 
 
@@ -19,7 +21,7 @@ def lint(session):
 def docs(session):
     """Build the documentation."""
     build = session.posargs.pop() if session.posargs else "html"
-    session.install(".[docs]")
+    session.install(".", *nox.project.dependency_groups(PYPROJECT, "docs"))
     session.run("sphinx-build", "-v", "-b", build, "docs", f"docs/_build/{build}")
 
 
@@ -29,14 +31,14 @@ def ci_test(session):
 
     This is used by the CI and can update the version of sqlalchemy with the posargs.
     """
-    session.install(".[test]")
+    session.install(".", *nox.project.dependency_groups(PYPROJECT, "test"))
     session.run("pytest", "--color=yes", "--cov", "--cov-report=xml", "tests")
 
 
 @nox.session(reuse_venv=True)
 def test(session):
     """Run the tests and report coverage in html format."""
-    session.install(".[test]")
+    session.install(".", *nox.project.dependency_groups(PYPROJECT, "test"))
     test_files = session.posargs or ["tests"]
     session.run("pytest", "--color=yes", "--cov", "--cov-report=html", *test_files)
 
