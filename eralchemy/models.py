@@ -53,6 +53,39 @@ def sanitize_mermaid(text: str, *, is_er: bool = False):
     return re.sub(RE, "_", text)
 
 
+def quote_d2(text: str) -> str:
+    """Quote a D2 key or value so dots, # and newlines are read literally."""
+    escaped = text.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
+    return f'"{escaped}"'
+
+
+# Reserved keywords and board keywords of D2 (d2ast in D2 v0.9.0).
+D2_KEYWORDS = frozenset(
+    {
+        "label", "shape", "icon", "constraint", "tooltip", "link", "near", "width",
+        "height", "direction", "top", "left", "grid-rows", "grid-columns", "grid-gap",
+        "vertical-gap", "horizontal-gap", "class", "vars", "style", "source-arrowhead",
+        "target-arrowhead", "classes", "opacity", "stroke", "fill", "fill-pattern",
+        "stroke-width", "stroke-dash", "border-radius", "font", "font-size", "font-color",
+        "bold", "italic", "underline", "text-transform", "shadow", "multiple",
+        "double-border", "3d", "animated", "filled", "layers", "scenarios", "steps",
+    }
+)  # fmt: skip
+
+
+def d2_key(name: str, taken: set[str]) -> str:
+    """Return a D2 id for name that is not a keyword and not already taken.
+
+    D2 compares ids case-insensitively and reads keywords even when quoted,
+    so a zero-width space, which renders as nothing, is appended until the id is free.
+    """
+    key = name
+    while key.lower() in D2_KEYWORDS or key.lower() in taken:
+        key += "\u200b"
+    taken.add(key.lower())
+    return key
+
+
 class Column(Drawable):
     """Represents a Column in the intermediaty syntax."""
 
@@ -125,6 +158,17 @@ class Column(Drawable):
         attributes_str = f"{', '.join(attributes)}" if attributes else ""
         return f" {type_str} {name} {attributes_str}"
 
+    def to_d2(self, key: str | None = None) -> str:
+        constraints = []
+        if self.is_key:
+            constraints.append("primary_key")
+        if self.is_foreign_key:
+            constraints.append("foreign_key")
+        line = f"  {quote_d2(key or self.name)}: {quote_d2(self.type or '')}"
+        if constraints:
+            line += f" {{constraint: [{'; '.join(constraints)}]}}"
+        return line
+
     def to_dot(self) -> str:
         base = config["DOT_ROW_TAGS"].format(
             ' ALIGN="LEFT" {port}',
@@ -182,6 +226,12 @@ class Relation(Drawable):
         "?": "one or zero",
         "+": "1+",
     }
+    cardinalities_d2 = {
+        "*": "cf-many",
+        "?": "cf-one",
+        "+": "cf-many-required",
+        "1": "cf-one-required",
+    }
 
     @staticmethod
     def make_from_match(match: re.Match) -> Relation:
@@ -237,6 +287,28 @@ class Relation(Drawable):
         left_col = sanitize_mermaid(self.left_table, is_er=True)
         right_col = sanitize_mermaid(self.right_table, is_er=True)
         return f"{left_col} {left}--{right} {right_col} : has"
+
+    def to_d2(self, left: str | None = None, right: str | None = None) -> str:
+        """Connect the two columns, or the given D2 endpoints, with crow's foot arrowheads."""
+        if left is None:
+            left = quote_d2(self.left_table)
+            if self.left_column:
+                left += f".{quote_d2(self.left_column)}"
+        if right is None:
+            right = quote_d2(self.right_table)
+            if self.right_column:
+                right += f".{quote_d2(self.right_column)}"
+        # D2 only draws an arrowhead on an end the connection points to
+        arrow = "<" if self.left_cardinality else ""
+        arrow += "->" if self.right_cardinality else "--"
+        arrowheads = [
+            f"  {end}-arrowhead.shape: {Relation.cardinalities_d2[card]}"
+            for end, card in (("source", self.left_cardinality), ("target", self.right_cardinality))
+            if card
+        ]
+        if not arrowheads:
+            return f"{left} {arrow} {right}"
+        return f"{left} {arrow} {right}: {{\n" + "\n".join(arrowheads) + "\n}"
 
     def graphviz_cardinalities(self, card) -> str:
         if card == "":
@@ -352,6 +424,17 @@ class Table(Drawable):
         columns = [c.to_mermaid_er() for c in self.columns]
         name = sanitize_mermaid(self.name, is_er=True)
         return f"{name} {{\n" + "\n  ".join(columns) + "\n}"
+
+    def d2_column_keys(self) -> dict[str, str]:
+        """Map each column name to its D2 id inside this table."""
+        taken: set[str] = set()
+        return {c.name: d2_key(c.name, taken) for c in self.columns}
+
+    def to_d2(self, key: str | None = None) -> str:
+        column_keys = self.d2_column_keys()
+        lines = [f"{quote_d2(key or self.name)}: {{", "  shape: sql_table"]
+        lines += [c.to_d2(column_keys[c.name]) for c in self.columns]
+        return "\n".join([*lines, "}"])
 
     @property
     def columns_sorted(self):

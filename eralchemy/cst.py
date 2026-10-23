@@ -17,6 +17,13 @@ DOT_GRAPH_BEGINNING = """graph {
         style=dashed
     ];"""
 MARKDOWN_TITLE = 'title {{label: "{}", size: "40"}}'
+# Written at the top of D2 output. TALA is bundled with D2 since v0.9.0.
+# Any D2 can go here, see "Configuration variables" in https://d2lang.com/tour/vars
+D2_CONFIG = """vars: {
+  d2-config: {
+    layout-engine: tala
+  }
+}"""
 
 DEFAULT_CONFIG = {
     "DOT_TABLE": DOT_TABLE,
@@ -24,6 +31,7 @@ DEFAULT_CONFIG = {
     "DOT_ROW_TAGS": DOT_ROW_TAGS,
     "DOT_GRAPH_BEGINNING": DOT_GRAPH_BEGINNING,
     "MARKDOWN_TITLE": MARKDOWN_TITLE,
+    "D2_CONFIG": D2_CONFIG,
     "DOT_KEY_OPENING": "<u>",
     "DOT_KEY_CLOSING": "</u>",
     "DOT_RELATION_GRAPH": "graph",
@@ -62,6 +70,10 @@ def dot_digraph():
 
 def dot_crowfoot():
     config["DOT_RELATION_STYLE"] = "crow"
+
+
+def d2_layout(engine: str):
+    config["D2_CONFIG"] = D2_CONFIG.replace("tala", engine)
 
 
 def reset_config():

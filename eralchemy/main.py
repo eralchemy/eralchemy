@@ -2,8 +2,11 @@ import argparse
 import base64
 import copy
 import logging
+import math
 import os
 import re
+import shutil
+import subprocess
 import sys
 from functools import partial
 from importlib.metadata import PackageNotFoundError, version
@@ -13,6 +16,7 @@ from sqlalchemy.exc import ArgumentError
 
 from .cst import config
 from .helpers import check_args, original_order_keys_first, plantuml_convert
+from .models import Relation, Table, d2_key, quote_d2
 from .parser import (
     ParsingException,
     line_iterator_to_intermediary,
@@ -156,6 +160,28 @@ title: {title}
     return md_markup.encode()
 
 
+def intermediary_to_d2(tables, relationships, title=""):
+    """Saves the intermediary representation to D2."""
+    d2_file = _intermediary_to_d2(tables, relationships, title)
+    return d2_file.encode()
+
+
+D2_IMAGE_FORMATS = {"svg", "png", "pdf", "gif", "pptx"}
+
+
+def intermediary_to_d2_image(tables, relationships, title="", extension="svg"):
+    d2 = shutil.which("d2")
+    if d2 is None:
+        raise FileNotFoundError("d2 is not installed, see https://d2lang.com/tour/install")
+    source = _intermediary_to_d2(tables, relationships, title).encode()
+    result = subprocess.run(
+        [d2, "--stdout-format", extension, "-", "-"], input=source, capture_output=True
+    )
+    if result.returncode:
+        raise ValueError(result.stderr.decode())
+    return result.stdout
+
+
 def intermediary_to_dot(tables, relationships, title=""):
     """Save the intermediary representation to dot format."""
     dot_file = _intermediary_to_dot(tables, relationships, title)
@@ -217,6 +243,63 @@ def _intermediary_to_mermaid_er(tables, relationships):
     return f"erDiagram\n{t}\n{r}"
 
 
+def _intermediary_to_d2(tables: list[Table], relationships: list[Relation], title: str = "") -> str:
+    """Returns the D2 source in a string."""
+    taken: set[str] = set()
+    parts = [config["D2_CONFIG"]] if config["D2_CONFIG"] else []
+    if title:
+        title_key = quote_d2(d2_key("title", taken))
+        parts.append(f"{title_key}: {quote_d2(title)} {{\n  shape: text\n  near: top-center\n}}")
+    table_keys = {t.name: d2_key(t.name, taken) for t in tables}
+    column_keys = {t.name: t.d2_column_keys() for t in tables}
+
+    def endpoint(table: str, column: str) -> str | None:
+        # Relations can point at tables or columns that were filtered out,
+        # which D2 would otherwise draw as new shapes or untyped rows.
+        if table not in table_keys:
+            return None
+        table_key = quote_d2(table_keys[table])
+        column_key = column_keys[table].get(column)
+        return f"{table_key}.{quote_d2(column_key)}" if column_key else table_key
+
+    edges, linked = [], set()
+    for r in relationships:
+        left = endpoint(r.left_table, r.left_column)
+        right = endpoint(r.right_table, r.right_column)
+        if left and right:
+            edges.append(r.to_d2(left, right))
+            linked |= {r.left_table, r.right_table}
+    parts += [t.to_d2(table_keys[t.name]) for t in tables if t.name in linked]
+    # Tallest first, so the tables in each grid row are of similar height
+    by_height = sorted(tables, key=lambda t: len(t.columns), reverse=True)
+    unlinked = [t.to_d2(table_keys[t.name]) for t in by_height if t.name not in linked]
+    if unlinked:
+        parts.append(_d2_grid(unlinked, d2_key("unlinked", taken), below=bool(linked)))
+    return "\n".join(parts + edges) + "\n"
+
+
+def _d2_grid(shapes: list[str], key: str, below: bool) -> str:
+    """Lay out tables without relations in rows, apart from the connected tables.
+
+    Each shape sits in its own cell because D2 stretches shapes to fill a cell.
+    """
+    columns = max(1, round(2 * math.sqrt(len(shapes))))
+    lines = [
+        f'{quote_d2(key)}: "" {{',
+        f"  grid-rows: {math.ceil(len(shapes) / columns)}",
+        f"  grid-columns: {columns}",
+        "  grid-gap: 40",
+        *(["  near: bottom-center"] if below else []),
+        "  style.stroke-width: 0",
+        "  style.fill: transparent",
+    ]
+    for i, shape in enumerate(shapes):
+        lines += [f'  "{i}": "" {{', "    style.stroke-width: 0", "    style.fill: transparent"]
+        lines += ["    " + line for line in shape.split("\n")]
+        lines.append("  }")
+    return "\n".join([*lines, "}"])
+
+
 def _intermediary_to_dot(tables, relationships, title=""):
     """Returns the dot source representing the database in a string."""
     t = "\n".join(t.to_dot() for t in tables)
@@ -257,6 +340,7 @@ switch_output_mode_auto = {
     "er": intermediary_to_markdown,
     "mermaid": intermediary_to_mermaid,
     "mermaid_er": intermediary_to_mermaid_er,
+    "d2": intermediary_to_d2,
     "graph": intermediary_to_schema,
     "graph_svg": partial(intermediary_to_schema, extension="svg"),
     "dot": intermediary_to_dot,
@@ -269,6 +353,7 @@ switch_output_mode_auto = {
 switch_output_mode = {
     "er": intermediary_to_markdown,
     "md": intermediary_to_mermaid,
+    "d2": intermediary_to_d2,
     "dot": intermediary_to_dot,
     "puml": intermediary_to_puml,
 }
@@ -310,6 +395,9 @@ def all_to_intermediary(filename_or_input, schema=None):
 
 def get_output_mode(output: str | None, mode: str):
     """From the output name and the mode returns a the function that will transform the intermediary representation to the output."""
+    d2_format = os.path.splitext(output or "")[1].lstrip(".")
+    if mode == "d2" and d2_format in D2_IMAGE_FORMATS:
+        return partial(intermediary_to_d2_image, extension=d2_format)
     if mode != "auto":
         try:
             return switch_output_mode_auto[mode]
@@ -323,6 +411,8 @@ def get_output_mode(output: str | None, mode: str):
     try:
         return switch_output_mode[extension]
     except KeyError:
+        if not GRAPHVIZ_AVAILABLE and extension in D2_IMAGE_FORMATS and shutil.which("d2"):
+            return partial(intermediary_to_d2_image, extension=extension)
         return partial(intermediary_to_schema, extension=extension)
 
 
@@ -418,12 +508,15 @@ def render_er(
         'graph': writes the image of the ER diagram.
         'mermaid': writes to a file the markup to generate an Mermaid-JS style diagram
         'mermaid_er': writes the markup to generate an Mermaid-JS ER diagram
+        'd2': writes the markup to generate a D2 diagram, or the image rendered by the d2
+            command when the output is a .svg, .png, .pdf, .gif or .pptx file
         'dot': write to file the diagram in dot format.
         'auto': choose from the filename:
             '*.er': writes to a file the markup to generate an ER style diagram.
+            '.d2': writes to a file the markup to generate a D2 diagram.
             '.dot': returns the graph in the dot syntax.
             '.md': writes to a file the markup to generate an Mermaid-JS style diagram
-            else: return a graph to the format graph
+            else: return a graph to the format graph, using d2 when graphviz is not installed
     :param include_tables: lst of str, table names to include, None means include all
     :param include_columns: lst of str, column names to include, None means include all
     :param exclude_tables: lst of str, table names to exclude, None means exclude nothing

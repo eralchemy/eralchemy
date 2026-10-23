@@ -79,6 +79,15 @@ database url.
 
     $ eralchemy -i 'markdown_file.er' -o erd_from_markdown_file.md -m mermaid_er
 
+#### To a [D2](https://d2lang.com) file
+
+    $ eralchemy -i 'markdown_file.er' -o erd_from_markdown_file.d2
+    $ eralchemy -i 'markdown_file.er' -o erd_from_markdown_file.svg -m d2
+
+The image is rendered with the `d2` command, so it needs [D2](https://d2lang.com/tour/install) v0.9.0 or newer, which bundles the TALA layout engine that the output selects by default.
+When Graphviz is not installed, image outputs such as `.svg` use D2.
+Tables without relations are placed in a grid below the connected tables.
+
 ### Usage from Python
 
 ```python
@@ -110,6 +119,9 @@ dot_digraph()
 
 render_er(Base, "forum.svg")
 ```
+
+D2 output starts with `config["D2_CONFIG"]`, which selects the TALA layout engine.
+Use `d2_layout("elk")` to pick another engine, or set `config["D2_CONFIG"]` to any D2, such as a theme or [configuration variables](https://d2lang.com/tour/vars).
 
 ## Architecture
 

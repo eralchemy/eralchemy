@@ -6,6 +6,7 @@ from eralchemy.main import (
     all_to_intermediary,
     filter_resources,
     get_output_mode,
+    intermediary_to_d2,
     intermediary_to_dot,
     intermediary_to_markdown,
     intermediary_to_mermaid,
@@ -125,18 +126,21 @@ def test_filter_exclude_columns(exclude_columns):
     check_tables_columns(actual_tables, id_is_included=False)
 
 
-def test_get_output_mode():
+def test_get_output_mode(monkeypatch):
+    monkeypatch.setattr("eralchemy.main.GRAPHVIZ_AVAILABLE", True)
     # access .func for partial
     assert get_output_mode("hello.png", "auto").func == intermediary_to_schema
     assert get_output_mode("hello.er", "auto") == intermediary_to_markdown
     assert get_output_mode("hello.dot", "auto") == intermediary_to_dot
     assert get_output_mode("hello.md", "auto") == intermediary_to_mermaid
+    assert get_output_mode("hello.d2", "auto") == intermediary_to_d2
 
     assert get_output_mode("anything", "graph") == intermediary_to_schema
     assert get_output_mode("anything", "dot") == intermediary_to_dot
     assert get_output_mode("anything", "er") == intermediary_to_markdown
     assert get_output_mode("anything", "mermaid") == intermediary_to_mermaid
     assert get_output_mode("anything", "mermaid_er") == intermediary_to_mermaid_er
+    assert get_output_mode("anything", "d2") == intermediary_to_d2
 
     with pytest.raises(ValueError):
         get_output_mode("anything", "mode")
